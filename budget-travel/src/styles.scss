@@ -1,30 +1,43 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 @include mat.core();
 
 // 🎨 Define the color palette
-$passport-primary: mat.m2-define-palette(mat.$m2-brown-palette, 900); // Passport Cover
-$passport-accent: mat.m2-define-palette(mat.$m2-deep-orange-palette, A700); // Visa Stamps
-$passport-warn: mat.m2-define-palette(mat.$m2-red-palette, 800); // Error messages
+$passport-primary: mat.m2-define-palette(
+  mat.$m2-brown-palette,
+  900
+); // Passport Cover
+$passport-accent: mat.m2-define-palette(
+  mat.$m2-deep-orange-palette,
+  A700
+); // Visa Stamps
+$passport-warn: mat.m2-define-palette(
+  mat.$m2-red-palette,
+  800
+); // Error messages
 
 // 🌍 Define the theme using the custom colors
-$passport-theme: mat.m2-define-light-theme((
-  color: (
-    primary: $passport-primary,
-    accent: $passport-accent,
-    warn: $passport-warn
-  ),
-  typography: mat.m2-define-typography-config(),
-  density: 0
-));
+$passport-theme: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $passport-primary,
+      accent: $passport-accent,
+      warn: $passport-warn,
+    ),
+    typography: mat.m2-define-typography-config(),
+    density: 0,
+  )
+);
 
 // 🖌 Apply the theme
 @include mat.all-component-themes($passport-theme);
 
 // 🌟 Global Styles
 body {
-  background-color: #FFF8E1; // Paper Texture
-  color: #212121; // Dark Ink Text
+  background-color: #fff8e1;
+  color: #212121;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
 }
 
 // Custom Border Styles (Stamped Edge Effect)
@@ -35,12 +48,14 @@ body {
 
 // Buttons with Stamp Effect
 .mat-raised-button {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 // Headings in Passport Font
-h1, h2, h3 {
-  font-family: 'Playfair Display', serif;
+h1,
+h2,
+h3 {
+  font-family: "Playfair Display", serif;
 }
