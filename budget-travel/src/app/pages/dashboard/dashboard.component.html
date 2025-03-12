@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="container__top-row">
+    <mat-card class="budget-overview">
+      <mat-card-title>💰 Budget Summary</mat-card-title>
+
+      <div class="budget-circle">
+        <mat-progress-spinner
+          mode="determinate"
+          [value]="(budget.spent / budget.total) * 100"
+          diameter="180"
+          strokeWidth="10"
+          color="primary"
+        >
+        </mat-progress-spinner>
+
+        <div class="budget-text">
+          <h2>{{ budget.spent | currency }}</h2>
+          <p>of {{ budget.total | currency }}</p>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="trip-overview">
+      <mat-card-title>🌍 Your Trips</mat-card-title>
+      <div class="trip-list">
+        <mat-card *ngFor="let trip of trips" class="trip-stamp">
+          <mat-card-content>
+            <h3>{{ trip.name }}</h3>
+            <p>Spent: {{ trip.spent | currency : trip.currency }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-card>
+  </div>
+
+  <div class="container__bottom-row">
+    <mat-card class="expenses-overview">
+      <mat-card-title>📊 Recent Expenses</mat-card-title>
+      <div class="expense-list">
+        <mat-list>
+          <mat-list-item *ngFor="let expense of recentExpenses">
+            <span>{{ expense.description }}</span>
+            <span class="amount">{{
+              expense.amount | currency : expense.currency
+            }}</span>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </mat-card>
+
+    <mat-card class="currency-exchange">
+      <mat-card-title>💱 Currency Exchange</mat-card-title>
+      <p>
+        1 {{ exchangeData.from }} = {{ exchangeData.rate }}
+        {{ exchangeData.to }}
+      </p>
+    </mat-card>
+
+    <mat-card class="category-breakdown">
+      <mat-card-title>🔍 Category Breakdown</mat-card-title>
+      <ng-container *ngIf="categoryBreakdown">
+        <div *ngFor="let category of categoryBreakdown">
+          <p>{{ category.name }}: {{ category.amount | currency }}</p>
+        </div>
+      </ng-container>
+    </mat-card>
+  </div>
+</div>

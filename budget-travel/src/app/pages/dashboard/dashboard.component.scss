@@ -1,0 +1,79 @@
+.container {
+  &__top-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    justify-content: center;
+  }
+
+  &__bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    justify-content: center;
+  }
+}
+
+.budget-overview,
+.trip-overview {
+  grid-column: span 1;
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.expenses-overview,
+.currency-exchange,
+.category-breakdown {
+  grid-column: span 1.5;
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.budget {
+  &-overview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  &-circle {
+    position: relative;
+    width: 12rem;
+    height: 12rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+  }
+
+  &-text {
+    position: absolute;
+    text-align: center;
+    font-family: "Playfair Display", serif;
+    color: #3e2723;
+  }
+}
+
+.trip {
+  &-stamp {
+    .mat-mdc-card-content {
+      margin: 0.5rem;
+      border-left: 0.25rem solid #d84315;
+      background: #ffe0b2;
+      padding: 0.5rem 1rem;
+    }
+  }
+
+  &-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &-overview .mat-mdc-card-title {
+    text-align: center;
+  }
+}
