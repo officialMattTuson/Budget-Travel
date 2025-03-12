@@ -32,4 +32,11 @@ export class BudgetService {
     return this.http.get<Budget>(`${this.apiUrl}/${id}`);
   }
 
+  getActiveBudget(): Observable<Budget> {
+    return this.http.get<Budget>(`${this.apiUrl}/active`);
+  }
+
+  setActiveBudget(budgetId: string): Observable<Budget> {
+    return this.http.post<Budget>(`${this.apiUrl}/set-active/${budgetId}`, {});
+  }
 }
