@@ -20,11 +20,11 @@ export class ExpensesService {
     return this.http.get<Expense>(`${this.apiUrl}/${id}`);
   }
 
-  addExpense(expense: any): Observable<Expense> {
+  addExpense(expense: Expense): Observable<Expense> {
     return this.http.post<Expense>(`${this.apiUrl}`, expense);
   }
 
-  updateExpense(id: string, expense: any): Observable<Expense> {
+  updateExpense(id: string, expense: Expense): Observable<Expense> {
     return this.http.put<Expense>(`${this.apiUrl}/${id}`, expense);
   }
 

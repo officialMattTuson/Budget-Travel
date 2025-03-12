@@ -16,7 +16,7 @@ export class TripService {
     return this.http.get<Trip[]>(`${this.apiUrl}`);
   }
 
-  addTrip(trip: any): Observable<Trip> {
+  addTrip(trip: Trip): Observable<Trip> {
     return this.http.post<Trip>(`${this.apiUrl}`, trip);
   }
 
@@ -28,7 +28,7 @@ export class TripService {
     return this.http.delete<Trip>(`${this.apiUrl}/${tripId}`);
   }
 
-  updateTrip(tripId: string, trip: any): Observable<Trip> {
+  updateTrip(tripId: string, trip: Trip): Observable<Trip> {
     return this.http.put<Trip>(`${this.apiUrl}/${tripId}`, trip);
   }
 }
