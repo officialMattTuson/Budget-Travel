@@ -21,6 +21,7 @@
   grid-column: span 1;
   width: 100%;
   padding: 1.5rem;
+  border-radius: 0.5rem;
 }
 
 .expenses-overview,
@@ -29,6 +30,7 @@
   grid-column: span 1.5;
   width: 100%;
   padding: 1.5rem;
+  border-radius: 0.5rem;
 }
 
 .budget {
@@ -76,4 +78,10 @@
   &-overview .mat-mdc-card-title {
     text-align: center;
   }
+}
+
+.mat-mdc-card-title {
+  font-family: "Inter", serif;
+  font-weight: 500;
+  color: #3e2723;
 }
