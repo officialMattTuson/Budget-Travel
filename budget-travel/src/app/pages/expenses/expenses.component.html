@@ -1,0 +1,38 @@
+ <mat-card class="expenses-container">
+  <mat-card-title>💰 Expenses by Category</mat-card-title>
+
+
+  @if (filteredCategories.length > 0) {
+    <mat-accordion multi="true">
+
+    @for (category of filteredCategories; track category.id) {
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ category.name }}
+          </mat-panel-title>
+          <mat-panel-description>
+            {{ expensesToCategoriesMap[category.id].length }} items
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-list>
+          @for (expense of expensesToCategoriesMap[category.id]; track expense._id) {
+            <mat-list-item>
+              <span>{{ expense.description }}</span>
+              <span class="expense-amount">{{ expense.amount | currency: expense.currency }}</span>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+          }
+        </mat-list>
+      </mat-expansion-panel>
+    }
+  </mat-accordion>
+}
+
+</mat-card>
+
+
+
+
+

@@ -35,7 +35,7 @@
 
   <div class="container__bottom-row">
     <mat-card class="expenses-overview">
-      <mat-card-title>📊 Recent Expenses</mat-card-title>
+      <mat-card-title (click)="goToExpenses()">📊 Recent Expenses</mat-card-title>
       <div class="expense-list">
         <mat-list>
           <mat-list-item *ngFor="let expense of recentExpenses">
