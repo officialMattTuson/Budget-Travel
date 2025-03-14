@@ -1,5 +1,3 @@
-import { Category } from "./category.model";
-
 export interface Expense {
   _id: string;
   amount: number;
@@ -9,5 +7,6 @@ export interface Expense {
   date: Date;
   recurring: boolean;
   recurrenceInterval: string;
-  tripId: string;
+  eventId: string;
+  budgetId: string;
 }

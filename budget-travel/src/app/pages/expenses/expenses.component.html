@@ -1,29 +1,100 @@
 <mat-card class="expenses-container">
-  <mat-card-title>💰 Expenses by Category</mat-card-title>
+  <mat-card-title>💰 Expenses</mat-card-title>
 
-  @if (filteredCategories.length > 0) {
+  <!-- Filters -->
+  <div class="filter-container">
+    <mat-form-field>
+      <mat-label>Filter by Event</mat-label>
+      <mat-select
+        [(ngModel)]="selectedEvent"
+        (selectionChange)="filterExpenses()"
+      >
+        <mat-option *ngFor="let event of events" [value]="event._id">{{
+          event.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Filter by Budget</mat-label>
+      <mat-select
+        [(ngModel)]="selectedBudget"
+        (selectionChange)="filterExpenses()"
+      >
+        <mat-option *ngFor="let budget of budgets" [value]="budget._id">{{
+          budget.amount | currency
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Filter by Category</mat-label>
+      <mat-select
+        [(ngModel)]="selectedCategory"
+        (selectionChange)="filterExpenses()"
+      >
+        <mat-option *ngFor="let category of categories" [value]="category.id">{{
+          category.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-button-toggle-group [(ngModel)]="viewMode">
+      <mat-button-toggle value="table">Table View</mat-button-toggle>
+      <mat-button-toggle value="accordion">Grouped View</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  @if (viewMode === 'table') {
+  <table mat-table [dataSource]="filteredExpenses" matSort>
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+      <td mat-cell *matCellDef="let expense">{{ expense.date | date }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+      <td mat-cell *matCellDef="let expense">{{ expense.category }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+      <td mat-cell *matCellDef="let expense">
+        {{ expense.amount | currency : expense.currency }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="budget">
+      <th mat-header-cell *matHeaderCellDef>Budget</th>
+      <td mat-cell *matCellDef="let expense">
+        {{ expense.budget ? (expense.budget.amount | currency) : "No Budget" }}
+      </td>
+    </ng-container>
+
+    <tr
+      mat-header-row
+      *matHeaderRowDef="['date', 'category', 'amount', 'budget']"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['date', 'category', 'amount', 'budget']"
+    ></tr>
+  </table>
+  } @if (viewMode === 'accordion') {
   <mat-accordion multi="true">
-    @for (category of filteredCategories; track category.id) {
+    @for (category of filteredCategories; track category) {
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{ category.name }}
-        </mat-panel-title>
-        <mat-panel-description>
-          {{ expensesToCategoriesMap[category.id].length }} items
-        </mat-panel-description>
+        <mat-panel-title>{{ category.name }}</mat-panel-title>
       </mat-expansion-panel-header>
 
       <mat-list>
         @for (expense of expensesToCategoriesMap[category.id]; track
         expense._id) {
         <mat-list-item>
-          <span>{{ expense.description }}</span>
-          <span class="expense-amount">{{
-            expense.amount | currency : expense.currency
-          }}</span>
+          {{ expense.description }} -
+          {{ expense.amount | currency : expense.currency }}
         </mat-list-item>
-        <mat-divider></mat-divider>
         }
       </mat-list>
     </mat-expansion-panel>
