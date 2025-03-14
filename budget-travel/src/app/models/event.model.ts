@@ -1,4 +1,4 @@
-export interface Trip {
+export interface Event {
   id: string;
   name: string;
   startDate: Date;
