@@ -9,9 +9,9 @@
         [(ngModel)]="selectedEvent"
         (selectionChange)="filterExpenses()"
       >
-        <mat-option *ngFor="let event of events" [value]="event._id">{{
-          event.name
-        }}</mat-option>
+        @for (event of events; track event._id) {
+        <mat-option [value]="event._id">{{ event.name }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
@@ -21,9 +21,11 @@
         [(ngModel)]="selectedBudget"
         (selectionChange)="filterExpenses()"
       >
-        <mat-option *ngFor="let budget of budgets" [value]="budget._id">{{
+        @for (budget of budgets; track budget._id) {
+        <mat-option [value]="budget._id">{{
           budget.amount | currency
         }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
@@ -33,9 +35,10 @@
         [(ngModel)]="selectedCategory"
         (selectionChange)="filterExpenses()"
       >
-        <mat-option *ngFor="let category of categories" [value]="category.id">{{
-          category.name
-        }}</mat-option>
+        @for (category of categories$ | async; track category.id) {
+
+        <mat-option [value]="category.id">{{ category.name }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
@@ -54,7 +57,11 @@
 
     <ng-container matColumnDef="category">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
-      <td mat-cell *matCellDef="let expense">{{ expense.category }}</td>
+      <td mat-cell *matCellDef="let expense">
+        <ng-container *ngIf="categories$ | async as categories">
+          {{ expense.category | categoryMap }}
+        </ng-container>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="amount">
