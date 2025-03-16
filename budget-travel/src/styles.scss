@@ -37,7 +37,7 @@ body {
   background-color: #fff8e1;
   color: #212121;
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 // Custom Border Styles (Stamped Edge Effect)
@@ -58,4 +58,29 @@ h1,
 h2,
 h3 {
   font-family: "Playfair Display", serif;
+}
+
+mat-form-field .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+.mat-button-toggle {
+  border-radius: 0.5rem;
+  background: #f4f1ea;
+  color: #2c3e50;
+  font-family: "Courier New", monospace;
+  box-shadow: 0.25rem rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+}
+
+.mat-button-toggle-checked {
+  background: #2c3e50 !important;
+  color: #fff !important;
+
+  .mat-button-toggle-checkbox-wrapper {
+    display: none;
+  }
+  .mat-button-toggle-button:has(.mat-button-toggle-checkbox-wrapper) {
+    padding: 0 !important;
+  }
 }

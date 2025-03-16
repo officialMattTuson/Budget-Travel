@@ -1,15 +1,19 @@
 .expenses-container {
-  padding: 20px;
+  padding: 1.25rem;
 }
 
 mat-expansion-panel {
-  background: #FFF8E1;
-  margin-bottom: 10px;
-  border-left: 5px solid #D84315;
+  background: #fff8e1;
+  margin-block-end: 0.5rem;
+  border-inline-start: 0.25rem solid #d84315;
 }
 
-.expense-amount {
-  font-weight: bold;
-  color: #D84315;
-  margin-left: auto;
+.filter-container {
+  display: flex;
+  align-items: center;
+  margin-block: 1.25rem;
+}
+
+.mat-button-toggle-group {
+  margin-inline-start: 3rem;
 }
