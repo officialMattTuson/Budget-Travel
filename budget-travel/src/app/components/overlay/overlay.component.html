@@ -1,0 +1,10 @@
+<mat-drawer-container class="overlay-container">
+  <mat-drawer #drawer mode="over" position="end">
+    <ng-container #overlayContainer></ng-container>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <app-toolbar></app-toolbar>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>

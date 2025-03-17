@@ -1,11 +1,58 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { BudgetService } from '../../services/budget.service';
+import { ActivatedRoute } from '@angular/router';
+import { take } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { MaterialModule } from '../../modules/material.module';
+import { OverlayService } from '../../services/overlay.service';
+import { AddBudgetComponent } from '../../components/overlays/add-budget/add-budget.component';
 
 @Component({
   selector: 'app-budgets',
-  imports: [],
   templateUrl: './budgets.component.html',
-  styleUrl: './budgets.component.scss'
+  styleUrls: ['./budgets.component.scss'],
+  imports: [CommonModule, MaterialModule],
 })
-export class BudgetsComponent {
+export class BudgetsComponent implements OnInit {
+  budgets: any[] = [];
+  selectedEvent: string = '';
+  activeBudget: any = null;
+  isLoading: boolean = true;
 
+  constructor(
+    private readonly budgetService: BudgetService, private readonly overlayService: OverlayService
+  ) {}
+
+  ngOnInit() {
+    this.loadBudgets();
+  }
+
+  loadBudgets() {
+    this.budgetService
+      .getBudgets()
+      .pipe(take(1))
+      .subscribe({
+        next: (data) => {
+          this.budgets = data;
+          console.log(data)
+          this.activeBudget = this.budgets.find((b) => b.isActive) || null;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error fetching budgets:', error);
+          this.isLoading = false;
+        },
+      });
+  }
+
+  // setActiveBudget(budgetId: string) {
+  //   this.budgetService.setActiveBudget(budgetId).subscribe(() => {
+  //     this.activeBudget = this.budgets.find((b) => b._id === budgetId) || null;
+  //   });
+  // }
+
+  openAddBudgetForm() {
+    console.log('hello')
+    this.overlayService.open(AddBudgetComponent, { onSave: () => this.loadBudgets() });
+  }
 }

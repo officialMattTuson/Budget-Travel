@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { MaterialModule } from './modules/material.module';
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { OverlayComponent } from "./components/overlay/overlay.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MaterialModule, ToolbarComponent],
+  imports: [MaterialModule, OverlayComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

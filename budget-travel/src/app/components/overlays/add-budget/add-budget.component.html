@@ -1,0 +1,35 @@
+<p>add-budget works!</p>
+<form [formGroup]="form" class="form-single-column">
+  <mat-form-field appearance="outline">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="budgetName" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Target Amount</mat-label>
+    <input matInput formControlName="budgetTarget" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Currency</mat-label>
+    <input matInput formControlName="budgetCurrency" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Start Date</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker1"
+      formControlName="budgetStartDate"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>End Date</mat-label>
+    <input matInput [matDatepicker]="picker2" formControlName="budgetEndDate" />
+    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+    <mat-datepicker #picker2></mat-datepicker>
+  </mat-form-field>
+</form>
