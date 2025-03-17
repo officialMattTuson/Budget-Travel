@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ExpensesComponent } from './pages/expenses/expenses.component';
+import { BudgetsComponent } from './pages/budgets/budgets.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -11,7 +12,7 @@ export const routes: Routes = [
   // { path: 'trips', component: TripsComponent },
   // { path: 'trips/add', component: AddTripComponent },
   // { path: 'trips/:id', component: TripDetailsComponent },
-  // { path: 'budget', component: BudgetComponent },
+  { path: 'budgets', component: BudgetsComponent },
   // { path: 'reports', component: ReportsComponent },
   // { path: 'reports/trip/:id', component: TripReportComponent },
   // { path: 'reports/categories', component: CategoryReportComponent },

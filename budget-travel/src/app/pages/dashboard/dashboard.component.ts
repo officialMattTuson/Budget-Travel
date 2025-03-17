@@ -21,4 +21,8 @@ export class DashboardComponent {
   goToExpenses() {
     this.router.navigate(['/expenses']);
   }
+  
+  goToBudgets() {
+    this.router.navigate(['/budgets']);
+  }
 }
