@@ -8,7 +8,7 @@ import { Budget } from '../models/budgets.model';
   providedIn: 'root'
 })
 export class BudgetService {
-  private readonly apiUrl = `${environment.apiUrl}/budget`;
+  private readonly apiUrl = `${environment.apiUrl}/budgets`;
 
   constructor(private readonly http: HttpClient) {}
 

@@ -1,0 +1,23 @@
+.budget-container {
+  padding: 1.25rem;
+  height: 100vh;
+}
+
+.budget-card {
+  padding: 1rem;
+  border-left: 0.25rem solid #D84315;
+  background: #FFF8E1;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.empty-message {
+  color: gray;
+  font-style: italic;
+  margin-top: 20px;
+}

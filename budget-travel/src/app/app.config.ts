@@ -7,6 +7,7 @@ import {
   withEventReplay,
 } from '@angular/platform-browser';
 import { provideHttpClient } from '@angular/common/http';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,5 +15,9 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(),
+    provideNativeDateAdapter(),
+    { provide: MAT_DATE_LOCALE, useValue: 'en-NZ' },
   ],
 };
+
+
