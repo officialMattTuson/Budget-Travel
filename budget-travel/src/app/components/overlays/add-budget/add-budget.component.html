@@ -1,4 +1,4 @@
-<p>add-budget works!</p>
+<span class="title">Add New Budget</span>
 <form [formGroup]="form" class="form-single-column">
   <mat-form-field appearance="outline">
     <mat-label>Name</mat-label>
@@ -33,3 +33,7 @@
     <mat-datepicker #picker2></mat-datepicker>
   </mat-form-field>
 </form>
+<div class="drawer-buttons">
+  <button mat-raised-button color="primary" (click)="onSubmit()">{{ buttonText }}</button>
+  <button mat-stroked-button color="accent" (click)="onCancel()">Cancel</button>
+</div>

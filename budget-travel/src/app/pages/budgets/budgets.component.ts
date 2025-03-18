@@ -20,7 +20,8 @@ export class BudgetsComponent implements OnInit {
   isLoading: boolean = true;
 
   constructor(
-    private readonly budgetService: BudgetService, private readonly overlayService: OverlayService
+    private readonly budgetService: BudgetService,
+    private readonly overlayService: OverlayService
   ) {}
 
   ngOnInit() {
@@ -34,7 +35,6 @@ export class BudgetsComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.budgets = data;
-          console.log(data)
           this.activeBudget = this.budgets.find((b) => b.isActive) || null;
           this.isLoading = false;
         },
@@ -52,7 +52,18 @@ export class BudgetsComponent implements OnInit {
   // }
 
   openAddBudgetForm() {
-    console.log('hello')
-    this.overlayService.open(AddBudgetComponent, { onSave: () => this.loadBudgets() });
+    console.log("Opening Add Budget Form...");
+    
+    const componentRef = this.overlayService.open(AddBudgetComponent);
+
+    if (componentRef) {
+      componentRef.instance.result.subscribe((result: string) => {
+        console.log(`Budget form result: ${result}`);
+
+        if (result === 'submitted' || result === 'updated') {
+          this.loadBudgets();
+        }
+      });
+    }
   }
 }
