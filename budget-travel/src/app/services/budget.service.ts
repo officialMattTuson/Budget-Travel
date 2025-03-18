@@ -16,7 +16,7 @@ export class BudgetService {
     return this.http.get<Budget[]>(`${this.apiUrl}`);
   }
 
-  setBudget(budgetData: Budget): Observable<Budget> {
+  addBudget(budgetData: Budget): Observable<Budget> {
     return this.http.post<Budget>(`${this.apiUrl}`, budgetData);
   }
 

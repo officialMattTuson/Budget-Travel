@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { OverlayService } from '../../../../services/overlay.service';
+import { OverlayResult } from '../../../../models/overlay-result.model';
 
 @Component({
   selector: 'app-base-overlay',
@@ -9,7 +10,7 @@ import { OverlayService } from '../../../../services/overlay.service';
   styleUrl: './base-overlay.component.scss'
 })
 export abstract class BaseOverlayComponent {
-  @Output() result = new EventEmitter<string>();
+  @Output() result = new EventEmitter<OverlayResult>();
 
   form: FormGroup = new FormGroup({});
 
@@ -24,7 +25,7 @@ export abstract class BaseOverlayComponent {
       this.form.markAllAsTouched();
       return;
     }
-    this.emitResult('submitted');
+    this.emitResult('submitted', this.form.value);
   }
 
   protected updateForm(): void {
@@ -32,15 +33,15 @@ export abstract class BaseOverlayComponent {
       this.form.markAllAsTouched();
       return;
     }
-    this.emitResult('updated');
+    this.emitResult('updated', this.form.value);
   }
-
   cancel(): void {
     this.emitResult('cancelled');
   }
 
-  private emitResult(status: 'submitted' | 'updated' | 'cancelled'): void {
-    this.result.emit(status);
+  private emitResult(status: 'submitted' | 'updated' | 'cancelled', data?: object): void {
+    this.result.emit({ status, data });
     this.overlayService.close();
   }
+
 }
