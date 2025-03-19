@@ -1,72 +1,92 @@
-.budget-container {
-  padding: 1.25rem;
-  height: 91vh;
-}
+.budget {
+  &__container {
+    padding: 1.25rem;
+    height: 91vh;
+  }
 
-.passport-container {
-  padding: 1rem;
-  background-color: #f7f5ee;
-}
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 2rem;
+  }
 
-.passport-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1rem;
-}
+  &__card {
+    background: #ffffff;
+    color: #2c3e50;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 0.25rem rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease-in-out;
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0.25rem 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+    }
 
-.passport-card {
-  background: #ffffff;
-  color: #2c3e50;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid #ddd;
-  box-shadow: 2px 2px 0.25rem rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease-in-out;
-}
+    &__container {
+      padding: 1rem;
+      background-color: #f7f5ee;
+    }
 
-.passport-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0.25rem 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
-}
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1rem;
+    }
 
-.passport-stamp {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background-color: rgba(0, 0, 139, 0.07);
-  border: 1px solid rgba(0, 0, 139, 0.2);
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-radius: 0.25rem;
-  opacity: 0.7;
-}
+    &-stamp {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background-color: rgba(0, 0, 139, 0.07);
+      border: 1px solid rgba(0, 0, 139, 0.2);
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-radius: 0.25rem;
+      opacity: 0.7;
 
-.stamp-text {
-  color: #2c3e50;
-}
+      &-text {
+        color: #2c3e50;
+      }
+    }
 
-.passport-amount {
-  font-size: 1.5rem;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
+    &-amount {
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
 
-.passport-date {
-  font-size: 1rem;
-  color: #7f8c8d;
-}
+    &-date {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+    }
 
-.passport-details {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.9rem;
-  margin-top: 10px;
-  color: #2c3e50;
+    &-details {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      color: #2c3e50;
+    }
+
+    &-view {
+      font-size: 0.75rem;
+      color: #2c3e50;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 }
 
 .spent {
@@ -77,15 +97,13 @@
   color: #27ae60;
 }
 
-.subtle-btn {
-  font-size: 0.75rem;
-  color: #2c3e50;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-.subtle-btn:hover {
-  text-decoration: underline;
+#add-btn {
+  display: flex;
+  align-items: center;
+
+  mat-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 1.5rem;
+  }
 }

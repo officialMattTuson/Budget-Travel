@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
-import { Budget, BudgetPostRequest } from '../models/budgets.model';
+import { map, Observable } from 'rxjs';
+import { Budget } from '../models/budgets.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BudgetService {
   private readonly apiUrl = `${environment.apiUrl}/budgets`;
@@ -13,7 +13,22 @@ export class BudgetService {
   constructor(private readonly http: HttpClient) {}
 
   getBudgets(): Observable<Budget[]> {
-    return this.http.get<Budget[]>(`${this.apiUrl}`);
+    return this.http.get<Budget[]>(this.apiUrl).pipe(
+      map((budgets) =>
+        budgets.map((budget) => ({
+          ...budget,
+          isActive: this.checkIfActive(
+            budget.startDate,
+            budget.endDate
+          ),
+        }))
+      )
+    );
+  }
+
+  private checkIfActive(startDate: string, endDate: string): boolean {
+    const today = new Date();
+    return today >= new Date(startDate) && today <= new Date(endDate);
   }
 
   addBudget(budgetData: Partial<Budget>): Observable<Budget> {

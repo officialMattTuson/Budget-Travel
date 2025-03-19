@@ -36,14 +36,14 @@ export class BudgetsComponent implements OnInit {
     this.dataCache.getBudgets().subscribe({
       next: (data) => {
         this.budgets = data;
-        console.log(data)
+        console.log(data);
         this.activeBudget = this.budgets.find((b) => b.isActive) || null;
         this.isLoading = false;
-      }, 
+      },
       error: (error) => {
         console.error('Error fetching budgets:', error);
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -73,8 +73,8 @@ export class BudgetsComponent implements OnInit {
       name: budgetData.budgetName,
       amount: budgetData.budgetTarget,
       currency: budgetData.budgetCurrency,
-      startDate: budgetData.budgetStartDate,
-      endDate: budgetData.budgetEndDate
+      startDate: budgetData.budgetStartDate.toLocaleDateString(),
+      endDate: budgetData.budgetEndDate.toLocaleDateString(),
     };
 
     this.budgetService.addBudget(budgetPostObject).subscribe({

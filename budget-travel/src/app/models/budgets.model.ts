@@ -4,8 +4,8 @@ export interface Budget {
   name: string;
   amount: number;
   currency: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   categoryBudgets?: CategoryBudget[];
   isActive: boolean;
   totalSpent: number;
