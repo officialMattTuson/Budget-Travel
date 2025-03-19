@@ -12,29 +12,44 @@
     Add Budget
   </button>
 
-  <div *ngIf="!isLoading && budgets.length > 0">
-    <mat-selection-list>
-      <mat-list-option
-        *ngFor="let budget of budgets"
-        [value]="budget._id"
-        [selected]="budget.isActive"
-      >
-        <mat-card class="budget-card">
-          <mat-card-title>{{ budget.amount }}</mat-card-title>
-          <mat-card-subtitle
-            >Allocated for: {{ budget.startDate | date }} -
-            {{ budget.endDate | date }}</mat-card-subtitle
-          >
-          <mat-progress-bar
-            mode="determinate"
-            [value]="(budget.totalSpent / budget.amount) * 100"
-          ></mat-progress-bar>
-          <p>
-            Spent: {{ budget.totalSpent | currency }} / Remaining:
-            {{ budget.amount - budget.totalSpent | currency }}
-          </p>
+  <div *ngIf="!isLoading && budgets.length > 0" class="passport-container">
+    <div class="passport-grid">
+      @for (budget of budgets; track budget._id) {
+        <mat-card class="passport-card">
+          <mat-card-header>
+            <div class="passport-stamp">
+              <span class="stamp-text">{{ budget.isActive ? 'VALID' : 'EXPIRED' }}</span>
+            </div>
+            <mat-card-title>
+              <span class="passport-amount">{{ budget.amount | currency }}</span>
+            </mat-card-title>
+            <mat-card-subtitle>
+              <span class="passport-date">
+                {{ budget.startDate | date:'MMM d, yyyy' }} - 
+                {{ budget.endDate | date:'MMM d, yyyy' }}
+              </span>
+            </mat-card-subtitle>
+          </mat-card-header>
+  
+          <mat-card-content>
+            <mat-progress-bar
+              mode="determinate"
+              [value]="(budget.totalSpent / budget.amount) * 100"
+            ></mat-progress-bar>
+            <p class="passport-details">
+              <span class="spent">Spent: {{ budget.totalSpent | currency }}</span>
+              <span class="remaining"
+                >Remaining: {{ budget.amount - budget.totalSpent | currency }}</span
+              >
+            </p>
+          </mat-card-content>
+  
+          <mat-card-actions align="end">
+            <button mat-button class="subtle-btn">View Details</button>
+          </mat-card-actions>
         </mat-card>
-      </mat-list-option>
-    </mat-selection-list>
+      }
+    </div>
   </div>
+  
 </mat-card>
