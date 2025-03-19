@@ -1,4 +1,4 @@
-import { CategoryBudget } from "./category.model";
+import { CategoryBudget } from './category.model';
 
 export interface Budget {
   name: string;
@@ -7,5 +7,15 @@ export interface Budget {
   startDate: Date;
   endDate: Date;
   categoryBudgets?: CategoryBudget[];
-  _id?: string;
+  isActive: boolean;
+  totalSpent: number;
+  _id: string;
+}
+
+export interface BudgetPostRequest {
+  budgetName: string;
+  budgetTarget: number;
+  budgetCurrency: string;
+  budgetStartDate: Date;
+  budgetEndDate: Date;
 }

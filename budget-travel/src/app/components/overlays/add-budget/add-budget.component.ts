@@ -7,10 +7,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { BaseOverlayComponent } from './base-overlay/base-overlay.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-budget',
-  imports: [MaterialModule, ReactiveFormsModule],
+  imports: [MaterialModule, ReactiveFormsModule, CommonModule],
   templateUrl: './add-budget.component.html',
   styleUrl: './add-budget.component.scss',
 })

@@ -6,17 +6,33 @@
   </div>
 
   <div *ngIf="!isLoading && budgets.length === 0" class="empty-message">
-    No budgets available. <button mat-button color="primary" (click)="openAddBudgetForm()">Add Budget</button>
+    No budgets available.
   </div>
+  <button mat-button color="primary" (click)="openAddBudgetForm()">
+    Add Budget
+  </button>
 
   <div *ngIf="!isLoading && budgets.length > 0">
     <mat-selection-list>
-      <mat-list-option *ngFor="let budget of budgets" [value]="budget._id" [selected]="budget.isActive">
+      <mat-list-option
+        *ngFor="let budget of budgets"
+        [value]="budget._id"
+        [selected]="budget.isActive"
+      >
         <mat-card class="budget-card">
-          <mat-card-title>{{ budget.amount | currency }}</mat-card-title>
-          <mat-card-subtitle>Allocated for: {{ budget.startDate | date }} - {{ budget.endDate | date }}</mat-card-subtitle>
-          <mat-progress-bar mode="determinate" [value]="(budget.totalSpent / budget.amount) * 100"></mat-progress-bar>
-          <p>Spent: {{ budget.totalSpent | currency }} / Remaining: {{ (budget.amount - budget.totalSpent) | currency }}</p>
+          <mat-card-title>{{ budget.amount }}</mat-card-title>
+          <mat-card-subtitle
+            >Allocated for: {{ budget.startDate | date }} -
+            {{ budget.endDate | date }}</mat-card-subtitle
+          >
+          <mat-progress-bar
+            mode="determinate"
+            [value]="(budget.totalSpent / budget.amount) * 100"
+          ></mat-progress-bar>
+          <p>
+            Spent: {{ budget.totalSpent | currency }} / Remaining:
+            {{ budget.amount - budget.totalSpent | currency }}
+          </p>
         </mat-card>
       </mat-list-option>
     </mat-selection-list>

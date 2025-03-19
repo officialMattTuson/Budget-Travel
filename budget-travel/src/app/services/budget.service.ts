@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { Budget } from '../models/budgets.model';
+import { Budget, BudgetPostRequest } from '../models/budgets.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class BudgetService {
     return this.http.get<Budget[]>(`${this.apiUrl}`);
   }
 
-  addBudget(budgetData: Budget): Observable<Budget> {
+  addBudget(budgetData: Partial<Budget>): Observable<Budget> {
     return this.http.post<Budget>(`${this.apiUrl}`, budgetData);
   }
 

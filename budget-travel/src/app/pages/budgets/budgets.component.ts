@@ -7,15 +7,9 @@ import { MaterialModule } from '../../modules/material.module';
 import { OverlayService } from '../../services/overlay.service';
 import { AddBudgetComponent } from '../../components/overlays/add-budget/add-budget.component';
 import { OverlayResult } from '../../models/overlay-result.model';
-import { Budget } from '../../models/budgets.model';
+import { Budget, BudgetPostRequest } from '../../models/budgets.model';
+import { DataCacheService } from '../../services/data-cache.service';
 
-interface BudgetData {
-  budgetName: string;
-  budgetTarget: number;
-  budgetCurrency: string;
-  budgetStartDate: Date;
-  budgetEndDate: Date;
-}
 @Component({
   selector: 'app-budgets',
   templateUrl: './budgets.component.html',
@@ -23,14 +17,15 @@ interface BudgetData {
   imports: [CommonModule, MaterialModule],
 })
 export class BudgetsComponent implements OnInit {
-  budgets: any[] = [];
+  budgets: Budget[] = [];
   selectedEvent: string = '';
-  activeBudget: any = null;
+  activeBudget: Budget | null = null;
   isLoading: boolean = true;
 
   constructor(
     private readonly budgetService: BudgetService,
-    private readonly overlayService: OverlayService
+    private readonly overlayService: OverlayService,
+    private readonly dataCache: DataCacheService
   ) {}
 
   ngOnInit() {
@@ -38,20 +33,18 @@ export class BudgetsComponent implements OnInit {
   }
 
   loadBudgets() {
-    this.budgetService
-      .getBudgets()
-      .pipe(take(1))
-      .subscribe({
-        next: (data) => {
-          this.budgets = data;
-          this.activeBudget = this.budgets.find((b) => b.isActive) || null;
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error('Error fetching budgets:', error);
-          this.isLoading = false;
-        },
-      });
+    this.dataCache.getBudgets().subscribe({
+      next: (data) => {
+        this.budgets = data;
+        console.log(data)
+        this.activeBudget = this.budgets.find((b) => b.isActive) || null;
+        this.isLoading = false;
+      }, 
+      error: (error) => {
+        console.error('Error fetching budgets:', error);
+        this.isLoading = false;
+      }
+    });
   }
 
   // setActiveBudget(budgetId: string) {
@@ -61,8 +54,6 @@ export class BudgetsComponent implements OnInit {
   // }
 
   openAddBudgetForm() {
-    console.log('Opening Add Budget Form...');
-
     const componentRef = this.overlayService.open(AddBudgetComponent);
 
     if (componentRef) {
@@ -71,14 +62,14 @@ export class BudgetsComponent implements OnInit {
           return;
         }
         if (result.status === 'submitted') {
-          this.addNewBudget(result.data as BudgetData);
+          this.addNewBudget(result.data as BudgetPostRequest);
         }
       });
     }
   }
 
-  addNewBudget(budgetData: BudgetData) {
-    let budgetPostObject: Budget = {
+  addNewBudget(budgetData: BudgetPostRequest) {
+    let budgetPostObject: Partial<Budget> = {
       name: budgetData.budgetName,
       amount: budgetData.budgetTarget,
       currency: budgetData.budgetCurrency,
@@ -88,7 +79,7 @@ export class BudgetsComponent implements OnInit {
 
     this.budgetService.addBudget(budgetPostObject).subscribe({
       next: () => {
-        this.loadBudgets();
+        this.dataCache.refreshBudgets();
       },
       error: (error) => {
         console.error('Error adding new budget:', error);

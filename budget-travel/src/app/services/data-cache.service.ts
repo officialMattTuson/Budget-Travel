@@ -26,6 +26,12 @@ export class DataCacheService {
   >([]);
   public currencies$ = this._currencies.asObservable();
 
+  private readonly _defaultCurrency = new BehaviorSubject<{
+    code: string;
+    symbol: string;
+  }>({ code: 'NZD', symbol: 'NZ$' });
+  public defaultCurrency$ = this._defaultCurrency.asObservable();
+
   constructor(
     private readonly budgetService: BudgetService,
     private readonly expenseService: ExpensesService,
@@ -35,7 +41,7 @@ export class DataCacheService {
   getBudgets(): Observable<Budget[]> {
     return this.budgets$.pipe(
       switchMap((budgets) => {
-        if (budgets === null) {
+        if (budgets.length === 0) {
           return this.budgetService
             .getBudgets()
             .pipe(tap((fetchedBudgets) => this._budgets.next(fetchedBudgets)));
@@ -48,7 +54,7 @@ export class DataCacheService {
   getExpenses(): Observable<Expense[]> {
     return this.expenses$.pipe(
       switchMap((expenses) => {
-        if (expenses === null) {
+        if (expenses.length === 0) {
           return this.expenseService
             .getExpenses()
             .pipe(
@@ -63,7 +69,7 @@ export class DataCacheService {
   getEvents(): Observable<Event[]> {
     return this.events$.pipe(
       switchMap((events) => {
-        if (events === null) {
+        if (events.length === 0) {
           return this.eventService
             .getEvents()
             .pipe(tap((fetchedEvents) => this._events.next(fetchedEvents)));
@@ -98,7 +104,7 @@ export class DataCacheService {
   getCurrencies(): Observable<{ code: string; symbol: string }[]> {
     return this.currencies$.pipe(
       switchMap((currencies) => {
-        if (currencies === null) {
+        if (currencies.length === 0) {
           const allCurrencies = this.getAllCurrencies();
           this._currencies.next(allCurrencies);
           return of(allCurrencies);
@@ -124,10 +130,18 @@ export class DataCacheService {
         currency: currencyCode,
       }).formatToParts();
       return (
-        parts.find((part) => part.type === 'currency')?.value || currencyCode
+        parts.find((part) => part.type === 'currency')?.value ?? currencyCode
       );
     } catch (error) {
-      return currencyCode; // Fallback in case of an error
+      return currencyCode;
     }
+  }
+
+  setDefaultCurrency(currency: { code: string; symbol: string }) {
+    this._defaultCurrency.next(currency);
+  }
+
+  getDefaultCurrency(): { code: string; symbol: string } {
+    return this._defaultCurrency.getValue();
   }
 }

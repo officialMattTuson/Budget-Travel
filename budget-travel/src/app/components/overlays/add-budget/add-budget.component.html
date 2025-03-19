@@ -12,7 +12,14 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Currency</mat-label>
-    <input matInput formControlName="budgetCurrency" />
+    <mat-select formControlName="budgetCurrency">
+    <mat-option [value]="(defaultCurrency$ | async)?.code">
+      {{ (defaultCurrency$ | async)?.code }}
+    </mat-option>
+    @for (currency of (currencies$ | async); track currency.code) {
+    <mat-option [value]="currency.code">{{ currency.code }}</mat-option>
+    }
+    </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
@@ -34,6 +41,8 @@
   </mat-form-field>
 </form>
 <div class="drawer-buttons">
-  <button mat-raised-button color="primary" (click)="onSubmit()">{{ buttonText }}</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()">
+    {{ buttonText }}
+  </button>
   <button mat-stroked-button color="accent" (click)="onCancel()">Cancel</button>
 </div>
