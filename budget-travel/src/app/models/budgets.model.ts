@@ -1,4 +1,5 @@
 import { CategoryBudget } from './category.model';
+import { Expense } from './expense.model';
 
 export interface Budget {
   name: string;
@@ -9,6 +10,7 @@ export interface Budget {
   categoryBudgets?: CategoryBudget[];
   isActive: boolean;
   totalSpent: number;
+  expenses: Expense[];
   _id: string;
 }
 

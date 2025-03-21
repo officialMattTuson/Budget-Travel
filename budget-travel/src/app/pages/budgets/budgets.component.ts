@@ -7,7 +7,8 @@ import { AddBudgetComponent } from '../../components/overlays/add-budget/add-bud
 import { OverlayResult } from '../../models/overlay-result.model';
 import { Budget, BudgetPostRequest } from '../../models/budgets.model';
 import { DataCacheService } from '../../services/data-cache.service';
-import { CardDetailsComponent } from "../../components/card-details/card-details.component";
+import { CardDetailsComponent } from '../../components/card-details/card-details.component';
+import { Expense } from '../../models/expense.model';
 
 @Component({
   selector: 'app-budgets',
@@ -21,6 +22,7 @@ export class BudgetsComponent implements OnInit {
   activeBudgets: Budget[] = [];
   inactiveBudgets: Budget[] = [];
   isLoading = false;
+  selectedBudgetExpenses: Expense[] = [];
 
   constructor(
     private readonly budgetService: BudgetService,
@@ -43,6 +45,7 @@ export class BudgetsComponent implements OnInit {
             this.inactiveBudgets.push(budget);
           }
         });
+        this.selectedBudgetExpenses = this.activeBudgets[0].expenses || [];
         this.isLoading = false;
       },
       error: (error) => {
@@ -90,5 +93,10 @@ export class BudgetsComponent implements OnInit {
         console.error('Error adding new budget:', error);
       },
     });
+  }
+
+  onTabChange(index: number): void {
+    const selectedBudget = this.activeBudgets[index];
+    this.selectedBudgetExpenses = selectedBudget.expenses || [];
   }
 }
