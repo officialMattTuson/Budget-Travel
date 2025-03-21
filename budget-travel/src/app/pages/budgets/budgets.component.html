@@ -1,54 +1,82 @@
 <mat-card class="budget__container">
   <div class="budget__header">
     <mat-card-title>💰 Budgets</mat-card-title>
-    <button mat-raised-button color="primary" id="add-btn" (click)="openAddBudgetForm()">
+    <button
+      mat-raised-button
+      color="primary"
+      id="add-btn"
+      (click)="openAddBudgetForm()"
+    >
       <mat-icon>add_circle</mat-icon>
       Add Budget
     </button>
   </div>
 
-  <div *ngIf="!isLoading && budgets.length === 0" class="empty-message">
-    No budgets available.
-  </div>
+  @if (!isLoading && activeBudgets.length > 0) {
 
-  <div *ngIf="!isLoading && budgets.length > 0" class="budget__card__container">
+    <div class="budget__hero-container">
+
+      @if (activeBudgets.length === 1) {
+        <div class="hero-budget-grid">
+          <app-card-details
+            [title]="activeBudgets[0].name"
+            [amount]="activeBudgets[0].amount"
+            [currency]="activeBudgets[0].currency"
+            [startDate]="activeBudgets[0].startDate"
+            [endDate]="activeBudgets[0].endDate"
+            [progressValue]="(activeBudgets[0].totalSpent / activeBudgets[0].amount) * 100"
+            [spent]="activeBudgets[0].totalSpent"
+            [remaining]="activeBudgets[0].amount - activeBudgets[0].totalSpent"
+            [isActive]="true"
+            variant="hero"
+          />
+        </div>
+      }
+    
+      @if (activeBudgets.length > 1) {
+        <mat-tab-group>
+          @for (budget of activeBudgets; track budget._id) {
+            <mat-tab [label]="budget.name">
+              <div class="hero-budget-tab">
+                <app-card-details
+                  [title]="budget.name"
+                  [amount]="budget.amount"
+                  [currency]="budget.currency"
+                  [startDate]="budget.startDate"
+                  [endDate]="budget.endDate"
+                  [progressValue]="(budget.totalSpent / budget.amount) * 100"
+                  [spent]="budget.totalSpent"
+                  [remaining]="budget.amount - budget.totalSpent"
+                  [isActive]="true"
+                  variant="hero"
+                />
+              </div>
+            </mat-tab>
+          }
+        </mat-tab-group>
+      }
+    
+    </div>
+    
+  } @if (!isLoading && inactiveBudgets.length > 0) {
+
+  <div class="budget__card__container">
     <div class="budget__card__grid">
-      @for (budget of budgets; track budget._id) {
-        <mat-card class="budget__card">
-          <mat-card-header>
-            <div class="budget__card-stamp">
-              <span class="budget__card-stamp__text">{{ budget.isActive ? 'VALID' : 'EXPIRED' }}</span>
-            </div>
-            <mat-card-title>
-              <span class="budget__card-amount">{{ budget.amount | currency }}</span>
-            </mat-card-title>
-            <mat-card-subtitle>
-              <span class="budget__card-date">
-                {{ budget.startDate | date:'MMM d, yyyy' }} - 
-                {{ budget.endDate | date:'MMM d, yyyy' }}
-              </span>
-            </mat-card-subtitle>
-          </mat-card-header>
-  
-          <mat-card-content>
-            <mat-progress-bar
-              mode="determinate"
-              [value]="(budget.totalSpent / budget.amount) * 100"
-            ></mat-progress-bar>
-            <p class="budget__card-details">
-              <span class="spent">Spent: {{ budget.totalSpent | currency }}</span>
-              <span class="remaining"
-                >Remaining: {{ budget.amount - budget.totalSpent | currency }}</span
-              >
-            </p>
-          </mat-card-content>
-  
-          <mat-card-actions align="end">
-            <button mat-button class="budget__card-view">View Details</button>
-          </mat-card-actions>
-        </mat-card>
+      @for (budget of inactiveBudgets; track budget._id) {
+      <app-card-details
+        [title]="budget.name"
+        [amount]="budget.amount"
+        [currency]="budget.currency"
+        [startDate]="budget.startDate"
+        [endDate]="budget.endDate"
+        [progressValue]="(budget.totalSpent / budget.amount) * 100"
+        [spent]="budget.totalSpent"
+        [remaining]="budget.amount - budget.totalSpent"
+        [isActive]="budget.isActive"
+        buttonText="View Details"
+      ></app-card-details>
       }
     </div>
   </div>
-  
+  }
 </mat-card>

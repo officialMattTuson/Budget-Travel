@@ -1,0 +1,146 @@
+.card,
+.card-active {
+  background: #ffffff;
+  color: #2c3e50;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  box-shadow: 2px 2px 0.25rem rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0.25rem 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+  }
+
+  &-stamp {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background-color: rgba(0, 0, 139, 0.07);
+    border: 1px solid rgba(0, 0, 139, 0.2);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 0.25rem;
+    opacity: 0.7;
+
+    &-text {
+      color: #2c3e50;
+    }
+  }
+
+  &-amount {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+
+  &-date {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+  }
+
+  &-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    color: #2c3e50;
+  }
+
+  &-view {
+    font-size: 0.75rem;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Hero variation for active budgets
+.hero-card {
+  @extend .card;
+  padding: 2rem;
+  min-height: 320px;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-left: 6px solid #d84315;
+
+  .card-stamp {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.9rem;
+  }
+
+  .card-stamp-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .card-amount {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #2c3e50;
+  }
+
+  .card-date {
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin-bottom: 1rem;
+  }
+
+  .card-details {
+    font-size: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .card-view {
+    font-size: 0.85rem;
+    padding-top: 1rem;
+  }
+
+  mat-progress-bar {
+    margin-top: 1rem;
+    height: 8px;
+    border-radius: 4px;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  }
+}
+
+// Additional styling shared by all cards
+.spent {
+  color: #e74c3c;
+}
+
+.remaining {
+  color: #27ae60;
+}
+
+#add-btn {
+  display: flex;
+  align-items: center;
+
+  mat-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 1.5rem;
+  }
+}

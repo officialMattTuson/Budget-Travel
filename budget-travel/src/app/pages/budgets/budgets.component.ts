@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { BudgetService } from '../../services/budget.service';
-import { ActivatedRoute } from '@angular/router';
-import { take } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../modules/material.module';
 import { OverlayService } from '../../services/overlay.service';
@@ -9,18 +7,20 @@ import { AddBudgetComponent } from '../../components/overlays/add-budget/add-bud
 import { OverlayResult } from '../../models/overlay-result.model';
 import { Budget, BudgetPostRequest } from '../../models/budgets.model';
 import { DataCacheService } from '../../services/data-cache.service';
+import { CardDetailsComponent } from "../../components/card-details/card-details.component";
 
 @Component({
   selector: 'app-budgets',
   templateUrl: './budgets.component.html',
   styleUrls: ['./budgets.component.scss'],
-  imports: [CommonModule, MaterialModule],
+  imports: [CommonModule, MaterialModule, CardDetailsComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class BudgetsComponent implements OnInit {
   budgets: Budget[] = [];
-  selectedEvent: string = '';
-  activeBudget: Budget | null = null;
-  isLoading: boolean = true;
+  activeBudgets: Budget[] = [];
+  inactiveBudgets: Budget[] = [];
+  isLoading = false;
 
   constructor(
     private readonly budgetService: BudgetService,
@@ -33,11 +33,16 @@ export class BudgetsComponent implements OnInit {
   }
 
   loadBudgets() {
+    this.isLoading = true;
     this.dataCache.getBudgets().subscribe({
-      next: (data) => {
-        this.budgets = data;
-        console.log(data);
-        this.activeBudget = this.budgets.find((b) => b.isActive) || null;
+      next: (budgets) => {
+        budgets.forEach((budget) => {
+          if (budget.isActive) {
+            this.activeBudgets.push(budget);
+          } else {
+            this.inactiveBudgets.push(budget);
+          }
+        });
         this.isLoading = false;
       },
       error: (error) => {
