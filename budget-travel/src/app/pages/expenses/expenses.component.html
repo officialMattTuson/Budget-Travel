@@ -1,15 +1,8 @@
-<div class="header">
-  <mat-card-title>💰 Expenses</mat-card-title>
-  <button
-    mat-raised-button
-    color="primary"
-    id="add-btn"
-    (click)="openAddExpenseForm()"
-  >
-    <mat-icon>add_circle</mat-icon>
-    Add Expense
-  </button>
-</div>
+<app-header
+  header="Expenses"
+  buttonText="Add Expense"
+  (onAddButtonClicked)="openAddExpenseForm()"
+></app-header>
 <mat-card class="expenses-container">
 
   <!-- Filters -->

@@ -10,12 +10,18 @@ import { DataCacheService } from '../../services/data-cache.service';
 import { CardDetailsComponent } from '../../components/card-details/card-details.component';
 import { Expense } from '../../models/expense.model';
 import { Router } from '@angular/router';
+import { HeaderComponent } from '../../components/header/header.component';
 
 @Component({
   selector: 'app-budgets',
   templateUrl: './budgets.component.html',
   styleUrls: ['./budgets.component.scss'],
-  imports: [CommonModule, MaterialModule, CardDetailsComponent],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    CardDetailsComponent,
+    HeaderComponent,
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class BudgetsComponent implements OnInit {
@@ -30,7 +36,6 @@ export class BudgetsComponent implements OnInit {
     private readonly overlayService: OverlayService,
     private readonly dataCache: DataCacheService,
     private readonly router: Router
-
   ) {}
 
   ngOnInit() {

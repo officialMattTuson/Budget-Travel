@@ -1,15 +1,8 @@
-<div class="budget__header">
-  <mat-card-title>💰 Budgets</mat-card-title>
-  <button
-    mat-raised-button
-    color="primary"
-    id="add-btn"
-    (click)="openAddBudgetForm()"
-  >
-    <mat-icon>add_circle</mat-icon>
-    Add Budget
-  </button>
-</div>
+<app-header
+  header="Budgets"
+  buttonText="Add Budget"
+  (onAddButtonClicked)="openAddBudgetForm()"
+></app-header>
 <mat-card class="budget__container">
   @if (!isLoading && activeBudgets.length > 0) {
   <div class="budget__hero-section">

@@ -15,6 +15,7 @@ import { OverlayResult } from '../../models/overlay-result.model';
 import { AddExpenseComponent } from '../../components/overlays/add-expense/add-expense.component';
 import { DataCacheService } from '../../services/data-cache.service';
 import { Router } from '@angular/router';
+import { HeaderComponent } from '../../components/header/header.component';
 
 @Component({
   selector: 'app-expenses',
@@ -25,6 +26,7 @@ import { Router } from '@angular/router';
     MaterialModule,
     CommonModule,
     CategoryMapperPipe,
+    HeaderComponent
   ],
   templateUrl: './expenses.component.html',
   styleUrls: ['./expenses.component.scss'],
