@@ -9,6 +9,7 @@ import { Budget, BudgetPostRequest } from '../../models/budgets.model';
 import { DataCacheService } from '../../services/data-cache.service';
 import { CardDetailsComponent } from '../../components/card-details/card-details.component';
 import { Expense } from '../../models/expense.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-budgets',
@@ -27,17 +28,22 @@ export class BudgetsComponent implements OnInit {
   constructor(
     private readonly budgetService: BudgetService,
     private readonly overlayService: OverlayService,
-    private readonly dataCache: DataCacheService
+    private readonly dataCache: DataCacheService,
+    private readonly router: Router
+
   ) {}
 
   ngOnInit() {
-    this.loadBudgets();
+    this.observeBudgetChanges();
   }
 
-  loadBudgets() {
-    this.isLoading = true;
-    this.dataCache.refreshBudgets().subscribe({
+  observeBudgetChanges() {
+    this.dataCache.budgets$.subscribe({
       next: (budgets) => {
+        if (budgets.length === 0) {
+          this.router.navigate(['/dashboard']);
+        }
+        this.budgets = budgets;
         budgets.forEach((budget) => {
           if (budget.isActive) {
             this.activeBudgets.push(budget);
@@ -86,8 +92,10 @@ export class BudgetsComponent implements OnInit {
     };
 
     this.budgetService.addBudget(budgetPostObject).subscribe({
-      next: () => {
-        this.loadBudgets();
+      next: (budget: Budget) => {
+        this.isLoading = true;
+        this.budgets.push(budget);
+        this.dataCache.setBudgets(this.budgets);
       },
       error: (error) => {
         console.error('Error adding new budget:', error);

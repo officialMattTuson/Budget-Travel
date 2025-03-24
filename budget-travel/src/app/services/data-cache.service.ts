@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { switchMap, take, tap } from 'rxjs/operators';
-import { BudgetService } from '../services/budget.service';
-import { EventService } from '../services/event.service';
+import { switchMap } from 'rxjs/operators';
 import { Budget } from '../models/budgets.model';
 import { Expense } from '../models/expense.model';
 import { Event } from '../models/event.model';
-import { ExpensesService } from './expenses.service';
 import { Currency } from '../models/currency.model';
 
 @Injectable({
@@ -31,74 +28,20 @@ export class DataCacheService {
   });
   public defaultCurrency$ = this._defaultCurrency.asObservable();
 
-  constructor(
-    private readonly budgetService: BudgetService,
-    private readonly expenseService: ExpensesService,
-    private readonly eventService: EventService
-  ) {}
-
-  getBudgets(): Observable<Budget[]> {
-    return this.budgets$.pipe(
-      switchMap((budgets) => {
-        if (budgets.length === 0) {
-          return this.budgetService
-            .getBudgets()
-            .pipe(tap((fetchedBudgets) => this._budgets.next(fetchedBudgets)));
-        }
-        return of(budgets);
-      })
-    );
+  getBudgets(): Budget[] {
+    return this._budgets.getValue();
   }
 
-  getExpenses(): Observable<Expense[]> {
-    return this.expenses$.pipe(
-      switchMap((expenses) => {
-        if (expenses.length === 0) {
-          return this.expenseService
-            .getExpenses()
-            .pipe(
-              tap((fetchedExpenses) => this._expenses.next(fetchedExpenses))
-            );
-        }
-        return of(expenses);
-      })
-    );
+  setBudgets(budgets: Budget[]) {
+    this._budgets.next(budgets);
   }
 
-  getEvents(): Observable<Event[]> {
-    return this.events$.pipe(
-      switchMap((events) => {
-        if (events.length === 0) {
-          return this.eventService
-            .getEvents()
-            .pipe(tap((fetchedEvents) => this._events.next(fetchedEvents)));
-        }
-        return of(events);
-      })
-    );
+  getExpenses(): Expense[] {
+    return this._expenses.getValue();
   }
 
-  refreshBudgets(): Observable<Budget[]> {
-    return this.budgetService.getBudgets().pipe(
-      take(1),
-      tap((budgets) => {
-        this._budgets.next(budgets);
-      })
-    );
-  }
-
-  refreshExpenses(): Observable<Expense[]> {
-    return this.expenseService.getExpenses().pipe(
-      tap((expenses) => {
-        this._expenses.next(expenses);
-      })
-    );
-  }
-
-  refreshEvents() {
-    this.eventService.getEvents().subscribe((events) => {
-      this._events.next(events);
-    });
+  setExpenses(expenses: Expense[]) {
+    this._expenses.next(expenses);
   }
 
   setCurrencies(currencies: Currency[]) {

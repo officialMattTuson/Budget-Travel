@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ExpensesService } from '../../services/expenses.service';
-import { Observable, Subject, switchMap, take, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { CategoriesService } from '../../services/categories.service';
 import { Category } from '../../models/category.model';
 import { CommonModule, CurrencyPipe } from '@angular/common';
@@ -14,6 +14,7 @@ import { OverlayService } from '../../services/overlay.service';
 import { OverlayResult } from '../../models/overlay-result.model';
 import { AddExpenseComponent } from '../../components/overlays/add-expense/add-expense.component';
 import { DataCacheService } from '../../services/data-cache.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-expenses',
@@ -48,43 +49,36 @@ export class ExpensesComponent implements OnInit {
     private readonly expensesService: ExpensesService,
     private readonly categoriesService: CategoriesService,
     private readonly overlayService: OverlayService,
-    private readonly dataCache: DataCacheService
+    private readonly dataCache: DataCacheService,
+    private readonly router: Router
   ) {
     this.categories$ = this.categoriesService.categories$;
   }
 
   ngOnInit(): void {
     this.observeBudgetChanges();
-    this.loadExpensesAndCategories();
+    this.observeExpenseChanges();
   }
 
   observeBudgetChanges(): void {
     this.dataCache.budgets$
       .pipe(takeUntil(this.destroy$))
       .subscribe((budgets) => {
+        if (budgets.length === 0) {
+          this.router.navigate(['/dashboard']);
+        }
         this.budgets = budgets;
         this.filterExpenses();
       });
   }
 
-  loadExpensesAndCategories(): void {
-    this.categoriesService
-      .getCategories()
-      .pipe(
-        take(1),
-        switchMap((categories) => {
-          this.categoriesService.setCategories(categories);
-          return this.dataCache.refreshExpenses();
-        }),
-        take(1)
-      )
-      .subscribe({
-        next: (expenses) => {
-          this.expenses = expenses;
-          this.mapExpensesToCategories(this.expenses);
-          this.filterExpenses();
-        },
-        error: console.error,
+  observeExpenseChanges(): void {
+    this.dataCache.expenses$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((expenses) => {
+        this.expenses = expenses;
+        this.mapExpensesToCategories(this.expenses);
+        this.filterExpenses();
       });
   }
 
@@ -102,7 +96,6 @@ export class ExpensesComponent implements OnInit {
         this.expensesToCategoriesMap[expense.category].push(expense);
       }
     });
-
     this.filteredCategories = categories.filter(
       (category) => this.expensesToCategoriesMap[category.id]?.length > 0
     );
@@ -136,8 +129,9 @@ export class ExpensesComponent implements OnInit {
 
   addNewExpense(expense: ExpensePostRequest): void {
     this.expensesService.addExpense(expense).subscribe({
-      next: () => {
-        this.loadExpensesAndCategories();
+      next: (expense: Expense) => {
+        this.expenses.push(expense);
+        this.dataCache.setExpenses(this.expenses);
       },
       error: (error) => console.error(error),
     });

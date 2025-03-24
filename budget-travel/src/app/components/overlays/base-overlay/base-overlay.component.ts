@@ -31,7 +31,7 @@ export abstract class BaseOverlayComponent {
     protected readonly categoryService: CategoriesService
   ) {
     this.initializeForm();
-    this.budget$ = this.dataCache.getBudgets();
+    this.budget$ = this.dataCache.budgets$;
     this.currencies$ = this.dataCache.getCurrencies();
     this.categories$ = this.categoryService.categories$;
     this.defaultCurrency$ = this.dataCache.defaultCurrency$;
