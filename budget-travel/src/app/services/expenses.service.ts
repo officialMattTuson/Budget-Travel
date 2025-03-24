@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { Expense } from '../models/expense.model';
+import { Expense, ExpensePostRequest } from '../models/expense.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class ExpensesService {
     return this.http.get<Expense>(`${this.apiUrl}/${id}`);
   }
 
-  addExpense(expense: Expense): Observable<Expense> {
+  addExpense(expense: ExpensePostRequest): Observable<Expense> {
     return this.http.post<Expense>(`${this.apiUrl}`, expense);
   }
 

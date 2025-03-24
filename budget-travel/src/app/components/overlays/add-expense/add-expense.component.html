@@ -1,0 +1,63 @@
+<span class="title">Add New Budget</span>
+<form [formGroup]="form" class="form-single-column">
+  <mat-form-field appearance="outline">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Category</mat-label>
+    <mat-select formControlName="category">
+      @for (category of (categories$ | async); track category.id) {
+      <mat-option [value]="category.id">{{ category.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Amount</mat-label>
+    <input matInput formControlName="amount" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Description</mat-label>
+    <input matInput formControlName="description" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Budget</mat-label>
+    <mat-select formControlName="budgetId">
+      @for (budget of (budget$ | async); track budget._id) {
+      <mat-option [value]="budget._id">{{ budget.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Currency</mat-label>
+    <mat-select formControlName="currency">
+      <mat-option [value]="(defaultCurrency$ | async)?.code">
+        {{ (defaultCurrency$ | async)?.code }}
+      </mat-option>
+      @for (currency of (currencies$ | async); track currency.code) {
+      <mat-option [value]="currency.code">{{ currency.code }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Date</mat-label>
+    <input matInput [matDatepicker]="picker1" formControlName="date" />
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+
+  <div class="drawer-buttons">
+    <button mat-raised-button color="primary" (click)="onSubmit()">
+      {{ buttonText }}
+    </button>
+    <button mat-stroked-button color="accent" (click)="onCancel()">
+      Cancel
+    </button>
+  </div>
+</form>

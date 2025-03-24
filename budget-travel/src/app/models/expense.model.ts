@@ -10,3 +10,14 @@ export interface Expense {
   eventId: string;
   budgetId: string;
 }
+
+export interface ExpensePostRequest {
+  name: string;
+  amount: number;
+  currency: string;
+  description: string;
+  category: string;
+  budgetId?: string;
+  date: Date;
+  eventId?: string;
+}

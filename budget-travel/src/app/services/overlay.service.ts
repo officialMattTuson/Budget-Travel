@@ -1,6 +1,6 @@
 import { Injectable, ComponentRef, ViewContainerRef, EventEmitter, Type } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
-import { BaseOverlayComponent } from '../components/overlays/add-budget/base-overlay/base-overlay.component';
+import { BaseOverlayComponent } from '../components/overlays/base-overlay/base-overlay.component';
 
 @Injectable({
   providedIn: 'root',

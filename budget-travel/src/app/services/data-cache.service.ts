@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, take, tap } from 'rxjs/operators';
 import { BudgetService } from '../services/budget.service';
 import { EventService } from '../services/event.service';
 import { Budget } from '../models/budgets.model';
 import { Expense } from '../models/expense.model';
 import { Event } from '../models/event.model';
 import { ExpensesService } from './expenses.service';
+import { Currency } from '../models/currency.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,15 +22,13 @@ export class DataCacheService {
   private readonly _events = new BehaviorSubject<Event[]>([]);
   public events$ = this._events.asObservable();
 
-  private readonly _currencies = new BehaviorSubject<
-    { code: string; symbol: string }[]
-  >([]);
+  private readonly _currencies = new BehaviorSubject<Currency[]>([]);
   public currencies$ = this._currencies.asObservable();
 
-  private readonly _defaultCurrency = new BehaviorSubject<{
-    code: string;
-    symbol: string;
-  }>({ code: 'NZD', symbol: 'NZ$' });
+  private readonly _defaultCurrency = new BehaviorSubject<Currency>({
+    code: 'NZD',
+    symbol: 'NZ$',
+  });
   public defaultCurrency$ = this._defaultCurrency.asObservable();
 
   constructor(
@@ -79,16 +78,21 @@ export class DataCacheService {
     );
   }
 
-  refreshBudgets() {
-    this.budgetService.getBudgets().subscribe((budgets) => {
-      this._budgets.next(budgets);
-    });
+  refreshBudgets(): Observable<Budget[]> {
+    return this.budgetService.getBudgets().pipe(
+      take(1),
+      tap((budgets) => {
+        this._budgets.next(budgets);
+      })
+    );
   }
 
-  refreshExpenses() {
-    this.expenseService.getExpenses().subscribe((expenses) => {
-      this._expenses.next(expenses);
-    });
+  refreshExpenses(): Observable<Expense[]> {
+    return this.expenseService.getExpenses().pipe(
+      tap((expenses) => {
+        this._expenses.next(expenses);
+      })
+    );
   }
 
   refreshEvents() {
@@ -97,11 +101,11 @@ export class DataCacheService {
     });
   }
 
-  setCurrencies(currencies: { code: string; symbol: string }[]) {
+  setCurrencies(currencies: Currency[]) {
     this._currencies.next(currencies);
   }
 
-  getCurrencies(): Observable<{ code: string; symbol: string }[]> {
+  getCurrencies(): Observable<Currency[]> {
     return this.currencies$.pipe(
       switchMap((currencies) => {
         if (currencies.length === 0) {
@@ -114,7 +118,7 @@ export class DataCacheService {
     );
   }
 
-  getAllCurrencies(): { code: string; symbol: string }[] {
+  getAllCurrencies(): Currency[] {
     const currencyCodes = Intl.supportedValuesOf('currency');
 
     return currencyCodes.map((code) => ({
@@ -137,11 +141,11 @@ export class DataCacheService {
     }
   }
 
-  setDefaultCurrency(currency: { code: string; symbol: string }) {
+  setDefaultCurrency(currency: Currency) {
     this._defaultCurrency.next(currency);
   }
 
-  getDefaultCurrency(): { code: string; symbol: string } {
+  getDefaultCurrency(): Currency {
     return this._defaultCurrency.getValue();
   }
 }

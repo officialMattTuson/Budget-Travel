@@ -36,7 +36,7 @@ export class BudgetsComponent implements OnInit {
 
   loadBudgets() {
     this.isLoading = true;
-    this.dataCache.getBudgets().subscribe({
+    this.dataCache.refreshBudgets().subscribe({
       next: (budgets) => {
         budgets.forEach((budget) => {
           if (budget.isActive) {
@@ -87,7 +87,7 @@ export class BudgetsComponent implements OnInit {
 
     this.budgetService.addBudget(budgetPostObject).subscribe({
       next: () => {
-        this.dataCache.refreshBudgets();
+        this.loadBudgets();
       },
       error: (error) => {
         console.error('Error adding new budget:', error);

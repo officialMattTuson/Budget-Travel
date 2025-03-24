@@ -1,9 +1,13 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { OverlayService } from '../../../../services/overlay.service';
-import { OverlayResult } from '../../../../models/overlay-result.model';
-import { DataCacheService } from '../../../../services/data-cache.service';
+import { OverlayService } from '../../../services/overlay.service';
+import { OverlayResult } from '../../../models/overlay-result.model';
+import { DataCacheService } from '../../../services/data-cache.service';
 import { Observable } from 'rxjs';
+import { CategoriesService } from '../../../services/categories.service';
+import { Category } from '../../../models/category.model';
+import { Currency } from '../../../models/currency.model';
+import { Budget } from '../../../models/budgets.model';
 
 @Component({
   selector: 'app-base-overlay',
@@ -15,16 +19,21 @@ export abstract class BaseOverlayComponent {
   @Output() result = new EventEmitter<OverlayResult>();
 
   form: FormGroup = new FormGroup({});
-  currencies$!: Observable<{code: string, symbol: string}[]>;
-  defaultCurrency$!: Observable<{code: string, symbol: string}>;
+  currencies$!: Observable<Currency[]>;
+  categories$!: Observable<Category[]>;
+  budget$!: Observable<Budget[]>;
+  defaultCurrency$!: Observable<Currency>;
 
   constructor(
     protected readonly fb: FormBuilder,
     protected readonly overlayService: OverlayService,
-    protected readonly dataCache: DataCacheService
+    protected readonly dataCache: DataCacheService,
+    protected readonly categoryService: CategoriesService
   ) {
     this.initializeForm();
+    this.budget$ = this.dataCache.getBudgets();
     this.currencies$ = this.dataCache.getCurrencies();
+    this.categories$ = this.categoryService.categories$;
     this.defaultCurrency$ = this.dataCache.defaultCurrency$;
   }
 

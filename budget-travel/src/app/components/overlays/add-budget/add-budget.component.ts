@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MaterialModule } from '../../../modules/material.module';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
-import { BaseOverlayComponent } from './base-overlay/base-overlay.component';
+import { BaseOverlayComponent } from '../base-overlay/base-overlay.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
