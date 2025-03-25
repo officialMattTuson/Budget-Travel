@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MaterialModule } from '../../modules/material.module';
 
 @Component({
@@ -21,4 +21,9 @@ export class CardDetailsComponent {
   @Input() remaining?: number;
   @Input() buttonText: string = 'View Details';
   @Input() variant: 'standard' | 'hero' = 'standard';
+  @Output() onViewButtonClicked = new EventEmitter<void>();
+
+  onViewButtonClick() {
+    this.onViewButtonClicked.emit();
+  }
 }

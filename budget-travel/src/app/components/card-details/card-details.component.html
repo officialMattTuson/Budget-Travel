@@ -1,30 +1,40 @@
 <mat-card [ngClass]="variant === 'hero' ? 'hero-card' : 'card'">
   <mat-card-header>
     <div class="card-stamp">
-      <span class="card-stamp-text">{{ isActive ? 'ACTIVE' : 'INACTIVE' }}</span>
+      <span class="card-stamp-text">{{
+        isActive ? "ACTIVE" : "INACTIVE"
+      }}</span>
     </div>
     <mat-card-title>
-      <span class="card-amount">{{ amount | currency: currency }}</span>
+      <span class="card-amount">{{ amount | currency : currency }}</span>
     </mat-card-title>
     <mat-card-subtitle *ngIf="startDate && endDate">
       <span class="card-date">
-        {{ startDate | date: 'MMM d, yyyy' }} - {{ endDate | date: 'MMM d, yyyy' }}
+        {{ startDate | date : "MMM d, yyyy" }} -
+        {{ endDate | date : "MMM d, yyyy" }}
       </span>
     </mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
-    <mat-progress-bar *ngIf="progressValue !== undefined"
-                      [value]="progressValue"
-                      mode="determinate"></mat-progress-bar>
+    <mat-progress-bar
+      *ngIf="progressValue !== undefined"
+      [value]="progressValue"
+      mode="determinate"
+    ></mat-progress-bar>
 
-    <div class="card-details" *ngIf="spent !== undefined && remaining !== undefined">
-      <span class="spent">Spent: {{ spent | currency: currency }}</span>
-      <span class="remaining">Remaining: {{ remaining | currency: currency }}</span>
+    <div
+      class="card-details"
+      *ngIf="spent !== undefined && remaining !== undefined"
+    >
+      <span class="spent">Spent: {{ spent | currency : currency }}</span>
+      <span class="remaining"
+        >Remaining: {{ remaining | currency : currency }}</span
+      >
     </div>
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <button mat-button class="card-view">{{ buttonText }}</button>
+    <button mat-button class="card-view" (click)="onViewButtonClick()">{{ buttonText }}</button>
   </mat-card-actions>
 </mat-card>
