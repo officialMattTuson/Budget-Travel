@@ -1,22 +1,24 @@
 <div class="container">
   <div class="container__top-row">
-    <mat-card class="budget-overview">
+    <mat-card class="trip-overview">
       <mat-card-title (click)="goToBudgets()">💰 Budget Summary</mat-card-title>
-
-      <div class="budget-circle">
-        <mat-progress-spinner
-          mode="determinate"
-          [value]="(budget.spent / budget.total) * 100"
-          diameter="180"
-          strokeWidth="10"
-          color="primary"
-        >
-        </mat-progress-spinner>
-
-        <div class="budget-text">
-          <h2>{{ budget.spent | currency }}</h2>
-          <p>of {{ budget.total | currency }}</p>
-        </div>
+      <div class="trip-list">
+        @for (budget of activeBudgets; track budget._id) {
+            <div class="hero-budget-tab">
+              <app-card-details
+                [title]="budget.name"
+                [amount]="budget.amount"
+                [currency]="budget.currency"
+                [startDate]="budget.startDate"
+                [endDate]="budget.endDate"
+                [progressValue]="(budget.totalSpent / budget.amount) * 100"
+                [spent]="budget.totalSpent"
+                [remaining]="budget.amount - budget.totalSpent"
+                [isActive]="true"
+                variant="hero"
+              />
+            </div>
+          }
       </div>
     </mat-card>
 
