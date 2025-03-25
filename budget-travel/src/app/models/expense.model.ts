@@ -12,7 +12,6 @@ export interface Expense {
 }
 
 export interface ExpensePostRequest {
-  name: string;
   amount: number;
   currency: string;
   description: string;

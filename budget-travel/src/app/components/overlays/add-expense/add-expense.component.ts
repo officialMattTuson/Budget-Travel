@@ -19,7 +19,6 @@ export class AddExpenseComponent extends BaseOverlayComponent {
 
   protected initializeForm(): void {
     this.form = this.fb.group({
-      name: this.fb.control('', Validators.required),
       currency: this.fb.control('', Validators.required),
       amount: this.fb.control('', Validators.required),
       date: this.fb.control('', Validators.required),

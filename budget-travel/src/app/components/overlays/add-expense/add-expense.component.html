@@ -1,11 +1,6 @@
 <span class="title">Add New Budget</span>
 <form [formGroup]="form" class="form-single-column">
   <mat-form-field appearance="outline">
-    <mat-label>Name</mat-label>
-    <input matInput formControlName="name" />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
     <mat-label>Category</mat-label>
     <mat-select formControlName="category">
       @for (category of (categories$ | async); track category.id) {
@@ -15,13 +10,13 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Amount</mat-label>
-    <input matInput formControlName="amount" />
+    <mat-label>Description</mat-label>
+    <input matInput formControlName="description" />
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Description</mat-label>
-    <input matInput formControlName="description" />
+    <mat-label>Amount</mat-label>
+    <input matInput formControlName="amount" />
   </mat-form-field>
 
   <mat-form-field appearance="outline">
