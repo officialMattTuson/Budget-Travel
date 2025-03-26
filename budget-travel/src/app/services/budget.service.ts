@@ -54,4 +54,8 @@ export class BudgetService {
   setActiveBudget(budgetId: string): Observable<Budget> {
     return this.http.post<Budget>(`${this.apiUrl}/set-active/${budgetId}`, {});
   }
+
+  updateBudget(budgetData: Partial<Budget>, budgetId: string): Observable<Budget> {
+    return this.http.put<Budget>(`${this.apiUrl}/${budgetId}`, budgetData);
+  }
 }

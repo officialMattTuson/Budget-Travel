@@ -45,6 +45,7 @@ export class BudgetsComponent implements OnInit {
   observeBudgetChanges() {
     this.dataCache.budgets$.subscribe({
       next: (budgets) => {
+        this.resetBudgets();
         if (budgets.length === 0) {
           this.router.navigate(['/dashboard']);
         }
@@ -72,8 +73,17 @@ export class BudgetsComponent implements OnInit {
   //   });
   // }
 
+  resetBudgets() {
+    this.activeBudgets = [];
+    this.inactiveBudgets = [];
+  }
+
   openAddBudgetForm(budget?: Budget) {
-    const componentRef = this.overlayService.open(AddBudgetComponent, budget, OverlayType.Budget);
+    const componentRef = this.overlayService.open(
+      AddBudgetComponent,
+      budget,
+      OverlayType.Budget
+    );
 
     if (componentRef) {
       componentRef.instance.result.subscribe((result: OverlayResult) => {
@@ -83,19 +93,16 @@ export class BudgetsComponent implements OnInit {
         if (result.status === 'submitted') {
           this.addNewBudget(result.data as BudgetPostRequest);
         }
+
+        if (result.status === 'updated' && budget) {
+          this.updateBudget(result.data as BudgetPostRequest, budget);
+        }
       });
     }
   }
 
-  addNewBudget(budgetData: BudgetPostRequest) {
-    let budgetPostObject: Partial<Budget> = {
-      name: budgetData.budgetName,
-      amount: budgetData.budgetTarget,
-      currency: budgetData.budgetCurrency,
-      startDate: budgetData.budgetStartDate.toLocaleDateString(),
-      endDate: budgetData.budgetEndDate.toLocaleDateString(),
-    };
-
+  addNewBudget(formData: BudgetPostRequest) {
+    const budgetPostObject = this.mapBudgetToPostRequest(formData);
     this.budgetService.addBudget(budgetPostObject).subscribe({
       next: (budget: Budget) => {
         this.isLoading = true;
@@ -104,6 +111,33 @@ export class BudgetsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error adding new budget:', error);
+      },
+    });
+  }
+
+  mapBudgetToPostRequest(budgetData: BudgetPostRequest): Partial<Budget> {
+    let budgetPostObject: Partial<Budget> = {
+      name: budgetData.budgetName,
+      amount: budgetData.budgetTarget,
+      currency: budgetData.budgetCurrency,
+      startDate: budgetData.budgetStartDate.toLocaleDateString(),
+      endDate: budgetData.budgetEndDate.toLocaleDateString(),
+    };
+    return budgetPostObject;
+  }
+
+  updateBudget(formData: BudgetPostRequest, budget: Budget) {
+    const budgetPostObject = this.mapBudgetToPostRequest(formData);
+    this.budgetService.updateBudget(budgetPostObject, budget._id).subscribe({
+      next: (addedBudget: Budget) => {
+        const index = this.budgets.findIndex((b) => b._id === budget._id);
+        addedBudget.totalSpent = budget.totalSpent;
+        this.budgets[index] = addedBudget;
+
+        this.dataCache.setBudgets(this.budgets);
+      },
+      error: (error) => {
+        console.error('Error updating budget:', error);
       },
     });
   }

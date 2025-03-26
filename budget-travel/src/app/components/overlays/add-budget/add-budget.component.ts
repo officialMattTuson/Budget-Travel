@@ -30,7 +30,6 @@ export class AddBudgetComponent extends BaseOverlayComponent {
   }
 
   protected autoFillForm(): void {
-    console.log(this.data)
     if (this.type === OverlayType.Budget && this.data) {
       const formData = this.data as Budget;
       this.form.patchValue({
@@ -44,6 +43,9 @@ export class AddBudgetComponent extends BaseOverlayComponent {
   }
 
   onSubmit(): void {
+    if (this.data) {
+      return this.updateForm();
+    }
     this.submitForm();
   }
 

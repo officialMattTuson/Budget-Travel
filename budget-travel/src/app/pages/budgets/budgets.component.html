@@ -79,6 +79,7 @@
         [remaining]="budget.amount - budget.totalSpent"
         [isActive]="budget.isActive"
         buttonText="View Details"
+        (onViewButtonClicked)="openAddBudgetForm(budget)"
       ></app-card-details>
       }
     </div>
