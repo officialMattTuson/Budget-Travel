@@ -78,12 +78,8 @@ export class BudgetsComponent implements OnInit {
     this.inactiveBudgets = [];
   }
 
-  openAddBudgetForm(budget?: Budget) {
-    const componentRef = this.overlayService.open(
-      AddBudgetComponent,
-      budget,
-      OverlayType.Budget
-    );
+  openAddBudgetForm() {
+    const componentRef = this.overlayService.open(AddBudgetComponent);
 
     if (componentRef) {
       componentRef.instance.result.subscribe((result: OverlayResult) => {
@@ -92,10 +88,6 @@ export class BudgetsComponent implements OnInit {
         }
         if (result.status === 'submitted') {
           this.addNewBudget(result.data as BudgetPostRequest);
-        }
-
-        if (result.status === 'updated' && budget) {
-          this.updateBudget(result.data as BudgetPostRequest, budget);
         }
       });
     }
@@ -126,24 +118,12 @@ export class BudgetsComponent implements OnInit {
     return budgetPostObject;
   }
 
-  updateBudget(formData: BudgetPostRequest, budget: Budget) {
-    const budgetPostObject = this.mapBudgetToPostRequest(formData);
-    this.budgetService.updateBudget(budgetPostObject, budget._id).subscribe({
-      next: (addedBudget: Budget) => {
-        const index = this.budgets.findIndex((b) => b._id === budget._id);
-        addedBudget.totalSpent = budget.totalSpent;
-        this.budgets[index] = addedBudget;
-
-        this.dataCache.setBudgets(this.budgets);
-      },
-      error: (error) => {
-        console.error('Error updating budget:', error);
-      },
-    });
-  }
-
   onTabChange(index: number): void {
     const selectedBudget = this.activeBudgets[index];
     this.selectedBudgetExpenses = selectedBudget.expenses || [];
+  }
+
+  viewBudgetDetails(budgetId: string) {
+    this.router.navigateByUrl(`/budgets/${budgetId}`);
   }
 }

@@ -22,7 +22,7 @@
           [remaining]="activeBudgets[0].amount - activeBudgets[0].totalSpent"
           [isActive]="true"
           variant="hero"
-          (onViewButtonClicked)="openAddBudgetForm(activeBudgets[0])"
+          (onViewButtonClicked)="viewBudgetDetails(activeBudgets[0]._id)"
         />
       </div>
       } @if (activeBudgets.length > 1) {
@@ -41,7 +41,7 @@
               [remaining]="budget.amount - budget.totalSpent"
               [isActive]="true"
               variant="hero"
-              (onViewButtonClicked)="openAddBudgetForm(budget)"
+              (onViewButtonClicked)="viewBudgetDetails(budget._id)"
             />
           </div>
         </mat-tab>
@@ -79,7 +79,7 @@
         [remaining]="budget.amount - budget.totalSpent"
         [isActive]="budget.isActive"
         buttonText="View Details"
-        (onViewButtonClicked)="openAddBudgetForm(budget)"
+        (onViewButtonClicked)="viewBudgetDetails(budget._id)"
       ></app-card-details>
       }
     </div>

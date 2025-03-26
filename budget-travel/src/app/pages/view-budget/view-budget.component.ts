@@ -10,6 +10,8 @@ import { Budget, BudgetPostRequest } from '../../models/budgets.model';
 import { OverlayService } from '../../services/overlay.service';
 import { OverlayResult, OverlayType } from '../../models/overlay-result.model';
 import { AddBudgetComponent } from '../../components/overlays/add-budget/add-budget.component';
+import { mapBudgetToPostRequest } from '../../utils/mappers/budget-post-request-mapper';
+import { DataCacheService } from '../../services/data-cache.service';
 
 @Component({
   selector: 'app-view-budget',
@@ -27,7 +29,8 @@ export class ViewBudgetComponent implements OnInit {
   constructor(
     private readonly activatedRoute: ActivatedRoute,
     private readonly budgetService: BudgetService,
-    private readonly overlayService: OverlayService
+    private readonly overlayService: OverlayService,
+    private readonly dataCache: DataCacheService
   ) {}
 
   ngOnInit(): void {
@@ -61,5 +64,20 @@ export class ViewBudgetComponent implements OnInit {
     }
   }
 
-  updateBudget(budgetData: BudgetPostRequest) {}
+  updateBudget(formData: BudgetPostRequest) {
+    const budgetPostObject = mapBudgetToPostRequest(formData);
+    this.budgetService.updateBudget(budgetPostObject, this.budget._id).subscribe({
+      next: (addedBudget: Budget) => {
+        const currentBudgets = this.dataCache.getBudgets();
+        const index = currentBudgets.findIndex((b) => b._id === this.budget._id);
+        addedBudget.totalSpent = this.budget.totalSpent;
+        currentBudgets[index] = addedBudget;
+
+        this.dataCache.setBudgets(currentBudgets);
+      },
+      error: (error) => {
+        console.error('Error updating budget:', error);
+      },
+    });
+  }
 }

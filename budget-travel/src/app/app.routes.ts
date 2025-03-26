@@ -9,7 +9,7 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'expenses', component: ExpensesComponent },
   { path: 'budgets', component: BudgetsComponent },
-  { path: 'budgets/id', component: ViewBudgetComponent },
+  { path: 'budgets/:id', component: ViewBudgetComponent },
   // { path: 'expenses/add', component: AddExpenseComponent },
   // { path: 'expenses/:id/edit', component: EditExpenseComponent },
   // { path: 'trips', component: TripsComponent },
