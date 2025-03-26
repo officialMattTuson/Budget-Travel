@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../modules/material.module';
 import { OverlayService } from '../../services/overlay.service';
 import { AddBudgetComponent } from '../../components/overlays/add-budget/add-budget.component';
-import { OverlayResult } from '../../models/overlay-result.model';
+import { OverlayResult, OverlayType } from '../../models/overlay-result.model';
 import { Budget, BudgetPostRequest } from '../../models/budgets.model';
 import { DataCacheService } from '../../services/data-cache.service';
 import { CardDetailsComponent } from '../../components/card-details/card-details.component';
@@ -72,8 +72,8 @@ export class BudgetsComponent implements OnInit {
   //   });
   // }
 
-  openAddBudgetForm() {
-    const componentRef = this.overlayService.open(AddBudgetComponent);
+  openAddBudgetForm(budget?: Budget) {
+    const componentRef = this.overlayService.open(AddBudgetComponent, budget, OverlayType.Budget);
 
     if (componentRef) {
       componentRef.instance.result.subscribe((result: OverlayResult) => {

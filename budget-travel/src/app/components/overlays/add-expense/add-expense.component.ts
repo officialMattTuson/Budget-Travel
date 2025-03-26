@@ -3,6 +3,8 @@ import { Component, Input } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../../modules/material.module';
 import { BaseOverlayComponent } from '../base-overlay/base-overlay.component';
+import { OverlayType } from '../../../models/overlay-result.model';
+import { Expense } from '../../../models/expense.model';
 
 @Component({
   selector: 'app-add-expense',
@@ -28,6 +30,21 @@ export class AddExpenseComponent extends BaseOverlayComponent {
       eventId: this.fb.control(''),
     });
   }
+
+    protected autoFillForm(): void {
+      if (this.type === OverlayType.Expense && this.data) {
+        const formData = this.data as Expense;
+        this.form.patchValue({
+          description: formData.description,
+          amount: formData.amount,
+          currency: formData.currency,
+          date: formData.date,
+          category: formData.category,
+          budgetId: formData.budgetId,
+          eventId: formData.eventId,
+        });
+      }
+    }
 
   onSubmit(): void {
     this.submitForm();

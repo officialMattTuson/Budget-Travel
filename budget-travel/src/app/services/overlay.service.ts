@@ -1,6 +1,9 @@
 import { Injectable, ComponentRef, ViewContainerRef, EventEmitter, Type } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { BaseOverlayComponent } from '../components/overlays/base-overlay/base-overlay.component';
+import { Expense } from '../models/expense.model';
+import { Budget } from '../models/budgets.model';
+import { OverlayType } from '../models/overlay-result.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +21,7 @@ export class OverlayService {
     this.drawer = drawer;
   }
 
-  open(component: Type<BaseOverlayComponent>): ComponentRef<BaseOverlayComponent> | null {
+  open(component: Type<BaseOverlayComponent>, data?: Budget | Expense, type?: OverlayType): ComponentRef<BaseOverlayComponent> | null {
     if (!this.containerRef || !this.drawer) {
       console.error('❌ MatDrawer or ContainerRef is not available!');
       return null;
@@ -27,6 +30,12 @@ export class OverlayService {
     this.drawer.open();
     this.containerRef.clear();
     const componentRef = this.containerRef.createComponent(component);
+
+    if (data) {
+      componentRef.instance.data = data;
+      componentRef.instance.type = type;
+      componentRef.instance.initializeWithData();
+    }
 
     return componentRef;
   }

@@ -1,13 +1,17 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { OverlayService } from '../../../services/overlay.service';
-import { OverlayResult } from '../../../models/overlay-result.model';
+import {
+  OverlayResult,
+  OverlayType,
+} from '../../../models/overlay-result.model';
 import { DataCacheService } from '../../../services/data-cache.service';
 import { Observable } from 'rxjs';
 import { CategoriesService } from '../../../services/categories.service';
 import { Category } from '../../../models/category.model';
 import { Currency } from '../../../models/currency.model';
 import { Budget } from '../../../models/budgets.model';
+import { Expense } from '../../../models/expense.model';
 
 @Component({
   selector: 'app-base-overlay',
@@ -23,6 +27,8 @@ export abstract class BaseOverlayComponent {
   categories$!: Observable<Category[]>;
   budget$!: Observable<Budget[]>;
   defaultCurrency$!: Observable<Currency>;
+  data: Budget | Expense | undefined;
+  type: OverlayType | undefined;
 
   constructor(
     protected readonly fb: FormBuilder,
@@ -37,7 +43,15 @@ export abstract class BaseOverlayComponent {
     this.defaultCurrency$ = this.dataCache.defaultCurrency$;
   }
 
+  protected abstract autoFillForm(): void;
+
   protected abstract initializeForm(): void;
+
+  public initializeWithData(): void {
+    if (this.data && this.type) {
+      this.autoFillForm();
+    }
+  }
 
   protected submitForm(): void {
     if (this.form.invalid) {

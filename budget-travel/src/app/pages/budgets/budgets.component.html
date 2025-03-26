@@ -22,6 +22,7 @@
           [remaining]="activeBudgets[0].amount - activeBudgets[0].totalSpent"
           [isActive]="true"
           variant="hero"
+          (onViewButtonClicked)="openAddBudgetForm(activeBudgets[0])"
         />
       </div>
       } @if (activeBudgets.length > 1) {
@@ -40,6 +41,7 @@
               [remaining]="budget.amount - budget.totalSpent"
               [isActive]="true"
               variant="hero"
+              (onViewButtonClicked)="openAddBudgetForm(budget)"
             />
           </div>
         </mat-tab>

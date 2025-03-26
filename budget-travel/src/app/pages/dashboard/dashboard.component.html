@@ -4,21 +4,21 @@
       <mat-card-title (click)="goToBudgets()">💰 Budget Summary</mat-card-title>
       <div class="trip-list">
         @for (budget of activeBudgets; track budget._id) {
-            <div class="hero-budget-tab">
-              <app-card-details
-                [title]="budget.name"
-                [amount]="budget.amount"
-                [currency]="budget.currency"
-                [startDate]="budget.startDate"
-                [endDate]="budget.endDate"
-                [progressValue]="(budget.totalSpent / budget.amount) * 100"
-                [spent]="budget.totalSpent"
-                [remaining]="budget.amount - budget.totalSpent"
-                [isActive]="true"
-                variant="hero"
-              />
-            </div>
-          }
+        <div class="hero-budget-tab">
+          <app-card-details
+            [title]="budget.name"
+            [amount]="budget.amount"
+            [currency]="budget.currency"
+            [startDate]="budget.startDate"
+            [endDate]="budget.endDate"
+            [progressValue]="(budget.totalSpent / budget.amount) * 100"
+            [spent]="budget.totalSpent"
+            [remaining]="budget.amount - budget.totalSpent"
+            [isActive]="true"
+            variant="hero"
+          />
+        </div>
+        }
       </div>
     </mat-card>
 
@@ -37,14 +37,16 @@
 
   <div class="container__bottom-row">
     <mat-card class="expenses-overview">
-      <mat-card-title (click)="goToExpenses()">📊 Recent Expenses</mat-card-title>
+      <mat-card-title (click)="goToExpenses()"
+        >📊 Recent Expenses</mat-card-title
+      >
       <div class="expense-list">
         <mat-list>
           <mat-list-item *ngFor="let expense of recentExpenses">
-            <span>{{ expense.description }}</span>
-            <span class="amount">{{
-              expense.amount | currency : expense.currency
-            }}</span>
+            <span
+              >{{ expense.description }}: 
+              {{ expense.amount | currency : expense.currency }}</span
+            >
           </mat-list-item>
         </mat-list>
       </div>
