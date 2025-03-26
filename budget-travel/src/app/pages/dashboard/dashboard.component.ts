@@ -22,7 +22,6 @@ export class DashboardComponent implements OnInit {
     { name: 'Paris', spent: 3200, currency: 'EUR' },
     { name: 'London', spent: 1200, currency: 'GBP' },
   ];
-  budget = { total: 5000, spent: 3200 };
   activeBudgets: Budget[] = [];
   recentExpenses: Expense[] = [];
   exchangeData = { from: 'USD', to: 'EUR', rate: 1 };
