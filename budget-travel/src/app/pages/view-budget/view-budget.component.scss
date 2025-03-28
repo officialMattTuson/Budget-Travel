@@ -1,91 +1,49 @@
-.top-row-container {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-  margin: 2rem 1rem;
-}
-
-.budget-card {
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  background: white;
-  flex: 1;
-}
-
 .container {
-  display: flex;
-  gap: 16px;
+  &__top-row {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    margin: 2rem 1rem;
+
+    app-card-details {
+      padding: 1rem;
+      flex: 1;
+    }
+  }
+
+  &__bottom-row {
+    display: flex;
+    gap: 2rem;
+    margin: 2rem 1rem;
+  }
 }
 
 .table-container {
   flex: 0 0 70%;
-  padding: 16px;
+  padding: 1rem;
   background: white;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 0.75rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
   overflow: auto;
 }
 
-.side-block {
-  flex: 1;
-  padding: 16px;
-  background-color: #f8f8f8;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  min-width: 250px;
-}
-
-.filter-bar {
-  margin-bottom: 12px;
-}
-
-.mat-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.mat-header-cell,
-.mat-cell {
-  padding: 8px 16px;
-  text-align: left;
-}
-
-.mat-header-cell {
-  font-weight: bold;
-  background-color: #f2f2f2;
-}
-
-.mat-row:nth-child(even) {
-  background-color: #fafafa;
+.filter {
+  margin-bottom: 1rem;
 }
 
 .side-block {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1rem;
 
   mat-card {
-    padding: 12px;
-  }
-
-  .alert-card {
-    background: #fff3cd;
-    color: #856404;
-    border-left: 4px solid #ffc107;
+    padding: 0.75rem;
   }
 
   .stat-line {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 6px;
-    font-size: 0.9rem;
-  }
-
-  button {
-    margin-top: auto;
-    align-self: stretch;
+    margin-block-end: 0.5rem;
+    font-size: 1rem;
   }
 }
-
