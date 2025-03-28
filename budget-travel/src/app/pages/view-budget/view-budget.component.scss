@@ -1,0 +1,33 @@
+.table-container {
+  padding: 16px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  overflow: auto;
+}
+
+.filter-bar {
+  margin-bottom: 12px;
+}
+
+.mat-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mat-header-cell,
+.mat-cell {
+  padding: 8px 16px;
+  text-align: left;
+}
+
+.mat-header-cell {
+  font-weight: bold;
+  background-color: #f2f2f2;
+}
+
+.mat-row:nth-child(even) {
+  background-color: #fafafa;
+}
