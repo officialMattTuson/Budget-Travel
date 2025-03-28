@@ -28,4 +28,11 @@ export class CategoriesService {
   getStoredCategories(): Category[] {
     return this._categories.getValue();
   }
+
+  getCategoryNameById(id: number): string {
+    return (
+      this._categories.getValue().find((category) => category.id === id)
+        ?.name ?? ''
+    );
+  }
 }
