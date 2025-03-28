@@ -54,7 +54,7 @@ export class ViewBudgetComponent implements OnInit {
     'category',
   ];
   dataSource!: MatTableDataSource<Expense>;
-  stats = { total: 0, avg: 0, max: 0 };
+  stats: any = {};
   categoryBreakdownData: object[] = [];
   colorScheme = {
     name: 'customScheme',
@@ -177,19 +177,57 @@ export class ViewBudgetComponent implements OnInit {
       });
   }
 
-  calculateStats() {
-    const total = this.budget.expenses.length;
-    const sum = this.budget.expenses.reduce(
-      (s, expense) => s + expense.amount,
-      0
-    );
-    const max = Math.max(
-      ...this.budget.expenses.map((expense) => expense.amount),
-      0
-    );
-    const avg = total > 0 ? sum / total : 0;
-    this.stats = { total, avg, max };
+  calculateStats(): void {
+    const expenses = this.budget.expenses ?? [];
+    const total = expenses.length;
+    const totalSpent = expenses.reduce((sum, e) => sum + e.amount, 0);
+    const max = Math.max(...expenses.map(e => e.amount), 0);
+    const mostRecent = expenses.reduce((latest, e) => {
+      return new Date(e.date) > new Date(latest) ? e.date : latest;
+    }, expenses[0]?.date ?? null);
+  
+    // Budget range calculations
+    const start = new Date(this.budget.startDate);
+    const end = new Date(this.budget.endDate);
+    const today = new Date();
+    const daysTotal = Math.max(1, (end.getTime() - start.getTime()) / (1000 * 3600 * 24));
+    const daysLeft = Math.max(0, Math.ceil((end.getTime() - today.getTime()) / (1000 * 3600 * 24)));
+  
+    const avgPerDay = totalSpent / daysTotal;
+    const remaining = this.budget.amount - totalSpent;
+    const avgRemainingPerDay = daysLeft > 0 ? remaining / daysLeft : 0;
+    const percentSpent = (totalSpent / this.budget.amount) * 100;
+    const isOverBudget = totalSpent > this.budget.amount;
+  
+    // Unique categories
+    const categoriesUsed = new Set(expenses.map(e => e.category)).size;
+  
+    // Top category
+    const categoryMap: Record<string, number> = {};
+    expenses.forEach(e => {
+      categoryMap[this.categoriesService.getCategoryNameById(e.category)] = (categoryMap[e.category] || 0) + e.amount;
+    });
+  
+    const topCategory = Object.entries(categoryMap)
+      .sort((a, b) => b[1] - a[1])
+      .map(([name, value]) => ({ name, value }))[0] || null;
+  
+    this.stats = {
+      total,
+      totalSpent,
+      max,
+      mostRecent,
+      avgPerDay,
+      percentSpent,
+      daysLeft,
+      avgRemainingPerDay,
+      isOverBudget,
+      categoriesUsed,
+      topCategory
+    };
   }
+  
+  
 
   calculateCategoryBreakdown() {
     const grouped = new Map();

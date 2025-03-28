@@ -79,32 +79,70 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-
     <mat-paginator
       [pageSizeOptions]="[5, 10, 25]"
       showFirstLastButtons
     ></mat-paginator>
+  </div>
 
-    <div class="side-block">
-      <mat-card class="stats-summary">
-        <mat-card-title>Expense Stats</mat-card-title>
-        <mat-card-content>
-          <div class="stat-line">
-            <strong># Expenses:</strong> {{ stats.total }}
-          </div>
-          <div class="stat-line">
-            <strong>Avg Amount:</strong> {{ stats.avg | currency }}
-          </div>
-          <div class="stat-line">
-            <strong>Largest:</strong> {{ stats.max | currency }}
-          </div>
-        </mat-card-content>
+  <div class="side-block">
+    <div class="stats-wrapper">
+      <mat-card class="chip-stats-card">
+        <mat-card-title>📊 Budget Insights</mat-card-title>
+        <mat-chip-list>
+      
+          <mat-chip selected color="primary">
+            💸 {{ stats.total }} Expenses
+          </mat-chip>
+      
+          <mat-chip selected color="accent">
+            💰 {{ stats.totalSpent | currency }}
+          </mat-chip>
+      
+          <mat-chip selected color="warn" *ngIf="stats.percentSpent >= 90">
+            📈 {{ stats.percentSpent | number : '1.0-0' }}% Used
+          </mat-chip>
+      
+          <mat-chip selected *ngIf="stats.daysLeft > 0">
+            📅 {{ stats.daysLeft }} Days Left
+          </mat-chip>
+      
+          <mat-chip selected>
+            🎯 Avg/Day: {{ stats.avgPerDay | currency }}
+          </mat-chip>
+      
+          <mat-chip selected>
+            📆 Last: {{ stats.mostRecent | date : 'mediumDate' }}
+          </mat-chip>
+      
+          <mat-chip selected>
+            🧩 {{ stats.categoriesUsed }} Categories Used
+          </mat-chip>
+      
+          <mat-chip selected *ngIf="stats.topCategory">
+            🏆 Top Category: <b>{{ stats.topCategory.name }} ({{ stats.topCategory.value | currency }}</b>)
+          </mat-chip>
+      
+          <mat-chip selected color="warn" *ngIf="stats.isOverBudget">
+            🔥 Over Budget!
+          </mat-chip>
+      
+          <mat-chip selected *ngIf="!stats.isOverBudget && stats.daysLeft > 0">
+            💡 Spend/day left: {{ stats.avgRemainingPerDay | currency }}
+          </mat-chip>
+      
+        </mat-chip-list>
       </mat-card>
-      <button mat-stroked-button color="primary">
-        <mat-icon>add</mat-icon>
-        Add Expense
-      </button>
+      
+      
     </div>
+    
+    
+    
+    <button mat-stroked-button color="primary">
+      <mat-icon>add</mat-icon>
+      Add Expense
+    </button>
   </div>
 </div>
 }
