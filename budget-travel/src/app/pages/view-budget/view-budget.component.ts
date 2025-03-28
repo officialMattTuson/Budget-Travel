@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CardDetailsComponent } from '../../components/card-details/card-details.component';
 import { HeaderComponent } from '../../components/header/header.component';
 import { MaterialModule } from '../../modules/material.module';
@@ -18,6 +23,11 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CategoryMapperPipe } from '../../pipes/category-mapper.pipe';
 import { CategoriesService } from '../../services/categories.service';
+import {
+  NgxChartsModule,
+  LegendPosition,
+  ScaleType,
+} from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-view-budget',
@@ -27,11 +37,13 @@ import { CategoriesService } from '../../services/categories.service';
     CardDetailsComponent,
     HeaderComponent,
     CategoryMapperPipe,
+    NgxChartsModule,
   ],
   templateUrl: './view-budget.component.html',
   styleUrl: './view-budget.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class ViewBudgetComponent implements OnInit, AfterViewInit {
+export class ViewBudgetComponent implements OnInit {
   budget!: Budget;
 
   displayedColumns: string[] = [
@@ -42,7 +54,26 @@ export class ViewBudgetComponent implements OnInit, AfterViewInit {
     'category',
   ];
   dataSource!: MatTableDataSource<Expense>;
-
+  stats = { total: 0, avg: 0, max: 0 };
+  categoryBreakdownData: object[] = [];
+  colorScheme = {
+    name: 'customScheme',
+    selectable: true,
+    group: ScaleType.Ordinal,
+    domain: [
+      '#5AA454', // Green
+      '#A10A28', // Burgundy
+      '#C7B42C', // Yellow/Gold
+      '#AAAAAA', // Grey
+      '#D84315', // Passport Stamp Red
+      '#3E2723', // Passport Cover Brown
+      '#795548', // Earthy Brown
+      '#00796B', // Teal
+      '#FFA000', // Warm Amber
+      '#8D6E63', // Muted Taupe
+    ],
+  };
+  LegendPosition = LegendPosition;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -59,11 +90,6 @@ export class ViewBudgetComponent implements OnInit, AfterViewInit {
     this.getBudgetById(id);
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
   getBudgetById(id: string) {
     this.budgetService
       .getBudgetById(id)
@@ -72,7 +98,11 @@ export class ViewBudgetComponent implements OnInit, AfterViewInit {
         next: (budget) => {
           this.budget = budget;
           this.dataSource = new MatTableDataSource(this.budget.expenses);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
           this.setFilters();
+          this.calculateStats();
+          this.calculateCategoryBreakdown();
         },
         error: (error) => console.error('Error fetching budget:', error),
       });
@@ -145,5 +175,52 @@ export class ViewBudgetComponent implements OnInit, AfterViewInit {
           console.error('Error updating budget:', error);
         },
       });
+  }
+
+  calculateStats() {
+    const total = this.budget.expenses.length;
+    const sum = this.budget.expenses.reduce(
+      (s, expense) => s + expense.amount,
+      0
+    );
+    const max = Math.max(
+      ...this.budget.expenses.map((expense) => expense.amount),
+      0
+    );
+    const avg = total > 0 ? sum / total : 0;
+    this.stats = { total, avg, max };
+  }
+
+  calculateCategoryBreakdown() {
+    const grouped = new Map();
+    this.budget.expenses.forEach((expense) => {
+      const category = this.categoriesService.getCategoryNameById(
+        expense.category
+      );
+      grouped.set(category, (grouped.get(category) || 0) + expense.amount);
+    });
+    this.categoryBreakdownData = Array.from(grouped.entries()).map(
+      ([name, value]) => ({ name, value })
+    );
+    console.log(this.categoryBreakdownData);
+  }
+
+  formatCurrency(value: number): string {
+    return `$${value.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+  }
+
+  formatTooltip(data: { data: { name: string }; value: number }): string {
+    const name = data.data.name ?? 'Unknown';
+    const value = typeof data.value === 'number' ? data.value : 0;
+
+    const formatted = `$${value.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+
+    return `${name}: ${formatted}`;
   }
 }

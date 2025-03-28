@@ -96,12 +96,45 @@ mat-form-field .mat-mdc-form-field-subscript-wrapper {
   font-size: 1.5rem;
   font-weight: bold;
   margin-left: 0.5rem;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .subtitle {
   font-size: 1rem;
   font-weight: bold;
   margin-left: 0.5rem;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
+}
+
+.ngx-charts-tooltip-content {
+  font-size: 1rem !important;
+  font-weight: 500;
+  background: #fff8e1 !important;
+  color: #3e2723 !important;
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 0.5rem;
+  border: 1px solid #d84315;
+  box-shadow: 0 2px 0.5rem rgba(0, 0, 0, 0.2);
+}
+
+.ngx-charts-tooltip-content span {
+  color: inherit !important;
+  font-weight: inherit !important;
+}
+
+.ngx-charts text {
+  font-size: 1rem;
+  fill: #3e2723;
+}
+
+.ngx-charts .label {
+  font-weight: 600;
+}
+
+.chart-legend .legend-label-text {
+  font-size: 1rem !important;
+}
+
+.ngx-charts-legend-label {
+  font-size: 1rem;
 }
