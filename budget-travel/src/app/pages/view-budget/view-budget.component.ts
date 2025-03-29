@@ -17,17 +17,17 @@ import { OverlayResult, OverlayType } from '../../models/overlay-result.model';
 import { AddBudgetComponent } from '../../components/overlays/add-budget/add-budget.component';
 import { mapBudgetToPostRequest } from '../../utils/mappers/budget-post-request-mapper';
 import { DataCacheService } from '../../services/data-cache.service';
-import { Expense } from '../../models/expense.model';
+import {
+  colorScheme,
+  Expense,
+  ExpenseStatistics,
+} from '../../models/expense.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CategoryMapperPipe } from '../../pipes/category-mapper.pipe';
 import { CategoriesService } from '../../services/categories.service';
-import {
-  NgxChartsModule,
-  LegendPosition,
-  ScaleType,
-} from '@swimlane/ngx-charts';
+import { NgxChartsModule, LegendPosition } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-view-budget',
@@ -54,26 +54,11 @@ export class ViewBudgetComponent implements OnInit {
     'category',
   ];
   dataSource!: MatTableDataSource<Expense>;
-  stats: any = {};
+  stats!: ExpenseStatistics;
   categoryBreakdownData: object[] = [];
-  colorScheme = {
-    name: 'customScheme',
-    selectable: true,
-    group: ScaleType.Ordinal,
-    domain: [
-      '#5AA454', // Green
-      '#A10A28', // Burgundy
-      '#C7B42C', // Yellow/Gold
-      '#AAAAAA', // Grey
-      '#D84315', // Passport Stamp Red
-      '#3E2723', // Passport Cover Brown
-      '#795548', // Earthy Brown
-      '#00796B', // Teal
-      '#FFA000', // Warm Amber
-      '#8D6E63', // Muted Taupe
-    ],
-  };
   LegendPosition = LegendPosition;
+  colorScheme = colorScheme;
+  
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -179,55 +164,46 @@ export class ViewBudgetComponent implements OnInit {
 
   calculateStats(): void {
     const expenses = this.budget.expenses ?? [];
-    const total = expenses.length;
     const totalSpent = expenses.reduce((sum, e) => sum + e.amount, 0);
-    const max = Math.max(...expenses.map(e => e.amount), 0);
-    const mostRecent = expenses.reduce((latest, e) => {
-      return new Date(e.date) > new Date(latest) ? e.date : latest;
-    }, expenses[0]?.date ?? null);
-  
-    // Budget range calculations
+
     const start = new Date(this.budget.startDate);
     const end = new Date(this.budget.endDate);
     const today = new Date();
-    const daysTotal = Math.max(1, (end.getTime() - start.getTime()) / (1000 * 3600 * 24));
-    const daysLeft = Math.max(0, Math.ceil((end.getTime() - today.getTime()) / (1000 * 3600 * 24)));
-  
-    const avgPerDay = totalSpent / daysTotal;
-    const remaining = this.budget.amount - totalSpent;
-    const avgRemainingPerDay = daysLeft > 0 ? remaining / daysLeft : 0;
-    const percentSpent = (totalSpent / this.budget.amount) * 100;
-    const isOverBudget = totalSpent > this.budget.amount;
-  
-    // Unique categories
-    const categoriesUsed = new Set(expenses.map(e => e.category)).size;
-  
-    // Top category
+    const daysTotal = Math.max(
+      1,
+      (end.getTime() - start.getTime()) / (1000 * 3600 * 24)
+    );
+    const daysLeft = Math.max(
+      0,
+      Math.ceil((end.getTime() - today.getTime()) / (1000 * 3600 * 24))
+    );
+
     const categoryMap: Record<string, number> = {};
-    expenses.forEach(e => {
-      categoryMap[this.categoriesService.getCategoryNameById(e.category)] = (categoryMap[e.category] || 0) + e.amount;
+    expenses.forEach((e) => {
+      categoryMap[this.categoriesService.getCategoryNameById(e.category)] =
+        (categoryMap[e.category] || 0) + e.amount;
     });
-  
-    const topCategory = Object.entries(categoryMap)
-      .sort((a, b) => b[1] - a[1])
-      .map(([name, value]) => ({ name, value }))[0] || null;
-  
+
     this.stats = {
-      total,
+      totalExpenses: expenses.length,
       totalSpent,
-      max,
-      mostRecent,
-      avgPerDay,
-      percentSpent,
+      max: Math.max(...expenses.map((e) => e.amount), 0),
+      mostRecent: expenses.reduce((latest, e) => {
+        return new Date(e.date) > new Date(latest) ? e.date : latest;
+      }, expenses[0]?.date ?? null),
+      avgPerDay: totalSpent / daysTotal,
+      percentSpent: (totalSpent / this.budget.amount) * 100,
       daysLeft,
-      avgRemainingPerDay,
-      isOverBudget,
-      categoriesUsed,
-      topCategory
+      avgRemainingPerDay:
+        daysLeft > 0 ? (this.budget.amount - totalSpent) / daysLeft : 0,
+      isOverBudget: totalSpent > this.budget.amount,
+      categoriesUsed: new Set(expenses.map((e) => e.category)).size,
+      topCategory:
+        Object.entries(categoryMap)
+          .sort((a, b) => b[1] - a[1])
+          .map(([name, value]) => ({ name, value }))[0] || null,
     };
   }
-  
-  
 
   calculateCategoryBreakdown() {
     const grouped = new Map();

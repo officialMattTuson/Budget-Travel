@@ -76,12 +76,23 @@
 }
 
 .stats-wrapper {
-  margin-top: 1,5rem;
+  margin-top: 1, 5rem;
   display: flex;
   justify-content: center;
 
   .chip-stats-card {
     max-width: 40rem;
     width: 100%;
+    .warn {
+      background-color: #db8781;
+    }
+
+    .accent {
+      background-color: #ceb38c;
+    }
+
+    .primary {
+      background-color: #b6eeb4;
+    }
   }
 }

@@ -92,7 +92,7 @@
         <mat-chip-list>
       
           <mat-chip selected color="primary">
-            💸 {{ stats.total }} Expenses
+            💸 {{ stats.totalExpenses }} Expenses
           </mat-chip>
       
           <mat-chip selected color="accent">
@@ -123,9 +123,16 @@
             🏆 Top Category: <b>{{ stats.topCategory.name }} ({{ stats.topCategory.value | currency }}</b>)
           </mat-chip>
       
-          <mat-chip selected color="warn" *ngIf="stats.isOverBudget">
-            🔥 Over Budget!
-          </mat-chip>
+            <mat-chip 
+            selected 
+            [ngClass]="{
+              'warn': stats.percentSpent >= 90,
+              'accent': stats.percentSpent >= 75 && stats.percentSpent < 90,
+              'primary': stats.percentSpent < 75
+            }"
+            >
+            🔥 {{ stats.percentSpent | number : '1.0-0' }}% of Budget Used
+            </mat-chip>
       
           <mat-chip selected *ngIf="!stats.isOverBudget && stats.daysLeft > 0">
             💡 Spend/day left: {{ stats.avgRemainingPerDay | currency }}
