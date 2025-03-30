@@ -16,7 +16,6 @@ import { OverlayService } from '../../services/shared/overlay.service';
 import { OverlayResult, OverlayType } from '../../models/overlay-result.model';
 import { AddBudgetComponent } from '../../components/overlays/add-budget/add-budget.component';
 import { mapBudgetToPostRequest } from '../../utils/mappers/budget-post-request-mapper';
-import { DataCacheService } from '../../services/data-cache.service';
 import {
   colorScheme,
   Expense,
@@ -28,6 +27,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { CategoryMapperPipe } from '../../pipes/category-mapper.pipe';
 import { CategoriesService } from '../../services/shared/categories.service';
 import { NgxChartsModule, LegendPosition } from '@swimlane/ngx-charts';
+import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
 
 @Component({
   selector: 'app-view-budget',
@@ -65,8 +65,8 @@ export class ViewBudgetComponent implements OnInit {
   constructor(
     private readonly activatedRoute: ActivatedRoute,
     private readonly budgetService: BudgetService,
+    private readonly budgetFacadeService: BudgetFacadeService,
     private readonly overlayService: OverlayService,
-    private readonly dataCache: DataCacheService,
     private readonly categoriesService: CategoriesService
   ) {}
 
@@ -147,14 +147,14 @@ export class ViewBudgetComponent implements OnInit {
       .updateBudget(budgetPostObject, this.budget._id)
       .subscribe({
         next: (addedBudget: Budget) => {
-          const currentBudgets = this.dataCache.getBudgets();
+          const currentBudgets = this.budgetFacadeService.getBudgets();
           const index = currentBudgets.findIndex(
             (b) => b._id === this.budget._id
           );
           addedBudget.totalSpent = this.budget.totalSpent;
           currentBudgets[index] = addedBudget;
 
-          this.dataCache.setBudgets(currentBudgets);
+          this.budgetFacadeService.setBudgets(currentBudgets);
         },
         error: (error) => {
           console.error('Error updating budget:', error);

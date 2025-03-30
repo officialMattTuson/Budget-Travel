@@ -4,13 +4,13 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../modules/material.module';
 import { OverlayService } from '../../services/shared/overlay.service';
 import { AddBudgetComponent } from '../../components/overlays/add-budget/add-budget.component';
-import { OverlayResult, OverlayType } from '../../models/overlay-result.model';
+import { OverlayResult } from '../../models/overlay-result.model';
 import { Budget, BudgetPostRequest } from '../../models/budgets.model';
-import { DataCacheService } from '../../services/data-cache.service';
 import { CardDetailsComponent } from '../../components/card-details/card-details.component';
 import { Expense } from '../../models/expense.model';
 import { Router } from '@angular/router';
 import { HeaderComponent } from '../../components/header/header.component';
+import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
 
 @Component({
   selector: 'app-budgets',
@@ -33,8 +33,8 @@ export class BudgetsComponent implements OnInit {
 
   constructor(
     private readonly budgetService: BudgetService,
+    private readonly budgetFacadeService: BudgetFacadeService,
     private readonly overlayService: OverlayService,
-    private readonly dataCache: DataCacheService,
     private readonly router: Router
   ) {}
 
@@ -43,7 +43,7 @@ export class BudgetsComponent implements OnInit {
   }
 
   observeBudgetChanges() {
-    this.dataCache.budgets$.subscribe({
+    this.budgetFacadeService.budgets$.subscribe({
       next: (budgets) => {
         this.resetBudgets();
         if (budgets.length === 0) {
@@ -99,7 +99,7 @@ export class BudgetsComponent implements OnInit {
       next: (budget: Budget) => {
         this.isLoading = true;
         this.budgets.push(budget);
-        this.dataCache.setBudgets(this.budgets);
+        this.budgetFacadeService.setBudgets(this.budgets);
       },
       error: (error) => {
         console.error('Error adding new budget:', error);
