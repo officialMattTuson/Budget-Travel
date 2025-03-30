@@ -13,9 +13,10 @@ import { CategoryMapperPipe } from '../../pipes/category-mapper.pipe';
 import { OverlayService } from '../../services/shared/overlay.service';
 import { OverlayResult } from '../../models/overlay-result.model';
 import { AddExpenseComponent } from '../../components/overlays/add-expense/add-expense.component';
-import { DataCacheService } from '../../services/data-cache.service';
 import { Router } from '@angular/router';
 import { HeaderComponent } from '../../components/header/header.component';
+import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
+import { ExpensesFacadeService } from '../../services/expenses/expenses-facade.service';
 
 @Component({
   selector: 'app-expenses',
@@ -50,8 +51,9 @@ export class ExpensesComponent implements OnInit {
   constructor(
     private readonly expensesService: ExpensesService,
     private readonly categoriesService: CategoriesService,
+    private readonly budgetFacadeService: BudgetFacadeService,
+    private readonly expensesFacadeService: ExpensesFacadeService,
     private readonly overlayService: OverlayService,
-    private readonly dataCache: DataCacheService,
     private readonly router: Router
   ) {
     this.categories$ = this.categoriesService.categories$;
@@ -63,7 +65,7 @@ export class ExpensesComponent implements OnInit {
   }
 
   observeBudgetChanges(): void {
-    this.dataCache.budgets$
+    this.budgetFacadeService.budgets$
       .pipe(takeUntil(this.destroy$))
       .subscribe((budgets) => {
         if (budgets.length === 0) {
@@ -75,7 +77,7 @@ export class ExpensesComponent implements OnInit {
   }
 
   observeExpenseChanges(): void {
-    this.dataCache.expenses$
+    this.expensesFacadeService.expenses$
       .pipe(takeUntil(this.destroy$))
       .subscribe((expenses) => {
         this.expenses = expenses;
@@ -133,7 +135,7 @@ export class ExpensesComponent implements OnInit {
     this.expensesService.addExpense(expense).subscribe({
       next: (expense: Expense) => {
         this.expenses.push(expense);
-        this.dataCache.setExpenses(this.expenses);
+        this.expensesFacadeService.setExpenses(this.expenses);
       },
       error: (error) => console.error(error),
     });

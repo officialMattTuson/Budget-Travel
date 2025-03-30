@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../modules/material.module';
 import { Router } from '@angular/router';
-import { DataCacheService } from '../../services/data-cache.service';
 import { take } from 'rxjs';
 import { BudgetService } from '../../services/budgets/budget.service';
 import { ExpensesService } from '../../services/expenses/expenses.service';
@@ -10,6 +9,8 @@ import { CategoriesService } from '../../services/shared/categories.service';
 import { Budget } from '../../models/budgets.model';
 import { CardDetailsComponent } from '../../components/card-details/card-details.component';
 import { Expense } from '../../models/expense.model';
+import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
+import { ExpensesFacadeService } from '../../services/expenses/expenses-facade.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,9 +30,10 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly dataCache: DataCacheService,
     private readonly budgetService: BudgetService,
     private readonly expensesService: ExpensesService,
+    private readonly budgetFacadeService: BudgetFacadeService,
+    private readonly expensesFacadeService: ExpensesFacadeService,
     private readonly categoriesService: CategoriesService
   ) {}
 
@@ -47,7 +49,7 @@ export class DashboardComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: (budgets) => {
-          this.dataCache.setBudgets(budgets);
+          this.budgetFacadeService.setBudgets(budgets);
           budgets.forEach((budget) => {
             if (budget.isActive) {
               this.activeBudgets.push(budget);
@@ -64,7 +66,7 @@ export class DashboardComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: (expenses) => {
-          this.dataCache.setExpenses(expenses);
+          this.expensesFacadeService.setExpenses(expenses);
           this.recentExpenses = expenses.slice(0, 5);
         },
         error: (error) => console.error('Error fetching expenses:', error),

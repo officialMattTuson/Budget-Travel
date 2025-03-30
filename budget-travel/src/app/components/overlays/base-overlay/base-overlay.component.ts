@@ -5,13 +5,14 @@ import {
   OverlayResult,
   OverlayType,
 } from '../../../models/overlay-result.model';
-import { DataCacheService } from '../../../services/data-cache.service';
 import { Observable } from 'rxjs';
 import { CategoriesService } from '../../../services/shared/categories.service';
 import { Category } from '../../../models/category.model';
 import { Currency } from '../../../models/currency.model';
 import { Budget } from '../../../models/budgets.model';
 import { Expense } from '../../../models/expense.model';
+import { BudgetFacadeService } from '../../../services/budgets/budget-facade.service';
+import { CurrencyService } from '../../../services/shared/currency.service';
 
 @Component({
   selector: 'app-base-overlay',
@@ -33,14 +34,15 @@ export abstract class BaseOverlayComponent {
   constructor(
     protected readonly fb: FormBuilder,
     protected readonly overlayService: OverlayService,
-    protected readonly dataCache: DataCacheService,
+    protected readonly budgetFacadeService: BudgetFacadeService,
+    protected readonly currencyService: CurrencyService,
     protected readonly categoryService: CategoriesService
   ) {
     this.initializeForm();
-    this.budget$ = this.dataCache.budgets$;
-    this.currencies$ = this.dataCache.getCurrencies();
+    this.budget$ = this.budgetFacadeService.budgets$;
+    this.currencies$ = this.currencyService.getCurrencies();
     this.categories$ = this.categoryService.categories$;
-    this.defaultCurrency$ = this.dataCache.defaultCurrency$;
+    this.defaultCurrency$ = this.currencyService.defaultCurrency$;
   }
 
   protected abstract autoFillForm(): void;
