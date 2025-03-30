@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ExpensesService } from '../../services/expenses.service';
+import { ExpensesService } from '../../services/expenses/expenses.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { CategoriesService } from '../../services/categories.service';
+import { CategoriesService } from '../../services/shared/categories.service';
 import { Category } from '../../models/category.model';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MaterialModule } from '../../modules/material.module';
@@ -10,7 +10,7 @@ import { Event } from '../../models/event.model';
 import { Expense, ExpensePostRequest } from '../../models/expense.model';
 import { Budget } from '../../models/budgets.model';
 import { CategoryMapperPipe } from '../../pipes/category-mapper.pipe';
-import { OverlayService } from '../../services/overlay.service';
+import { OverlayService } from '../../services/shared/overlay.service';
 import { OverlayResult } from '../../models/overlay-result.model';
 import { AddExpenseComponent } from '../../components/overlays/add-expense/add-expense.component';
 import { DataCacheService } from '../../services/data-cache.service';

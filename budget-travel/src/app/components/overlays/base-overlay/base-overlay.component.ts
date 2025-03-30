@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { OverlayService } from '../../../services/overlay.service';
+import { OverlayService } from '../../../services/shared/overlay.service';
 import {
   OverlayResult,
   OverlayType,
 } from '../../../models/overlay-result.model';
 import { DataCacheService } from '../../../services/data-cache.service';
 import { Observable } from 'rxjs';
-import { CategoriesService } from '../../../services/categories.service';
+import { CategoriesService } from '../../../services/shared/categories.service';
 import { Category } from '../../../models/category.model';
 import { Currency } from '../../../models/currency.model';
 import { Budget } from '../../../models/budgets.model';

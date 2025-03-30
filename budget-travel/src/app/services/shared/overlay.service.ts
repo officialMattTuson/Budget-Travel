@@ -1,9 +1,9 @@
 import { Injectable, ComponentRef, ViewContainerRef, EventEmitter, Type } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
-import { BaseOverlayComponent } from '../components/overlays/base-overlay/base-overlay.component';
-import { Expense } from '../models/expense.model';
-import { Budget } from '../models/budgets.model';
-import { OverlayType } from '../models/overlay-result.model';
+import { BaseOverlayComponent } from '../../components/overlays/base-overlay/base-overlay.component';
+import { Expense } from '../../models/expense.model';
+import { Budget } from '../../models/budgets.model';
+import { OverlayType } from '../../models/overlay-result.model';
 
 @Injectable({
   providedIn: 'root',

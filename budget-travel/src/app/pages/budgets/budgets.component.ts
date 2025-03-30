@@ -1,8 +1,8 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
-import { BudgetService } from '../../services/budget.service';
+import { BudgetService } from '../../services/budgets/budget.service';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../modules/material.module';
-import { OverlayService } from '../../services/overlay.service';
+import { OverlayService } from '../../services/shared/overlay.service';
 import { AddBudgetComponent } from '../../components/overlays/add-budget/add-budget.component';
 import { OverlayResult, OverlayType } from '../../models/overlay-result.model';
 import { Budget, BudgetPostRequest } from '../../models/budgets.model';

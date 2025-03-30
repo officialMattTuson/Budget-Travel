@@ -1,5 +1,5 @@
 import { Component, ViewChild, ViewContainerRef } from '@angular/core';
-import { OverlayService } from '../../services/overlay.service';
+import { OverlayService } from '../../services/shared/overlay.service';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../modules/material.module';
 import { MatDrawer } from '@angular/material/sidenav';

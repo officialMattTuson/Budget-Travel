@@ -9,10 +9,10 @@ import { CardDetailsComponent } from '../../components/card-details/card-details
 import { HeaderComponent } from '../../components/header/header.component';
 import { MaterialModule } from '../../modules/material.module';
 import { ActivatedRoute } from '@angular/router';
-import { BudgetService } from '../../services/budget.service';
+import { BudgetService } from '../../services/budgets/budget.service';
 import { take } from 'rxjs';
 import { Budget, BudgetPostRequest } from '../../models/budgets.model';
-import { OverlayService } from '../../services/overlay.service';
+import { OverlayService } from '../../services/shared/overlay.service';
 import { OverlayResult, OverlayType } from '../../models/overlay-result.model';
 import { AddBudgetComponent } from '../../components/overlays/add-budget/add-budget.component';
 import { mapBudgetToPostRequest } from '../../utils/mappers/budget-post-request-mapper';
@@ -26,7 +26,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CategoryMapperPipe } from '../../pipes/category-mapper.pipe';
-import { CategoriesService } from '../../services/categories.service';
+import { CategoriesService } from '../../services/shared/categories.service';
 import { NgxChartsModule, LegendPosition } from '@swimlane/ngx-charts';
 
 @Component({
@@ -58,7 +58,7 @@ export class ViewBudgetComponent implements OnInit {
   categoryBreakdownData: object[] = [];
   LegendPosition = LegendPosition;
   colorScheme = colorScheme;
-  
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
