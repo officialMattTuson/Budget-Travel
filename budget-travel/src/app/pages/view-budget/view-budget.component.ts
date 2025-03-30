@@ -10,11 +10,7 @@ import { MaterialModule } from '../../modules/material.module';
 import { ActivatedRoute } from '@angular/router';
 import { BudgetService } from '../../services/budgets/budget.service';
 import { take } from 'rxjs';
-import { Budget, BudgetPostRequest } from '../../models/budgets.model';
-import { OverlayService } from '../../services/shared/overlay.service';
-import { OverlayResult, OverlayType } from '../../models/overlay-result.model';
-import { AddBudgetComponent } from '../../components/overlays/add-budget/add-budget.component';
-import { mapBudgetToPostRequest } from '../../utils/mappers/budget-post-request-mapper';
+import { Budget } from '../../models/budgets.model';
 import {
   colorScheme,
   Expense,
@@ -64,12 +60,12 @@ export class ViewBudgetComponent implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
     private readonly budgetService: BudgetService,
     private readonly budgetFacadeService: BudgetFacadeService,
-    private readonly overlayService: OverlayService,
     private readonly categoriesService: CategoriesService
   ) {}
 
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.params['id'];
+    console.log(id)
     this.getBudgetById(id);
   }
 
@@ -83,6 +79,7 @@ export class ViewBudgetComponent implements OnInit {
           this.dataSource = new MatTableDataSource(this.budget.expenses);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
+          console.log('hello')
           this.setFilters();
           this.calculateStats();
           this.calculateCategoryBreakdown();
@@ -122,42 +119,7 @@ export class ViewBudgetComponent implements OnInit {
   }
 
   openViewBudgetForm() {
-    const componentRef = this.overlayService.open(
-      AddBudgetComponent,
-      this.budget,
-      OverlayType.Budget
-    );
-
-    if (componentRef) {
-      componentRef.instance.result.subscribe((result: OverlayResult) => {
-        if (!result.data) {
-          return;
-        }
-
-        this.updateBudget(result.data as BudgetPostRequest);
-      });
-    }
-  }
-
-  updateBudget(formData: BudgetPostRequest) {
-    const budgetPostObject = mapBudgetToPostRequest(formData);
-    this.budgetService
-      .updateBudget(budgetPostObject, this.budget._id)
-      .subscribe({
-        next: (addedBudget: Budget) => {
-          const currentBudgets = this.budgetFacadeService.getBudgets();
-          const index = currentBudgets.findIndex(
-            (b) => b._id === this.budget._id
-          );
-          addedBudget.totalSpent = this.budget.totalSpent;
-          currentBudgets[index] = addedBudget;
-
-          this.budgetFacadeService.setBudgets(currentBudgets);
-        },
-        error: (error) => {
-          console.error('Error updating budget:', error);
-        },
-      });
+    this.budgetFacadeService.openBudgetForm(this.budget);
   }
 
   calculateStats(): void {

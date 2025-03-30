@@ -4,7 +4,7 @@
   (onAddButtonClicked)="openAddBudgetForm()"
 ></app-header>
 <mat-card class="budget__container">
-  @if (!isLoading && activeBudgets.length > 0) {
+  @if (!(isLoading$ | async) && activeBudgets.length > 0) {
   <div class="budget__hero-section">
     <div class="budget__hero-left">
       @if (activeBudgets.length === 1) {
@@ -63,7 +63,7 @@
     </div>
   </div>
 
-  } @if (!isLoading && inactiveBudgets.length > 0) {
+  } @if (!(isLoading$ | async) && inactiveBudgets.length > 0) {
 
   <div class="budget__card__container">
     <div class="budget__card__grid">
