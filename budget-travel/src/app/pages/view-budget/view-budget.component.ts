@@ -5,7 +5,6 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { CardDetailsComponent } from '../../components/card-details/card-details.component';
 import { HeaderComponent } from '../../components/header/header.component';
 import { MaterialModule } from '../../modules/material.module';
 import { ActivatedRoute } from '@angular/router';
@@ -34,7 +33,6 @@ import { BudgetFacadeService } from '../../services/budgets/budget-facade.servic
   imports: [
     CommonModule,
     MaterialModule,
-    CardDetailsComponent,
     HeaderComponent,
     CategoryMapperPipe,
     NgxChartsModule,
@@ -216,7 +214,6 @@ export class ViewBudgetComponent implements OnInit {
     this.categoryBreakdownData = Array.from(grouped.entries()).map(
       ([name, value]) => ({ name, value })
     );
-    console.log(this.categoryBreakdownData);
   }
 
   formatCurrency(value: number): string {
