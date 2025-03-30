@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ExpensesService } from '../../services/expenses/expenses.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { CategoriesService } from '../../services/shared/categories.service';
 import { Category } from '../../models/category.model';
@@ -7,12 +6,9 @@ import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MaterialModule } from '../../modules/material.module';
 import { FormsModule } from '@angular/forms';
 import { Event } from '../../models/event.model';
-import { Expense, ExpensePostRequest } from '../../models/expense.model';
+import { Expense } from '../../models/expense.model';
 import { Budget } from '../../models/budgets.model';
 import { CategoryMapperPipe } from '../../pipes/category-mapper.pipe';
-import { OverlayService } from '../../services/shared/overlay.service';
-import { OverlayResult } from '../../models/overlay-result.model';
-import { AddExpenseComponent } from '../../components/overlays/add-expense/add-expense.component';
 import { Router } from '@angular/router';
 import { HeaderComponent } from '../../components/header/header.component';
 import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
@@ -27,7 +23,7 @@ import { ExpensesFacadeService } from '../../services/expenses/expenses-facade.s
     MaterialModule,
     CommonModule,
     CategoryMapperPipe,
-    HeaderComponent
+    HeaderComponent,
   ],
   templateUrl: './expenses.component.html',
   styleUrls: ['./expenses.component.scss'],
@@ -49,11 +45,9 @@ export class ExpensesComponent implements OnInit {
   private readonly destroy$ = new Subject<void>();
 
   constructor(
-    private readonly expensesService: ExpensesService,
     private readonly categoriesService: CategoriesService,
     private readonly budgetFacadeService: BudgetFacadeService,
     private readonly expensesFacadeService: ExpensesFacadeService,
-    private readonly overlayService: OverlayService,
     private readonly router: Router
   ) {
     this.categories$ = this.categoriesService.categories$;
@@ -117,27 +111,6 @@ export class ExpensesComponent implements OnInit {
   }
 
   openAddExpenseForm() {
-    const componentRef = this.overlayService.open(AddExpenseComponent);
-
-    if (componentRef) {
-      componentRef.instance.result.subscribe((result: OverlayResult) => {
-        if (!result.data) {
-          return;
-        }
-        if (result.status === 'submitted') {
-          this.addNewExpense(result.data as ExpensePostRequest);
-        }
-      });
-    }
-  }
-
-  addNewExpense(expense: ExpensePostRequest): void {
-    this.expensesService.addExpense(expense).subscribe({
-      next: (expense: Expense) => {
-        this.expenses.push(expense);
-        this.expensesFacadeService.setExpenses(this.expenses);
-      },
-      error: (error) => console.error(error),
-    });
+    this.expensesFacadeService.openAddExpenseForm();
   }
 }
