@@ -11,46 +11,53 @@
       <div>
         <h2>{{ budget.name }}</h2>
         <p class="date-range">
-          {{ budget.startDate | date: 'MMM d, y' }} – {{ budget.endDate | date: 'MMM d, y' }}
+          {{ budget.startDate | date : "MMM d, y" }} –
+          {{ budget.endDate | date : "MMM d, y" }}
         </p>
       </div>
-      <button mat-button color="primary">
-        <mat-icon>edit</mat-icon> Edit
-      </button>
+      <button mat-button color="primary"><mat-icon>edit</mat-icon> Edit</button>
     </div>
-  
+
     <div class="budget-metrics">
       <div class="metric">
         <label>Total Budget</label>
-        <span>{{ budget.amount | currency: budget.currency }}</span>
+        <span>{{ budget.amount | currency : budget.currency }}</span>
       </div>
-  
+
       <div class="metric">
         <label>Spent</label>
-        <span>{{ budget.totalSpent | currency: budget.currency }}</span>
+        <span>{{ budget.totalSpent | currency : budget.currency }}</span>
       </div>
-  
+
       <div class="metric">
         <label>Remaining</label>
-        <span>{{ budget.amount - budget.totalSpent | currency: budget.currency }}</span>
+        <span>{{
+          budget.amount - budget.totalSpent | currency : budget.currency
+        }}</span>
       </div>
-  
+
       <div class="metric">
         <label>Status</label>
-        <span [ngClass]="{ 'over': budget.totalSpent > budget.amount }">
-          {{ budget.totalSpent > budget.amount ? 'Over Budget' : 'On Track' }}
+        <span [ngClass]="{ over: budget.totalSpent > budget.amount }">
+          {{ budget.totalSpent > budget.amount ? "Over Budget" : "On Track" }}
         </span>
       </div>
     </div>
-  
-<div class="budget-bar">
-  <div class="fill" [style.width.%]="budget.totalSpent / budget.amount * 100">
-    <span class="label">{{ (budget.totalSpent / budget.amount * 100) | number: '1.0-0' }}%</span>
-  </div>
-</div>
+
+    <div class="budget-bar">
+      <div
+        class="fill"
+        [style.width.%]="(budget.totalSpent / budget.amount) * 100"
+      >
+        <span class="label"
+          >{{
+            (budget.totalSpent / budget.amount) * 100 | number : "1.0-0"
+          }}%</span
+        >
+      </div>
+    </div>
   </mat-card>
-  
-  
+
   @if (categoryBreakdownData.length > 0) {
   <ngx-charts-pie-chart
     [results]="categoryBreakdownData"
@@ -121,63 +128,62 @@
       <mat-card class="chip-stats-card">
         <mat-card-title>📊 Budget Insights</mat-card-title>
         <mat-chip-list>
-      
           <mat-chip selected color="primary">
             💸 {{ stats.totalExpenses }} Expenses
           </mat-chip>
-      
+
           <mat-chip selected color="accent">
             💰 {{ stats.totalSpent | currency }}
           </mat-chip>
-      
+
           <mat-chip selected color="warn" *ngIf="stats.percentSpent >= 90">
-            📈 {{ stats.percentSpent | number : '1.0-0' }}% Used
+            📈 {{ stats.percentSpent | number : "1.0-0" }}% Used
           </mat-chip>
-      
+
           <mat-chip selected *ngIf="stats.daysLeft > 0">
             📅 {{ stats.daysLeft }} Days Left
           </mat-chip>
-      
+
           <mat-chip selected>
             🎯 Avg/Day: {{ stats.avgPerDay | currency }}
           </mat-chip>
-      
+
           <mat-chip selected>
-            📆 Last: {{ stats.mostRecent | date : 'mediumDate' }}
+            📆 Last: {{ stats.mostRecent | date : "mediumDate" }}
           </mat-chip>
-      
+
           <mat-chip selected>
             🧩 {{ stats.categoriesUsed }} Categories Used
           </mat-chip>
-      
+
           <mat-chip selected *ngIf="stats.topCategory">
-            🏆 Top Category: <b>{{ stats.topCategory.name }} ({{ stats.topCategory.value | currency }}</b>)
+            🏆 Top Category:
+            <b
+              >{{ stats.topCategory.name }} ({{
+                stats.topCategory.value | currency
+              }}</b
+            >)
           </mat-chip>
-      
-            <mat-chip 
-            selected 
+
+          <mat-chip
+            selected
             [ngClass]="{
-              'warn': stats.percentSpent >= 90,
-              'accent': stats.percentSpent >= 75 && stats.percentSpent < 90,
-              'primary': stats.percentSpent < 75
+              warn: stats.percentSpent >= 90,
+              accent: stats.percentSpent >= 75 && stats.percentSpent < 90,
+              primary: stats.percentSpent < 75
             }"
-            >
-            🔥 {{ stats.percentSpent | number : '1.0-0' }}% of Budget Used
-            </mat-chip>
-      
+          >
+            🔥 {{ stats.percentSpent | number : "1.0-0" }}% of Budget Used
+          </mat-chip>
+
           <mat-chip selected *ngIf="!stats.isOverBudget && stats.daysLeft > 0">
             💡 Spend/day left: {{ stats.avgRemainingPerDay | currency }}
           </mat-chip>
-      
         </mat-chip-list>
       </mat-card>
-      
-      
     </div>
-    
-    
-    
-    <button mat-stroked-button color="primary">
+
+    <button mat-stroked-button color="primary" (click)="openAddExpenseForm()">
       <mat-icon>add</mat-icon>
       Add Expense
     </button>

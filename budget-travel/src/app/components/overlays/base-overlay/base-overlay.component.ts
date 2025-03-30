@@ -16,9 +16,7 @@ import { CurrencyService } from '../../../services/shared/currency.service';
 
 @Component({
   selector: 'app-base-overlay',
-  imports: [],
-  templateUrl: './base-overlay.component.html',
-  styleUrl: './base-overlay.component.scss',
+  template: ''
 })
 export abstract class BaseOverlayComponent {
   @Output() result = new EventEmitter<OverlayResult>();

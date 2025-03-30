@@ -23,6 +23,7 @@ import { CategoryMapperPipe } from '../../pipes/category-mapper.pipe';
 import { CategoriesService } from '../../services/shared/categories.service';
 import { NgxChartsModule, LegendPosition } from '@swimlane/ngx-charts';
 import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
+import { ExpensesFacadeService } from '../../services/expenses/expenses-facade.service';
 
 @Component({
   selector: 'app-view-budget',
@@ -60,12 +61,12 @@ export class ViewBudgetComponent implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
     private readonly budgetService: BudgetService,
     private readonly budgetFacadeService: BudgetFacadeService,
+    private readonly expensesFacadeService: ExpensesFacadeService,
     private readonly categoriesService: CategoriesService
   ) {}
 
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.params['id'];
-    console.log(id)
     this.getBudgetById(id);
   }
 
@@ -79,7 +80,6 @@ export class ViewBudgetComponent implements OnInit {
           this.dataSource = new MatTableDataSource(this.budget.expenses);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-          console.log('hello')
           this.setFilters();
           this.calculateStats();
           this.calculateCategoryBreakdown();
@@ -195,5 +195,9 @@ export class ViewBudgetComponent implements OnInit {
     })}`;
 
     return `${name}: ${formatted}`;
+  }
+
+  openAddExpenseForm() {
+    this.expensesFacadeService.openAddExpenseForm();
   }
 }
