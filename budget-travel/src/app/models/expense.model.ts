@@ -1,4 +1,4 @@
-import { ScaleType } from "@swimlane/ngx-charts";
+import { ScaleType } from '@swimlane/ngx-charts';
 
 export interface Expense {
   _id: string;
@@ -11,6 +11,7 @@ export interface Expense {
   recurrenceInterval: string;
   eventId: string;
   budgetId: string;
+  location: Location;
 }
 
 export interface ExpensePostRequest {
@@ -18,6 +19,7 @@ export interface ExpensePostRequest {
   currency: string;
   description: string;
   category: string;
+  location: Location;
   budgetId?: string;
   date: Date;
   eventId?: string;
@@ -40,20 +42,20 @@ export interface ExpenseStatistics {
   };
 }
 
-export const   colorScheme = {
-    name: 'customScheme',
-    selectable: true,
-    group: ScaleType.Ordinal,
-    domain: [
-      '#5AA454', // Green
-      '#A10A28', // Burgundy
-      '#C7B42C', // Yellow/Gold
-      '#AAAAAA', // Grey
-      '#D84315', // Passport Stamp Red
-      '#3E2723', // Passport Cover Brown
-      '#795548', // Earthy Brown
-      '#00796B', // Teal
-      '#FFA000', // Warm Amber
-      '#8D6E63', // Muted Taupe
-    ],
-  };
+export const colorScheme = {
+  name: 'customScheme',
+  selectable: true,
+  group: ScaleType.Ordinal,
+  domain: [
+    '#5AA454', // Green
+    '#A10A28', // Burgundy
+    '#C7B42C', // Yellow/Gold
+    '#AAAAAA', // Grey
+    '#D84315', // Passport Stamp Red
+    '#3E2723', // Passport Cover Brown
+    '#795548', // Earthy Brown
+    '#00796B', // Teal
+    '#FFA000', // Warm Amber
+    '#8D6E63', // Muted Taupe
+  ],
+};
