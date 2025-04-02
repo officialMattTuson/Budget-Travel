@@ -24,6 +24,7 @@ import { CategoriesService } from '../../services/shared/categories.service';
 import { NgxChartsModule, LegendPosition } from '@swimlane/ngx-charts';
 import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
 import { ExpensesFacadeService } from '../../services/expenses/expenses-facade.service';
+import { ExpenseMapComponent } from '../../components/map/expense-map/expense-map.component';
 
 @Component({
   selector: 'app-view-budget',
@@ -33,6 +34,7 @@ import { ExpensesFacadeService } from '../../services/expenses/expenses-facade.s
     HeaderComponent,
     CategoryMapperPipe,
     NgxChartsModule,
+    ExpenseMapComponent,
   ],
   templateUrl: './view-budget.component.html',
   styleUrl: './view-budget.component.scss',

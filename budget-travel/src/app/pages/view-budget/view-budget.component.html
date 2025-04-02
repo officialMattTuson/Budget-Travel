@@ -58,7 +58,9 @@
     </div>
   </mat-card>
 
-  @if (categoryBreakdownData.length > 0) {
+  <app-expense-map></app-expense-map>
+
+  <!-- @if (categoryBreakdownData.length > 0) {
   <ngx-charts-pie-chart
     [results]="categoryBreakdownData"
     [legend]="true"
@@ -70,7 +72,7 @@
     [valueFormatting]="formatCurrency"
     [view]="[700, 300]"
   ></ngx-charts-pie-chart>
-  }
+  } -->
 </div>
 <div class="container__bottom-row">
   <div class="table-container">
