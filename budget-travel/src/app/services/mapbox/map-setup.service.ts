@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import mapboxgl from 'mapbox-gl';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 enum MapStyles {
   MapboxStreets = 'mapbox://styles/mapbox/streets-v12',
@@ -9,13 +10,25 @@ enum MapStyles {
   MapboxSatellite = 'mapbox://styles/mapbox/satellite-v9',
   MapboxSatelliteStreets = 'mapbox://styles/mapbox/satellite-streets-v12',
   MapboxNavigationDay = 'mapbox://styles/mapbox/navigation-day-v1',
-  MapboxNavigationNight = 'mapbox://styles/mapbox/navigation-night-v',
+  MapboxNavigationNight = 'mapbox://styles/mapbox/navigation-night-v1',
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class MapSetupService {
+  private readonly map$ = new BehaviorSubject<mapboxgl.Map | null>(null);
+
+  setMap(map: mapboxgl.Map): void {
+    this.map$.next(map);
+  }
+
+  getMap$(): Observable<mapboxgl.Map | null> {
+    return this.map$.asObservable();
+  }
+
+  getMapSnapshot(): mapboxgl.Map | null {
+    return this.map$.getValue();
+  }
+
   initializeMap(
     containerId: string,
     options?: Partial<mapboxgl.MapboxOptions>
@@ -28,15 +41,14 @@ export class MapSetupService {
       ...options,
     });
 
+    this.setMap(map);
     return map;
   }
 
-  addMarker(
-    map: mapboxgl.Map,
-    lat: number,
-    lng: number,
-    label?: string
-  ): mapboxgl.Marker {
+  addMarker(lat: number, lng: number, label?: string): mapboxgl.Marker | null {
+    const map = this.getMapSnapshot();
+    if (!map) return null;
+
     const popup = label ? new mapboxgl.Popup().setText(label) : undefined;
 
     return new mapboxgl.Marker()
@@ -45,19 +57,16 @@ export class MapSetupService {
       .addTo(map);
   }
 
-  addMarkers(
-    map: mapboxgl.Map,
-    points: { lat: number; lng: number; label?: string }[]
-  ): void {
-    points.forEach(({ lat, lng, label }) =>
-      this.addMarker(map, lat, lng, label)
-    );
+  addMarkers(points: { lat: number; lng: number; label?: string }[]): void {
+    const map = this.getMapSnapshot();
+    if (!map) return;
+
+    points.forEach(({ lat, lng, label }) => this.addMarker(lat, lng, label));
   }
 
-  // onMapClick(callback: (coords: { lat: number; lng: number }) => void): void {
-  //   this.map.on('click', (e) => {
-  //     const { lat, lng } = e.lngLat;
-  //     callback({ lat, lng });
-  //   });
-  // }
+  destroyMap(): void {
+    const map = this.getMapSnapshot();
+    if (map) map.remove();
+    this.map$.next(null);
+  }
 }
