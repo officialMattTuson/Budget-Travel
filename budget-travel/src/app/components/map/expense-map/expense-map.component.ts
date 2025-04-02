@@ -11,17 +11,8 @@ import {
 import mapboxgl from 'mapbox-gl';
 import { environment } from '../../../../environments/environment';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-
-enum MapStyles {
-  MapboxStreets = 'mapbox://styles/mapbox/streets-v12',
-  MapboxOutdoors = 'mapbox://styles/mapbox/outdoors-v12',
-  MapboxLight = 'mapbox://styles/mapbox/light-v11',
-  MapboxDark = 'mapbox://styles/mapbox/dark-v11',
-  MapboxSatellite = 'mapbox://styles/mapbox/satellite-v9',
-  MapboxSatelliteStreets = 'mapbox://styles/mapbox/satellite-streets-v12',
-  MapboxNavigationDay = 'mapbox://styles/mapbox/navigation-day-v1',
-  MapboxNavigationNight = 'mapbox://styles/mapbox/navigation-night-v',
-}
+import { MapSetupService } from '../../../services/mapbox/map-setup.service';
+import { LocationService } from '../../../services/mapbox/location.service';
 
 @Component({
   selector: 'app-expense-map',
@@ -37,21 +28,17 @@ export class ExpenseMapComponent implements AfterViewInit, OnDestroy {
   map!: mapboxgl.Map;
   markers: mapboxgl.Marker[] = [];
 
-  constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private readonly platformId: Object,
+    private readonly mapboxSetupService: MapSetupService,
+    private readonly locationService: LocationService
+  ) {}
 
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
     mapboxgl.accessToken = environment.mapboxToken;
-
-    this.map = new mapboxgl.Map({
-      container: 'map',
-      style: MapStyles.MapboxSatelliteStreets,
-      projection: 'globe',
-      center: [175.2528, -37.7826],
-      zoom: 7,
-    });
-
+    this.map = this.mapboxSetupService.initializeMap('map');
     this.map.on('load', () => this.loadPins());
 
     if (this.enableClickToAdd) {
@@ -59,6 +46,12 @@ export class ExpenseMapComponent implements AfterViewInit, OnDestroy {
         const { lng, lat } = e.lngLat;
         this.addMarker(lat, lng);
         this.pinAdded.emit({ lat, lng });
+        this.locationService
+          .reverseGeocode(lat, lng)
+          .subscribe((locationData) => {
+            console.log(locationData);
+            // Optional: patch your form or emit this info
+          });
       });
     }
   }
