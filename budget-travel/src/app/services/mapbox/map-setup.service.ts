@@ -22,9 +22,9 @@ export class MapSetupService {
   ): mapboxgl.Map {
     const map = new mapboxgl.Map({
       container: containerId,
-      style: 'mapbox://styles/mapbox/streets-v12',
-      center: [0, 0],
-      zoom: 2,
+      style: MapStyles.MapboxSatelliteStreets,
+      center: [175.2528, -37.7826],
+      zoom: 7,
       ...options,
     });
 
