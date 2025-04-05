@@ -42,22 +42,36 @@
   <ng-container formGroupName="location" class="form-single-column">
     <mat-form-field appearance="outline">
       <mat-label>Country</mat-label>
-      <mat-select formControlName="country">
-        <mat-option (click)="resetCountrySelected()">---</mat-option>
-        @for (country of countryOptions; track country) {
-        <mat-option (click)="onCountrySelected(country)" [value]="country">{{ country }}</mat-option>
-        }
-      </mat-select>
+      <input
+        #countryInput
+        type="text"
+        matInput
+        [matAutocomplete]="countryAuto"
+        formControlName="country"
+        (input)="onCountryInput(countryInput.value)"
+      />
+      <mat-autocomplete #countryAuto="matAutocomplete" (optionSelected)="onCountrySelected($event.option.value)">
+        <mat-option *ngFor="let country of filteredCountryOptions" [value]="country">
+          {{ country }}
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>City</mat-label>
-      <mat-select formControlName="city">
-        <mat-option (click)="resetCitySelected()">---</mat-option>
-        @for (city of cityOptions; track city) {
-        <mat-option (click)="onCitySelected(city)" [value]="city">{{ city }}</mat-option>
-        }
-      </mat-select>
+      <input
+        #cityInput
+        type="text"
+        matInput
+        [matAutocomplete]="cityAuto"
+        formControlName="city"
+        (input)="onCityInput(cityInput.value)"
+      />
+      <mat-autocomplete #cityAuto="matAutocomplete" (optionSelected)="onCitySelected($event.option.value)">
+        <mat-option *ngFor="let city of filteredCityOptions" [value]="city">
+          {{ city }}
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
   </ng-container>
 

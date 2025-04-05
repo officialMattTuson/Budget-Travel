@@ -34,6 +34,8 @@ export class ExpenseFormComponent implements OnInit {
   defaultCurrency$!: Observable<Currency>;
   countryOptions: string[] = [];
   cityOptions: string[] = [];
+  filteredCountryOptions: string[] = [];
+  filteredCityOptions: string[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -55,6 +57,8 @@ export class ExpenseFormComponent implements OnInit {
         .sort((a, b) => a.localeCompare(b));
     });
     this.cityFormControl.disable();
+    this.filteredCountryOptions = this.countryOptions;
+    this.filteredCityOptions = [];
   }
 
   initializeForm(): void {
@@ -108,6 +112,22 @@ export class ExpenseFormComponent implements OnInit {
     console.log(city)
 
     // Logic to zoom in on city on map
+  }
+
+  onCountryInput(value: string): void {
+    this.filteredCountryOptions = value
+      ? this.countryOptions.filter(country =>
+          country.toLowerCase().includes(value.toLowerCase())
+        )
+      : this.countryOptions;
+  }
+
+  onCityInput(value: string): void {
+    this.filteredCityOptions = value
+      ? this.cityOptions.filter(city =>
+          city.toLowerCase().includes(value.toLowerCase())
+        )
+      : this.cityOptions;
   }
 
   // protected autoFillForm(): void {
