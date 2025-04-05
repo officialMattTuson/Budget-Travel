@@ -2,12 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { MaterialModule } from '../../../modules/material.module';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { Budget } from '../../../models/budgets.model';
 import { Category } from '../../../models/category.model';
 import { Currency } from '../../../models/currency.model';
@@ -32,6 +33,7 @@ export class ExpenseFormComponent implements OnInit {
   budget$!: Observable<Budget[]>;
   defaultCurrency$!: Observable<Currency>;
   countryOptions: string[] = [];
+  cityOptions: string[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -52,6 +54,7 @@ export class ExpenseFormComponent implements OnInit {
         .map((country) => country?.name?.common)
         .sort((a, b) => a.localeCompare(b));
     });
+    this.cityFormControl.disable();
   }
 
   initializeForm(): void {
@@ -77,14 +80,34 @@ export class ExpenseFormComponent implements OnInit {
   }
 
   resetCountrySelected(): void {
-    this.form.get('location')?.get('country')?.setValue('');
+    this.countryFormControl.setValue('');
+    this.cityFormControl.reset();
+    this.cityFormControl.disable();
+  }
+
+  resetCitySelected(): void {
+    this.cityFormControl.setValue('');
   }
 
   onCountrySelected(country: string): void {
-    console.log(country)
-    this.countriesService.getCitiesByCountry(country).subscribe((cities) => {
-      console.log(cities)
-    })
+    this.cityFormControl.reset();
+    this.cityFormControl.enable();
+    this.cityOptions = [];
+    this.countriesService
+      .getCitiesByCountry(country)
+      .pipe(take(1))
+      .subscribe({
+        next: (cities) => (this.cityOptions = cities),
+        error: (error) => console.error(error),
+      });
+
+    // Logic to display country on map
+  }
+
+  onCitySelected(city: string): void {
+    console.log(city)
+
+    // Logic to zoom in on city on map
   }
 
   // protected autoFillForm(): void {
@@ -101,4 +124,12 @@ export class ExpenseFormComponent implements OnInit {
   //     });
   //   }
   // }
+
+  get countryFormControl(): FormControl {
+    return this.form.get('location')?.get('country') as FormControl;
+  }
+
+  get cityFormControl(): FormControl {
+    return this.form.get('location')?.get('city') as FormControl;
+  }
 }
