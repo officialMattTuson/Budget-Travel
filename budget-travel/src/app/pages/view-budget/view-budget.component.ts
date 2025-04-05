@@ -199,6 +199,6 @@ export class ViewBudgetComponent implements OnInit {
   }
 
   openAddExpenseForm() {
-    this.router.navigateByUrl('expenses/add')
+    this.router.navigateByUrl('expenses/new')
   }
 }
