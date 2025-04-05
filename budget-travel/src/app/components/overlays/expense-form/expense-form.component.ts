@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -24,8 +24,6 @@ import { CountriesService } from '../../../services/expenses/countries.service';
   styleUrl: './expense-form.component.scss',
 })
 export class ExpenseFormComponent implements OnInit {
-  @Input() buttonText = 'Submit';
-  @Output() countrySelected = new EventEmitter<string>();
   form!: FormGroup;
 
   currencies$!: Observable<Currency[]>;
@@ -51,14 +49,17 @@ export class ExpenseFormComponent implements OnInit {
     this.currencies$ = this.currencyService.getCurrencies();
     this.categories$ = this.categoryService.categories$;
     this.defaultCurrency$ = this.currencyService.defaultCurrency$;
+    this.getCountries();
+    this.resetCitiesFormFieldToInitialState();
+  }
+
+  getCountries() {
     this.countriesService.getCountries().subscribe((countries: any[]) => {
       this.countryOptions = countries
         .map((country) => country?.name?.common)
         .sort((a, b) => a.localeCompare(b));
+      this.filteredCountryOptions = this.countryOptions;
     });
-    this.cityFormControl.disable();
-    this.filteredCountryOptions = this.countryOptions;
-    this.filteredCityOptions = [];
   }
 
   initializeForm(): void {
@@ -85,12 +86,17 @@ export class ExpenseFormComponent implements OnInit {
 
   resetCountrySelected(): void {
     this.countryFormControl.setValue('');
-    this.cityFormControl.reset();
-    this.cityFormControl.disable();
+    this.resetCitiesFormFieldToInitialState();
   }
 
   resetCitySelected(): void {
-    this.cityFormControl.setValue('');
+    this.cityFormControl.reset();
+  }
+
+  resetCitiesFormFieldToInitialState(): void {
+    this.cityFormControl.disable();
+    this.cityOptions = [];
+    this.filteredCityOptions = [];
   }
 
   onCountrySelected(country: string): void {
@@ -104,19 +110,13 @@ export class ExpenseFormComponent implements OnInit {
         next: (cities) => (this.cityOptions = cities),
         error: (error) => console.error(error),
       });
-
-    // Logic to display country on map
   }
 
-  onCitySelected(city: string): void {
-    console.log(city)
-
-    // Logic to zoom in on city on map
-  }
+  onCitySelected(city: string): void {}
 
   onCountryInput(value: string): void {
     this.filteredCountryOptions = value
-      ? this.countryOptions.filter(country =>
+      ? this.countryOptions.filter((country) =>
           country.toLowerCase().includes(value.toLowerCase())
         )
       : this.countryOptions;
@@ -124,26 +124,11 @@ export class ExpenseFormComponent implements OnInit {
 
   onCityInput(value: string): void {
     this.filteredCityOptions = value
-      ? this.cityOptions.filter(city =>
+      ? this.cityOptions.filter((city) =>
           city.toLowerCase().includes(value.toLowerCase())
         )
       : this.cityOptions;
   }
-
-  // protected autoFillForm(): void {
-  //   if (this.type === OverlayType.Expense && this.data) {
-  //     const formData = this.data as Expense;
-  //     this.form.patchValue({
-  //       description: formData.description,
-  //       amount: formData.amount,
-  //       currency: formData.currency,
-  //       date: formData.date,
-  //       category: formData.category,
-  //       budgetId: formData.budgetId,
-  //       eventId: formData.eventId,
-  //     });
-  //   }
-  // }
 
   get countryFormControl(): FormControl {
     return this.form.get('location')?.get('country') as FormControl;
