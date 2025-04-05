@@ -111,6 +111,6 @@ export class ExpensesComponent implements OnInit {
   }
 
   openAddExpenseForm() {
-    this.expensesFacadeService.openAddExpenseForm();
+    // this.expensesFacadeService.openAddExpenseForm();
   }
 }

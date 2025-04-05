@@ -1,0 +1,24 @@
+<div class="expense__header">
+  <mat-icon>payments</mat-icon>
+  <span class="title">Add New Expense</span>
+</div>
+<div class="expense__container">
+  <mat-card class="expense__form-card">
+    <mat-card-title>📍 Expense Details</mat-card-title>
+    <mat-card-content>
+      <app-expense-form> </app-expense-form>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="expense__map-card">
+    <mat-card-title>📍 Select Location (Optional)</mat-card-title>
+    <mat-card-content>
+      <app-expense-map mapHeight="600px" mapWidth="100%"></app-expense-map>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div class="expense__actions">
+  <button mat-stroked-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="onSubmit()">
+    Add Expense
+  </button>
+</div>

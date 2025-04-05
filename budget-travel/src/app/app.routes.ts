@@ -3,6 +3,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ExpensesComponent } from './pages/expenses/expenses.component';
 import { BudgetsComponent } from './pages/budgets/budgets.component';
 import { ViewBudgetComponent } from './pages/view-budget/view-budget.component';
+import { AddExpenseComponent } from './pages/expenses/add-expense/add-expense.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -10,7 +11,7 @@ export const routes: Routes = [
   { path: 'expenses', component: ExpensesComponent },
   { path: 'budgets', component: BudgetsComponent },
   { path: 'budgets/:id', component: ViewBudgetComponent },
-  // { path: 'expenses/add', component: AddExpenseComponent },
+  { path: 'expenses/add', component: AddExpenseComponent },
   // { path: 'expenses/:id/edit', component: EditExpenseComponent },
   // { path: 'trips', component: TripsComponent },
   // { path: 'trips/add', component: AddTripComponent },

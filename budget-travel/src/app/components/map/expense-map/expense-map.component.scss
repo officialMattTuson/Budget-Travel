@@ -1,4 +1,7 @@
-#map-container {
-  height: 500px;
-  width: 750px;
+.map-container {
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  min-height: 500px;
+  width: 100%;
 }

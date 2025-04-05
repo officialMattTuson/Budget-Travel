@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { MaterialModule } from '../../modules/material.module';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BudgetService } from '../../services/budgets/budget.service';
 import { take } from 'rxjs';
 import { Budget } from '../../models/budgets.model';
@@ -23,7 +23,6 @@ import { CategoryMapperPipe } from '../../pipes/category-mapper.pipe';
 import { CategoriesService } from '../../services/shared/categories.service';
 import { NgxChartsModule, LegendPosition } from '@swimlane/ngx-charts';
 import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
-import { ExpensesFacadeService } from '../../services/expenses/expenses-facade.service';
 import { ExpenseMapComponent } from '../../components/map/expense-map/expense-map.component';
 
 @Component({
@@ -60,10 +59,10 @@ export class ViewBudgetComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
+    private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
     private readonly budgetService: BudgetService,
     private readonly budgetFacadeService: BudgetFacadeService,
-    private readonly expensesFacadeService: ExpensesFacadeService,
     private readonly categoriesService: CategoriesService
   ) {}
 
@@ -200,6 +199,6 @@ export class ViewBudgetComponent implements OnInit {
   }
 
   openAddExpenseForm() {
-    this.expensesFacadeService.openAddExpenseForm();
+    this.router.navigateByUrl('expenses/add')
   }
 }

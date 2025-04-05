@@ -22,6 +22,8 @@ import { LocationService } from '../../../services/mapbox/location.service';
   imports: [CommonModule],
 })
 export class ExpenseMapComponent implements AfterViewInit, OnDestroy {
+  @Input() mapHeight: string = '500px';
+  @Input() mapWidth: string = '750px';
   @Input() pins: { lat: number; lng: number; label?: string }[] = [];
   @Input() enableClickToAdd: boolean = false;
   @Output() pinAdded = new EventEmitter<{ lat: number; lng: number }>();
@@ -38,7 +40,13 @@ export class ExpenseMapComponent implements AfterViewInit, OnDestroy {
     mapboxgl.accessToken = environment.mapboxToken;
 
     const map = this.mapboxSetupService.initializeMap('map');
-    map.on('load', () => this.loadPins());
+
+    map.on('load', () => {
+      setTimeout(() => {
+        map.resize(); // Ensure the map resizes to fit the container
+      }, 300);
+      this.loadPins();
+    });
 
     if (this.enableClickToAdd) {
       map.on('click', (e) => {
