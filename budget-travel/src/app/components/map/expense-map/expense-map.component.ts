@@ -42,9 +42,6 @@ export class ExpenseMapComponent implements AfterViewInit, OnDestroy {
     const map = this.mapboxSetupService.initializeMap('map');
 
     map.on('load', () => {
-      setTimeout(() => {
-        map.resize(); // Ensure the map resizes to fit the container
-      }, 300);
       this.loadPins();
     });
 

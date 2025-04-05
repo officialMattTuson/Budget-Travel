@@ -14,6 +14,7 @@ import { Currency } from '../../../models/currency.model';
 import { BudgetFacadeService } from '../../../services/budgets/budget-facade.service';
 import { CategoriesService } from '../../../services/shared/categories.service';
 import { CurrencyService } from '../../../services/shared/currency.service';
+import { CountriesService } from '../../../services/expenses/countries.service';
 
 @Component({
   selector: 'app-expense-form',
@@ -30,12 +31,14 @@ export class ExpenseFormComponent implements OnInit {
   categories$!: Observable<Category[]>;
   budget$!: Observable<Budget[]>;
   defaultCurrency$!: Observable<Currency>;
+  countryOptions: string[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly budgetFacadeService: BudgetFacadeService,
     private readonly currencyService: CurrencyService,
     private readonly categoryService: CategoriesService,
+    private readonly countriesService: CountriesService
   ) {}
 
   ngOnInit(): void {
@@ -44,6 +47,11 @@ export class ExpenseFormComponent implements OnInit {
     this.currencies$ = this.currencyService.getCurrencies();
     this.categories$ = this.categoryService.categories$;
     this.defaultCurrency$ = this.currencyService.defaultCurrency$;
+    this.countriesService.getCountries().subscribe((countries: any[]) => {
+      this.countryOptions = countries
+        .map((country) => country?.name?.common)
+        .sort((a, b) => a.localeCompare(b));
+    });
   }
 
   initializeForm(): void {
@@ -66,6 +74,17 @@ export class ExpenseFormComponent implements OnInit {
       budgetId: this.fb.control('', Validators.required),
       eventId: this.fb.control(''),
     });
+  }
+
+  resetCountrySelected(): void {
+    this.form.get('location')?.get('country')?.setValue('');
+  }
+
+  onCountrySelected(country: string): void {
+    console.log(country)
+    this.countriesService.getCitiesByCountry(country).subscribe((cities) => {
+      console.log(cities)
+    })
   }
 
   // protected autoFillForm(): void {

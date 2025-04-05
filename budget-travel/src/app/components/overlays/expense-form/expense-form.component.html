@@ -42,7 +42,12 @@
   <ng-container formGroupName="location" class="form-single-column">
     <mat-form-field appearance="outline">
       <mat-label>Country</mat-label>
-      <input matInput formControlName="country" />
+      <mat-select formControlName="country">
+        <mat-option (click)="resetCountrySelected()">---</mat-option>
+        @for (country of countryOptions; track country) {
+        <mat-option (click)="onCountrySelected(country)" [value]="country">{{ country }}</mat-option>
+        }
+      </mat-select>
     </mat-form-field>
     
     <mat-form-field appearance="outline">
