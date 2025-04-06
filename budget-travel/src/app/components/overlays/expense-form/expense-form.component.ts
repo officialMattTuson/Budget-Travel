@@ -64,7 +64,7 @@ export class ExpenseFormComponent implements OnInit {
 
   getCountries() {
     this.loadingCountries = true;
-    this.countriesService.getCountries().subscribe({
+    this.countriesService.getCountries().pipe(take(1)).subscribe({
       next: (countries: any[]) => {
         this.countryOptions = countries
           .map((country) => {
@@ -148,8 +148,8 @@ export class ExpenseFormComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: (cities) => {
-          this.cityOptions = cities;
-          this.filteredCityOptions = cities;
+          this.cityOptions = [...cities].sort((a, b) => a.localeCompare(b));
+          this.filteredCityOptions = this.cityOptions;
         },
         error: (error) => console.error(error),
         complete: () => (this.loadingCities = false),
@@ -189,5 +189,12 @@ export class ExpenseFormComponent implements OnInit {
 
   get cityFormControl(): FormControl {
     return this.form.get('location')?.get('city') as FormControl;
+  }
+
+  resetForm(): void {
+    this.form.reset();
+    this.prefillDate();
+    this.prefillBudget();
+    this.resetCitiesFormFieldToInitialState();
   }
 }

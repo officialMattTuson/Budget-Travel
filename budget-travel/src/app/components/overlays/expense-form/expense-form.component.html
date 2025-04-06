@@ -111,4 +111,9 @@
     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
     <mat-datepicker #picker1></mat-datepicker>
   </mat-form-field>
+
+  <div class="form-actions">
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+    <button mat-raised-button color="warn" type="button" (click)="resetForm()">Reset</button>
+  </div>
 </form>
