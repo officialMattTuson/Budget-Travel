@@ -17,6 +17,10 @@ import { CategoriesService } from '../../../services/shared/categories.service';
 import { CurrencyService } from '../../../services/shared/currency.service';
 import { CountriesService } from '../../../services/expenses/countries.service';
 
+interface Country {
+  name: string;
+  currencies: string[];
+}
 @Component({
   selector: 'app-expense-form',
   imports: [MaterialModule, ReactiveFormsModule, CommonModule],
@@ -30,10 +34,11 @@ export class ExpenseFormComponent implements OnInit {
   categories$!: Observable<Category[]>;
   budget$!: Observable<Budget[]>;
   defaultCurrency$!: Observable<Currency>;
-  countryOptions: string[] = [];
+  countryOptions: Country[] = [];
   cityOptions: string[] = [];
-  filteredCountryOptions: string[] = [];
+  filteredCountryOptions: Country[] = [];
   filteredCityOptions: string[] = [];
+  currenciesOfSelectedCountry: string[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -56,8 +61,15 @@ export class ExpenseFormComponent implements OnInit {
   getCountries() {
     this.countriesService.getCountries().subscribe((countries: any[]) => {
       this.countryOptions = countries
-        .map((country) => country?.name?.common)
-        .sort((a, b) => a.localeCompare(b));
+        .map((country) => {
+          return {
+            name: country?.name?.common,
+            currencies: country?.currencies
+              ? Object.keys(country?.currencies)
+              : [],
+          };
+        })
+        .sort((a, b) => a.name.localeCompare(b.name));
       this.filteredCountryOptions = this.countryOptions;
     });
   }
@@ -86,6 +98,7 @@ export class ExpenseFormComponent implements OnInit {
 
   resetCountrySelected(): void {
     this.countryFormControl.setValue('');
+    this.currenciesOfSelectedCountry = [];
     this.resetCitiesFormFieldToInitialState();
   }
 
@@ -99,17 +112,26 @@ export class ExpenseFormComponent implements OnInit {
     this.filteredCityOptions = [];
   }
 
-  onCountrySelected(country: string): void {
+  onCountrySelected(countryName: string): void {
     this.cityFormControl.reset();
     this.cityFormControl.enable();
     this.cityOptions = [];
     this.countriesService
-      .getCitiesByCountry(country)
+      .getCitiesByCountry(countryName)
       .pipe(take(1))
       .subscribe({
         next: (cities) => (this.cityOptions = cities),
         error: (error) => console.error(error),
       });
+    this.setCountrySpecificCurrencyOptions(countryName);
+  }
+
+  setCountrySpecificCurrencyOptions(countryName: string) {
+    this.currenciesOfSelectedCountry = [];
+    const selectedCountry = this.countryOptions.find(
+      (country) => country.name === countryName
+    ) as Country;
+    this.currenciesOfSelectedCountry = selectedCountry.currencies;
   }
 
   onCitySelected(city: string): void {}
@@ -117,7 +139,7 @@ export class ExpenseFormComponent implements OnInit {
   onCountryInput(value: string): void {
     this.filteredCountryOptions = value
       ? this.countryOptions.filter((country) =>
-          country.toLowerCase().includes(value.toLowerCase())
+          country.name.toLowerCase().includes(value.toLowerCase())
         )
       : this.countryOptions;
   }

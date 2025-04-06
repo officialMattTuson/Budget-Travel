@@ -27,18 +27,6 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Currency</mat-label>
-    <mat-select formControlName="currency">
-      <mat-option [value]="(defaultCurrency$ | async)?.code">
-        {{ (defaultCurrency$ | async)?.code }}
-      </mat-option>
-      @for (currency of (currencies$ | async); track currency.code) {
-      <mat-option [value]="currency.code">{{ currency.code }}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-
   <ng-container formGroupName="location" class="form-single-column">
     <mat-form-field appearance="outline">
       <mat-label>Country</mat-label>
@@ -50,9 +38,15 @@
         formControlName="country"
         (input)="onCountryInput(countryInput.value)"
       />
-      <mat-autocomplete #countryAuto="matAutocomplete" (optionSelected)="onCountrySelected($event.option.value)">
-        <mat-option *ngFor="let country of filteredCountryOptions" [value]="country">
-          {{ country }}
+      <mat-autocomplete
+        #countryAuto="matAutocomplete"
+        (optionSelected)="onCountrySelected($event.option.value)"
+      >
+        <mat-option
+          *ngFor="let country of filteredCountryOptions"
+          [value]="country.name"
+        >
+          {{ country.name }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
@@ -67,13 +61,39 @@
         formControlName="city"
         (input)="onCityInput(cityInput.value)"
       />
-      <mat-autocomplete #cityAuto="matAutocomplete" (optionSelected)="onCitySelected($event.option.value)">
+      <mat-autocomplete
+        #cityAuto="matAutocomplete"
+        (optionSelected)="onCitySelected($event.option.value)"
+      >
         <mat-option *ngFor="let city of filteredCityOptions" [value]="city">
           {{ city }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
   </ng-container>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Currency</mat-label>
+    <mat-select formControlName="currency">
+      <mat-optgroup label="Default Currency">
+        <mat-option [value]="(defaultCurrency$ | async)?.code">
+          {{ (defaultCurrency$ | async)?.code }}
+        </mat-option>
+      </mat-optgroup>
+      @if (currenciesOfSelectedCountry.length > 0) {
+      <mat-optgroup label="Currency of Selected Country">
+        @for (currency of currenciesOfSelectedCountry; track currency) {
+        <mat-option [value]="currency">{{ currency }}</mat-option>
+        }
+      </mat-optgroup>
+      }
+      <mat-optgroup label="All Currencies">
+        @for (currency of currencies$ | async; track currency.code) {
+        <mat-option [value]="currency.code">{{ currency.code }}</mat-option>
+        }
+      </mat-optgroup>
+    </mat-select>
+  </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Date</mat-label>
