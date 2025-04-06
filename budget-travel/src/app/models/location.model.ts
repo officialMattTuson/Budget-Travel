@@ -7,6 +7,6 @@ export interface Location {
 }
 
 export interface Coordinates {
-  latitude: number;
-  longitude: number;
+  lat: number;
+  lng: number;
 }

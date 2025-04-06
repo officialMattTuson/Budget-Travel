@@ -45,25 +45,6 @@ export class MapSetupService {
     return map;
   }
 
-  addMarker(lat: number, lng: number, label?: string): mapboxgl.Marker | null {
-    const map = this.getMapSnapshot();
-    if (!map) return null;
-
-    const popup = label ? new mapboxgl.Popup().setText(label) : undefined;
-
-    return new mapboxgl.Marker()
-      .setLngLat([lng, lat])
-      .setPopup(popup)
-      .addTo(map);
-  }
-
-  addMarkers(points: { lat: number; lng: number; label?: string }[]): void {
-    const map = this.getMapSnapshot();
-    if (!map) return;
-
-    points.forEach(({ lat, lng, label }) => this.addMarker(lat, lng, label));
-  }
-
   destroyMap(): void {
     const map = this.getMapSnapshot();
     if (map) map.remove();

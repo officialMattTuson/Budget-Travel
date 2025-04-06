@@ -13,6 +13,9 @@ import { environment } from '../../../../environments/environment';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MapSetupService } from '../../../services/mapbox/map-setup.service';
 import { LocationService } from '../../../services/mapbox/location.service';
+import { Location } from '../../../models/location.model';
+import { take } from 'rxjs';
+import { MapMarkerService } from '../../../services/mapbox/map-marker.service';
 
 @Component({
   selector: 'app-expense-map',
@@ -26,11 +29,12 @@ export class ExpenseMapComponent implements AfterViewInit, OnDestroy {
   @Input() mapWidth: string = '750px';
   @Input() pins: { lat: number; lng: number; label?: string }[] = [];
   @Input() enableClickToAdd: boolean = false;
-  @Output() pinAdded = new EventEmitter<{ lat: number; lng: number }>();
+  @Output() locationPinAdded = new EventEmitter<Location>();
 
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: Object,
     private readonly mapboxSetupService: MapSetupService,
+    private readonly mapboxMarkerService: MapMarkerService,
     private readonly locationService: LocationService
   ) {}
 
@@ -48,19 +52,24 @@ export class ExpenseMapComponent implements AfterViewInit, OnDestroy {
     if (this.enableClickToAdd) {
       map.on('click', (e) => {
         const { lng, lat } = e.lngLat;
-
-        this.mapboxSetupService.addMarker(lat, lng);
-        this.pinAdded.emit({ lat, lng });
-
-        this.locationService.reverseGeocode(lat, lng).subscribe((location) => {
-          console.log(location);
-        });
+        this.mapboxMarkerService.clearMarkers();
+        this.mapboxMarkerService.addMarker(lat, lng);
+        this.getLocationByCoordinates(lat, lng);
       });
     }
   }
 
-  private loadPins(): void {
-    this.mapboxSetupService.addMarkers(this.pins);
+  getLocationByCoordinates(lat: number, lng: number): void {
+    this.locationService
+      .reverseGeocode(lat, lng)
+      .pipe(take(1))
+      .subscribe((location: Location) => {
+        this.locationPinAdded.emit(location);
+      });
+  }
+
+  loadPins(): void {
+    this.mapboxMarkerService.addMarkers(this.pins);
   }
 
   ngOnDestroy(): void {
