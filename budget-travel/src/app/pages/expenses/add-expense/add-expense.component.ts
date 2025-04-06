@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../modules/material.module';
 import { ExpenseFormComponent } from '../../../components/overlays/expense-form/expense-form.component';
 import { ExpenseMapComponent } from '../../../components/map/expense-map/expense-map.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-add-expense',
@@ -17,7 +18,13 @@ import { ExpenseMapComponent } from '../../../components/map/expense-map/expense
   templateUrl: './add-expense.component.html',
   styleUrl: './add-expense.component.scss',
 })
-export class AddExpenseComponent {
+export class AddExpenseComponent implements OnInit {
+  budgetId!: string;
+  constructor(private readonly activatedRoute: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.budgetId = this.activatedRoute.snapshot.params['id'];
+  }
   onCancel(): void {}
 
   onSubmit(): void {}

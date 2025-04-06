@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -28,6 +28,7 @@ interface Country {
   styleUrl: './expense-form.component.scss',
 })
 export class ExpenseFormComponent implements OnInit {
+  @Input() budgetId!: string;
   form!: FormGroup;
 
   currencies$!: Observable<Currency[]>;
@@ -52,18 +53,13 @@ export class ExpenseFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
-    this.prefillDate();
     this.budget$ = this.budgetFacadeService.budgets$;
     this.currencies$ = this.currencyService.getCurrencies();
     this.categories$ = this.categoryService.categories$;
     this.defaultCurrency$ = this.currencyService.defaultCurrency$;
     this.getCountries();
     this.resetCitiesFormFieldToInitialState();
-  }
-
-  prefillDate(): void {
-    const today = new Date();
-    this.form.get('date')?.setValue(today);
+    this.prefillBudget();
   }
 
   getCountries() {
@@ -106,6 +102,23 @@ export class ExpenseFormComponent implements OnInit {
       category: this.fb.control('', Validators.required),
       budgetId: this.fb.control('', Validators.required),
       eventId: this.fb.control(''),
+    });
+    this.prefillDate();
+  }
+
+  prefillDate(): void {
+    const today = new Date();
+    this.form.get('date')?.setValue(today);
+  }
+
+  prefillBudget(): void {
+    this.budget$.pipe(take(1)).subscribe((budgets) => {
+      const matchingBudget = budgets.find(
+        (budget) => budget._id === this.budgetId
+      );
+      if (matchingBudget) {
+        this.form.get('budgetId')?.setValue(matchingBudget._id);
+      }
     });
   }
 
