@@ -39,6 +39,8 @@ export class ExpenseFormComponent implements OnInit {
   filteredCountryOptions: Country[] = [];
   filteredCityOptions: string[] = [];
   currenciesOfSelectedCountry: string[] = [];
+  loadingCountries = true;
+  loadingCities = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -50,6 +52,7 @@ export class ExpenseFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
+    this.prefillDate();
     this.budget$ = this.budgetFacadeService.budgets$;
     this.currencies$ = this.currencyService.getCurrencies();
     this.categories$ = this.categoryService.categories$;
@@ -58,19 +61,29 @@ export class ExpenseFormComponent implements OnInit {
     this.resetCitiesFormFieldToInitialState();
   }
 
+  prefillDate(): void {
+    const today = new Date();
+    this.form.get('date')?.setValue(today);
+  }
+
   getCountries() {
-    this.countriesService.getCountries().subscribe((countries: any[]) => {
-      this.countryOptions = countries
-        .map((country) => {
-          return {
-            name: country?.name?.common,
-            currencies: country?.currencies
-              ? Object.keys(country?.currencies)
-              : [],
-          };
-        })
-        .sort((a, b) => a.name.localeCompare(b.name));
-      this.filteredCountryOptions = this.countryOptions;
+    this.loadingCountries = true;
+    this.countriesService.getCountries().subscribe({
+      next: (countries: any[]) => {
+        this.countryOptions = countries
+          .map((country) => {
+            return {
+              name: country?.name?.common,
+              currencies: country?.currencies
+                ? Object.keys(country?.currencies)
+                : [],
+            };
+          })
+          .sort((a, b) => a.name.localeCompare(b.name));
+        this.filteredCountryOptions = this.countryOptions;
+      },
+      error: (error) => console.error(error),
+      complete: () => (this.loadingCountries = false),
     });
   }
 
@@ -116,12 +129,17 @@ export class ExpenseFormComponent implements OnInit {
     this.cityFormControl.reset();
     this.cityFormControl.enable();
     this.cityOptions = [];
+    this.loadingCities = true;
     this.countriesService
       .getCitiesByCountry(countryName)
       .pipe(take(1))
       .subscribe({
-        next: (cities) => (this.cityOptions = cities),
+        next: (cities) => {
+          this.cityOptions = cities;
+          this.filteredCityOptions = cities;
+        },
         error: (error) => console.error(error),
+        complete: () => (this.loadingCities = false),
       });
     this.setCountrySpecificCurrencyOptions(countryName);
   }

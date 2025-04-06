@@ -37,11 +37,16 @@
         [matAutocomplete]="countryAuto"
         formControlName="country"
         (input)="onCountryInput(countryInput.value)"
+        aria-label="Country"
+        [attr.aria-busy]="loadingCountries"
       />
       <mat-autocomplete
         #countryAuto="matAutocomplete"
         (optionSelected)="onCountrySelected($event.option.value)"
       >
+        <mat-option *ngIf="loadingCountries" disabled>
+          Loading countries...
+        </mat-option>
         <mat-option
           *ngFor="let country of filteredCountryOptions"
           [value]="country.name"
@@ -60,11 +65,16 @@
         [matAutocomplete]="cityAuto"
         formControlName="city"
         (input)="onCityInput(cityInput.value)"
+        aria-label="City"
+        [attr.aria-busy]="loadingCities"
       />
       <mat-autocomplete
         #cityAuto="matAutocomplete"
         (optionSelected)="onCitySelected($event.option.value)"
       >
+        <mat-option *ngIf="loadingCities" disabled>
+          Loading cities...
+        </mat-option>
         <mat-option *ngFor="let city of filteredCityOptions" [value]="city">
           {{ city }}
         </mat-option>
