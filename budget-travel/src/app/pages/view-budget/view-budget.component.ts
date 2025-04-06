@@ -41,6 +41,7 @@ import { ExpenseMapComponent } from '../../components/map/expense-map/expense-ma
 })
 export class ViewBudgetComponent implements OnInit {
   budget!: Budget;
+  budgetId!: string;
 
   displayedColumns: string[] = [
     'description',
@@ -67,13 +68,13 @@ export class ViewBudgetComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = this.activatedRoute.snapshot.params['id'];
-    this.getBudgetById(id);
+    this.budgetId = this.activatedRoute.snapshot.paramMap.get('id')!;
+    this.getBudgetById();
   }
 
-  getBudgetById(id: string) {
+  getBudgetById() {
     this.budgetService
-      .getBudgetById(id)
+      .getBudgetById(this.budgetId)
       .pipe(take(1))
       .subscribe({
         next: (budget) => {
@@ -200,5 +201,9 @@ export class ViewBudgetComponent implements OnInit {
 
   openAddExpenseForm() {
     this.router.navigateByUrl('expenses/new')
+  }
+
+  navigateToAddExpense(): void {
+    this.router.navigate([`/budgets/${this.budgetId}/expense/new`]);
   }
 }
