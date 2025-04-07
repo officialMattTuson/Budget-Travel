@@ -63,8 +63,13 @@ export class ExpenseMapComponent implements AfterViewInit, OnDestroy {
     this.locationService
       .reverseGeocode(lat, lng)
       .pipe(take(1))
-      .subscribe((location: Location) => {
-        this.locationPinAdded.emit(location);
+      .subscribe({
+        next: (location: Location) => {
+          this.locationPinAdded.emit(location);
+        },
+        error: (error) => {
+          console.error('Error fetching location:', error);
+        },
       });
   }
 

@@ -71,9 +71,12 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['locationDetails']) {
+    if (changes['locationDetails'] && this.form) {
       this.locationDetails = changes['locationDetails'].currentValue;
       this.form?.get('location')?.patchValue(this.locationDetails);
+      this.onCountrySelected(this.locationDetails?.country);
+      this.cityFormControl.enable();
+      this.cityFormControl.patchValue(this.locationDetails?.city);
     }
   }
 
@@ -161,6 +164,7 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
     this.cityFormControl.enable();
     this.cityOptions = [];
     this.loadingCities = true;
+    this.setCountrySpecificCurrencyOptions(countryName);
     this.countriesService
       .getCitiesByCountry(countryName)
       .pipe(take(1))
@@ -172,7 +176,6 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
         error: (error) => console.error(error),
         complete: () => (this.loadingCities = false),
       });
-    this.setCountrySpecificCurrencyOptions(countryName);
   }
 
   setCountrySpecificCurrencyOptions(countryName: string) {
@@ -202,11 +205,11 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
   }
 
   get countryFormControl(): FormControl {
-    return this.form.get('location')?.get('country') as FormControl;
+    return this.form?.get('location')?.get('country') as FormControl;
   }
 
   get cityFormControl(): FormControl {
-    return this.form.get('location')?.get('city') as FormControl;
+    return this.form?.get('location')?.get('city') as FormControl;
   }
 
   resetForm(): void {
