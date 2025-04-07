@@ -6,13 +6,21 @@
   <mat-card class="expense__form-card">
     <mat-card-title>📍 Expense Details</mat-card-title>
     <mat-card-content>
-      <app-expense-form [budgetId]="budgetId"> </app-expense-form>
+      <app-expense-form 
+        [budgetId]="budgetId"
+        [locationDetails]="locationDetails"
+      ></app-expense-form>
     </mat-card-content>
   </mat-card>
   <mat-card class="expense__map-card">
     <mat-card-title>📍 Select Location (Optional)</mat-card-title>
     <mat-card-content>
-      <app-expense-map mapHeight="600px" mapWidth="100%" [enableClickToAdd]="true"></app-expense-map>
+      <app-expense-map
+        mapHeight="600px"
+        mapWidth="100%"
+        [enableClickToAdd]="true"
+        (locationPinAdded)="onLocationSelected($event)"
+      ></app-expense-map>
     </mat-card-content>
   </mat-card>
 </div>

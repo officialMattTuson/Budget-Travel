@@ -5,6 +5,7 @@ import { MaterialModule } from '../../../modules/material.module';
 import { ExpenseFormComponent } from '../../../components/overlays/expense-form/expense-form.component';
 import { ExpenseMapComponent } from '../../../components/map/expense-map/expense-map.component';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '../../../models/location.model';
 
 @Component({
   selector: 'app-add-expense',
@@ -20,11 +21,17 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class AddExpenseComponent implements OnInit {
   budgetId!: string;
+  locationDetails!: Location;
   constructor(private readonly activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.budgetId = this.activatedRoute.snapshot.params['id'];
   }
+
+  onLocationSelected(location: Location): void {
+    this.locationDetails = location;
+  }
+
   onCancel(): void {}
 
   onSubmit(): void {}

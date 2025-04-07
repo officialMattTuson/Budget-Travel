@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -16,6 +22,7 @@ import { BudgetFacadeService } from '../../../services/budgets/budget-facade.ser
 import { CategoriesService } from '../../../services/shared/categories.service';
 import { CurrencyService } from '../../../services/shared/currency.service';
 import { CountriesService } from '../../../services/expenses/countries.service';
+import { Location } from '../../../models/location.model';
 
 interface Country {
   name: string;
@@ -27,8 +34,9 @@ interface Country {
   templateUrl: './expense-form.component.html',
   styleUrl: './expense-form.component.scss',
 })
-export class ExpenseFormComponent implements OnInit {
+export class ExpenseFormComponent implements OnInit, OnChanges {
   @Input() budgetId!: string;
+  @Input() locationDetails!: Location;
   form!: FormGroup;
 
   currencies$!: Observable<Currency[]>;
@@ -62,25 +70,35 @@ export class ExpenseFormComponent implements OnInit {
     this.prefillBudget();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['locationDetails']) {
+      this.locationDetails = changes['locationDetails'].currentValue;
+      this.form?.get('location')?.patchValue(this.locationDetails);
+    }
+  }
+
   getCountries() {
     this.loadingCountries = true;
-    this.countriesService.getCountries().pipe(take(1)).subscribe({
-      next: (countries: any[]) => {
-        this.countryOptions = countries
-          .map((country) => {
-            return {
-              name: country?.name?.common,
-              currencies: country?.currencies
-                ? Object.keys(country?.currencies)
-                : [],
-            };
-          })
-          .sort((a, b) => a.name.localeCompare(b.name));
-        this.filteredCountryOptions = this.countryOptions;
-      },
-      error: (error) => console.error(error),
-      complete: () => (this.loadingCountries = false),
-    });
+    this.countriesService
+      .getCountries()
+      .pipe(take(1))
+      .subscribe({
+        next: (countries: any[]) => {
+          this.countryOptions = countries
+            .map((country) => {
+              return {
+                name: country?.name?.common,
+                currencies: country?.currencies
+                  ? Object.keys(country?.currencies)
+                  : [],
+              };
+            })
+            .sort((a, b) => a.name.localeCompare(b.name));
+          this.filteredCountryOptions = this.countryOptions;
+        },
+        error: (error) => console.error(error),
+        complete: () => (this.loadingCountries = false),
+      });
   }
 
   initializeForm(): void {
