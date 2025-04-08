@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Expense, ExpensePostRequest } from '../../models/expense.model';
 import { OverlayService } from '../shared/overlay.service';
-import { OverlayResult } from '../../models/overlay-result.model';
 import { ExpensesService } from './expenses.service';
 
 @Injectable({
@@ -24,21 +23,6 @@ export class ExpensesFacadeService {
   setExpenses(expenses: Expense[]) {
     this._expenses.next(expenses);
   }
-
-  // openAddExpenseForm() {
-  //   const componentRef = this.overlayService.open(AddExpenseComponent);
-
-  //   if (componentRef) {
-  //     componentRef.instance.result.subscribe((result: OverlayResult) => {
-  //       if (!result.data) {
-  //         return;
-  //       }
-  //       if (result.status === 'submitted') {
-  //         this.addNewExpense(result.data as ExpensePostRequest);
-  //       }
-  //     });
-  //   }
-  // }
 
   addNewExpense(expense: ExpensePostRequest): void {
     this.expensesService.addExpense(expense).subscribe({

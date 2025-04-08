@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { CategoriesService } from '../../services/shared/categories.service';
-import { Category } from '../../models/category.model';
+import { CategoriesService } from '../../../services/shared/categories.service';
+import { Category } from '../../../models/category.model';
 import { CommonModule, CurrencyPipe } from '@angular/common';
-import { MaterialModule } from '../../modules/material.module';
+import { MaterialModule } from '../../../modules/material.module';
 import { FormsModule } from '@angular/forms';
-import { Event } from '../../models/event.model';
-import { Expense } from '../../models/expense.model';
-import { Budget } from '../../models/budgets.model';
-import { CategoryMapperPipe } from '../../pipes/category-mapper.pipe';
+import { Event } from '../../../models/event.model';
+import { Expense } from '../../../models/expense.model';
+import { Budget } from '../../../models/budgets.model';
+import { CategoryMapperPipe } from '../../../pipes/category-mapper.pipe';
 import { Router } from '@angular/router';
-import { HeaderComponent } from '../../components/header/header.component';
-import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
-import { ExpensesFacadeService } from '../../services/expenses/expenses-facade.service';
+import { HeaderComponent } from '../../../components/header/header.component';
+import { BudgetFacadeService } from '../../../services/budgets/budget-facade.service';
+import { ExpensesFacadeService } from '../../../services/expenses/expenses-facade.service';
 
 @Component({
   selector: 'app-expenses',

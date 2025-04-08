@@ -25,7 +25,6 @@ import { CategoriesService } from '../../../services/shared/categories.service';
 import { CurrencyService } from '../../../services/shared/currency.service';
 import { CountriesService } from '../../../services/expenses/countries.service';
 import { Location } from '../../../models/location.model';
-import { ExpensesFacadeService } from '../../../services/expenses/expenses-facade.service';
 import { ExpensePostRequest } from '../../../models/expense.model';
 
 interface Country {
