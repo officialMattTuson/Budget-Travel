@@ -9,6 +9,7 @@
       <app-expense-form 
         [budgetId]="budgetId"
         [locationDetails]="locationDetails"
+        (onValidFormSubmission)="onValidFormSubmission($event)"
       ></app-expense-form>
     </mat-card-content>
   </mat-card>

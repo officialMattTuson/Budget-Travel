@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
 } from '@angular/core';
 import {
@@ -23,6 +25,8 @@ import { CategoriesService } from '../../../services/shared/categories.service';
 import { CurrencyService } from '../../../services/shared/currency.service';
 import { CountriesService } from '../../../services/expenses/countries.service';
 import { Location } from '../../../models/location.model';
+import { ExpensesFacadeService } from '../../../services/expenses/expenses-facade.service';
+import { ExpensePostRequest } from '../../../models/expense.model';
 
 interface Country {
   name: string;
@@ -37,6 +41,7 @@ interface Country {
 export class ExpenseFormComponent implements OnInit, OnChanges {
   @Input() budgetId!: string;
   @Input() locationDetails!: Location;
+  @Output() onValidFormSubmission = new EventEmitter<ExpensePostRequest>();
   form!: FormGroup;
 
   currencies$!: Observable<Currency[]>;
@@ -116,8 +121,8 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
         city: this.fb.control(''),
         country: this.fb.control('', Validators.required),
         coordinates: this.fb.group({
-          latitude: this.fb.control('', Validators.required),
-          longitude: this.fb.control('', Validators.required),
+          lat: this.fb.control('', Validators.required),
+          lng: this.fb.control('', Validators.required),
         }),
       }),
       category: this.fb.control('', Validators.required),
@@ -204,18 +209,27 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
       : this.cityOptions;
   }
 
+  resetForm(): void {
+    this.form.reset();
+    this.prefillDate();
+    this.prefillBudget();
+    this.resetCitiesFormFieldToInitialState();
+  }
+
+  submitForm(): void {
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+    } else {
+      this.onValidFormSubmission.emit(this.form.value);
+      this.resetForm();
+    }
+  }
+
   get countryFormControl(): FormControl {
     return this.form?.get('location')?.get('country') as FormControl;
   }
 
   get cityFormControl(): FormControl {
     return this.form?.get('location')?.get('city') as FormControl;
-  }
-
-  resetForm(): void {
-    this.form.reset();
-    this.prefillDate();
-    this.prefillBudget();
-    this.resetCitiesFormFieldToInitialState();
   }
 }

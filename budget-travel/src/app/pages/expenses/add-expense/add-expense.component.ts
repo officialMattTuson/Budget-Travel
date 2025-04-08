@@ -6,6 +6,7 @@ import { ExpenseFormComponent } from '../../../components/overlays/expense-form/
 import { ExpenseMapComponent } from '../../../components/map/expense-map/expense-map.component';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '../../../models/location.model';
+import { ExpensePostRequest } from '../../../models/expense.model';
 
 @Component({
   selector: 'app-add-expense',
@@ -30,6 +31,11 @@ export class AddExpenseComponent implements OnInit {
 
   onLocationSelected(location: Location): void {
     this.locationDetails = location;
+  }
+
+  onValidFormSubmission(expense: ExpensePostRequest): void {
+    console.log(expense)
+
   }
 
   onCancel(): void {}
