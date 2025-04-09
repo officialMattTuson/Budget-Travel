@@ -10,7 +10,8 @@
         [budgetId]="budgetId"
         [locationDetails]="locationDetails"
         (onValidFormSubmission)="onValidFormSubmission($event)"
-      ></app-expense-form>
+        (onCountrySelectedFromDropdown)="onCountrySelected($event)"
+        ></app-expense-form>
     </mat-card-content>
   </mat-card>
   <mat-card class="expense__map-card">

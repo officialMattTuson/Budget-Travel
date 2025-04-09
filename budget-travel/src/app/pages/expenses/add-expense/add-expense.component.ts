@@ -5,8 +5,9 @@ import { MaterialModule } from '../../../modules/material.module';
 import { ExpenseFormComponent } from '../../../components/overlays/expense-form/expense-form.component';
 import { ExpenseMapComponent } from '../../../components/map/expense-map/expense-map.component';
 import { ActivatedRoute } from '@angular/router';
-import { Location } from '../../../models/location.model';
+import { Coordinates, Location } from '../../../models/location.model';
 import { ExpensePostRequest } from '../../../models/expense.model';
+import { MapSetupService } from '../../../services/mapbox/map-setup.service';
 
 @Component({
   selector: 'app-add-expense',
@@ -23,7 +24,10 @@ import { ExpensePostRequest } from '../../../models/expense.model';
 export class AddExpenseComponent implements OnInit {
   budgetId!: string;
   locationDetails!: Location;
-  constructor(private readonly activatedRoute: ActivatedRoute) {}
+  constructor(
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly mapSetupService: MapSetupService
+  ) {}
 
   ngOnInit(): void {
     this.budgetId = this.activatedRoute.snapshot.params['id'];
@@ -34,11 +38,20 @@ export class AddExpenseComponent implements OnInit {
   }
 
   onValidFormSubmission(expense: ExpensePostRequest): void {
-    console.log(expense)
-
+    console.log(expense);
   }
 
   onCancel(): void {}
 
   onSubmit(): void {}
+
+  onCountrySelected(countryCoordinates: Coordinates): void {
+    const map = this.mapSetupService.getMapSnapshot();
+    if (map) {
+      map.flyTo({
+        center: [countryCoordinates.lng, countryCoordinates.lat],
+        zoom: 4,
+      });
+    }
+  }
 }
