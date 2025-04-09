@@ -26,6 +26,7 @@ import { CurrencyService } from '../../../services/shared/currency.service';
 import { CountriesService } from '../../../services/expenses/countries.service';
 import { Coordinates, Location } from '../../../models/location.model';
 import { ExpensePostRequest } from '../../../models/expense.model';
+import { LocationService } from '../../../services/mapbox/location.service';
 
 interface Country {
   name: string;
@@ -62,7 +63,8 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
     private readonly budgetFacadeService: BudgetFacadeService,
     private readonly currencyService: CurrencyService,
     private readonly categoryService: CategoriesService,
-    private readonly countriesService: CountriesService
+    private readonly countriesService: CountriesService,
+    private readonly locationService: LocationService
   ) {}
 
   ngOnInit(): void {
@@ -93,7 +95,6 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
       .pipe(take(1))
       .subscribe({
         next: (countries: any[]) => {
-          console.log(countries)
           this.countryOptions = countries
             .map((country) => {
               return {
@@ -210,7 +211,26 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
     this.onCountrySelectedFromDropdown.emit(countryCoordinates);
   }
 
-  onCitySelected(city: string): void {}
+  onCitySelected(city: string): void {
+    const country = this.countryFormControl.value;
+    if (country) {
+      this.locationService
+        .getCoordinatesByCityAndCountry(city, country)
+        .pipe(take(1))
+        .subscribe({
+          next: (coordinates) => {
+            console.log(`Coordinates for ${city}:`, coordinates);
+            this.form
+              .get('location.coordinates')
+              ?.patchValue({
+                latitude: coordinates.lat,
+                longitude: coordinates.lng,
+              });
+          },
+          error: (error) => console.error('Error fetching city coordinates:', error),
+        });
+    }
+  }
 
   onCountryInput(value: string): void {
     this.filteredCountryOptions = value
