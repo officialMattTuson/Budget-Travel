@@ -45,11 +45,11 @@ export class AddExpenseComponent implements OnInit {
 
   onSubmit(): void {}
 
-  onCountrySelected(countryCoordinates: Coordinates): void {
+  onCoordinatesReceived(coordinates: Coordinates): void {
     const map = this.mapSetupService.getMapSnapshot();
     if (map) {
       map.flyTo({
-        center: [countryCoordinates.lng, countryCoordinates.lat],
+        center: [coordinates.lng, coordinates.lat],
         zoom: 4,
       });
     }

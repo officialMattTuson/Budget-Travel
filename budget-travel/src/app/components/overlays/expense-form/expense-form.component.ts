@@ -43,7 +43,7 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
   @Input() budgetId!: string;
   @Input() locationDetails!: Location;
   @Output() onValidFormSubmission = new EventEmitter<ExpensePostRequest>();
-  @Output() onCountrySelectedFromDropdown = new EventEmitter<Coordinates>();
+  @Output() emitCoordinatesToFlyTo = new EventEmitter<Coordinates>();
   form!: FormGroup;
 
   currencies$!: Observable<Currency[]>;
@@ -195,7 +195,7 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
       (country) => country.name === countryName
     );
     if (selectedCountry) {
-      this.handleCountrySelection(selectedCountry.coordinates);
+      this.emitCoordinates(selectedCountry.coordinates);
     }
   }
 
@@ -207,8 +207,8 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
     this.currenciesOfSelectedCountry = selectedCountry.currencies;
   }
 
-  handleCountrySelection(countryCoordinates: Coordinates): void {
-    this.onCountrySelectedFromDropdown.emit(countryCoordinates);
+  emitCoordinates(coordinates: Coordinates): void {
+    this.emitCoordinatesToFlyTo.emit(coordinates);
   }
 
   onCitySelected(city: string): void {
@@ -219,15 +219,14 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
         .pipe(take(1))
         .subscribe({
           next: (coordinates) => {
-            console.log(`Coordinates for ${city}:`, coordinates);
-            this.form
-              .get('location.coordinates')
-              ?.patchValue({
-                latitude: coordinates.lat,
-                longitude: coordinates.lng,
-              });
+            this.form.get('location.coordinates')?.patchValue({
+              latitude: coordinates.lat,
+              longitude: coordinates.lng,
+            });
+            this.emitCoordinates(coordinates);
           },
-          error: (error) => console.error('Error fetching city coordinates:', error),
+          error: (error) =>
+            console.error('Error fetching city coordinates:', error),
         });
     }
   }
@@ -248,6 +247,13 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
       : this.cityOptions;
   }
 
+  resetForm(): void {
+    this.form.reset();
+    this.prefillDate();
+    this.prefillBudget();
+    this.resetCitiesFormFieldToInitialState();
+  }
+
   get countryFormControl(): FormControl {
     return this.form?.get('location')?.get('country') as FormControl;
   }
@@ -256,10 +262,4 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
     return this.form?.get('location')?.get('city') as FormControl;
   }
 
-  resetForm(): void {
-    this.form.reset();
-    this.prefillDate();
-    this.prefillBudget();
-    this.resetCitiesFormFieldToInitialState();
-  }
 }
