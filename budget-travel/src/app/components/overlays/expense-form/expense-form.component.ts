@@ -8,13 +8,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule  } from '@angular/forms';
 import { MaterialModule } from '../../../modules/material.module';
 import { Observable, take } from 'rxjs';
 import { Budget } from '../../../models/budgets.model';
@@ -27,6 +21,7 @@ import { CountriesService } from '../../../services/expenses/countries.service';
 import { Coordinates, Location } from '../../../models/location.model';
 import { ExpensePostRequest } from '../../../models/expense.model';
 import { LocationService } from '../../../services/mapbox/location.service';
+import { ExpenseForm } from '../../../pages/expenses/add-expense/add-expense.form';
 
 interface Country {
   name: string;
@@ -59,7 +54,6 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
   loadingCities = false;
 
   constructor(
-    private readonly fb: FormBuilder,
     private readonly budgetFacadeService: BudgetFacadeService,
     private readonly currencyService: CurrencyService,
     private readonly categoryService: CategoriesService,
@@ -68,7 +62,8 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.initializeForm();
+    this.form = new ExpenseForm();
+    this.prefillDate();
     this.budget$ = this.budgetFacadeService.budgets$;
     this.currencies$ = this.currencyService.getCurrencies();
     this.categories$ = this.categoryService.categories$;
@@ -116,29 +111,6 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
         error: (error) => console.error(error),
         complete: () => (this.loadingCountries = false),
       });
-  }
-
-  initializeForm(): void {
-    this.form = this.fb.group({
-      currency: this.fb.control('', Validators.required),
-      amount: this.fb.control('', Validators.required),
-      date: this.fb.control('', Validators.required),
-      description: this.fb.control('', Validators.required),
-      location: this.fb.group({
-        name: this.fb.control('', Validators.required),
-        address: this.fb.control(''),
-        city: this.fb.control(''),
-        country: this.fb.control('', Validators.required),
-        coordinates: this.fb.group({
-          latitude: this.fb.control('', Validators.required),
-          longitude: this.fb.control('', Validators.required),
-        }),
-      }),
-      category: this.fb.control('', Validators.required),
-      budgetId: this.fb.control('', Validators.required),
-      eventId: this.fb.control(''),
-    });
-    this.prefillDate();
   }
 
   prefillDate(): void {
@@ -261,5 +233,4 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
   get cityFormControl(): FormControl {
     return this.form?.get('location')?.get('city') as FormControl;
   }
-
 }
