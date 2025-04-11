@@ -5,6 +5,7 @@ import { OverlayResult, OverlayType } from '../../models/overlay-result.model';
 import { AddBudgetComponent } from '../../components/overlays/add-budget/add-budget.component';
 import { OverlayService } from '../shared/overlay.service';
 import { BudgetService } from './budget.service';
+import { AlertService } from '../shared/alert.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,8 @@ export class BudgetFacadeService {
 
   constructor(
     private readonly overlayService: OverlayService,
-    private readonly budgetService: BudgetService
+    private readonly budgetService: BudgetService,
+    private readonly alertService: AlertService
   ) {}
 
   getBudgets(): Budget[] {
@@ -64,9 +66,8 @@ export class BudgetFacadeService {
         budgets.push(newBudget);
         this.setBudgets(budgets);
       },
-      error: (error) => {
-        console.error('Error adding new budget:', error);
-      },
+      error: (error) =>
+        this.alertService.error('Error adding budgets: ' + error),
     });
   }
 
@@ -83,22 +84,17 @@ export class BudgetFacadeService {
 
   updateBudget(formData: BudgetPostRequest, budget: Budget) {
     const budgetPostObject = this.mapBudgetToPostRequest(formData);
-    this.budgetService
-      .updateBudget(budgetPostObject, budget._id)
-      .subscribe({
-        next: (addedBudget: Budget) => {
-          const currentBudgets = this.getBudgets();
-          const index = currentBudgets.findIndex(
-            (b) => b._id === budget._id
-          );
-          addedBudget.totalSpent = budget.totalSpent;
-          currentBudgets[index] = addedBudget;
+    this.budgetService.updateBudget(budgetPostObject, budget._id).subscribe({
+      next: (addedBudget: Budget) => {
+        const currentBudgets = this.getBudgets();
+        const index = currentBudgets.findIndex((b) => b._id === budget._id);
+        addedBudget.totalSpent = budget.totalSpent;
+        currentBudgets[index] = addedBudget;
 
-          this.setBudgets(currentBudgets);
-        },
-        error: (error) => {
-          console.error('Error updating budget:', error);
-        },
-      });
+        this.setBudgets(currentBudgets);
+      },
+      error: (error) =>
+        this.alertService.error('Error updating budgets: ' + error),
+    });
   }
 }

@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { HeaderComponent } from '../../components/header/header.component';
 import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
 import { Observable } from 'rxjs';
+import { AlertService } from '../../services/shared/alert.service';
 
 @Component({
   selector: 'app-budgets',
@@ -30,6 +31,7 @@ export class BudgetsComponent implements OnInit {
 
   constructor(
     private readonly budgetFacadeService: BudgetFacadeService,
+    private readonly alertService: AlertService,
     private readonly router: Router
   ) {
     this.isLoading$ = this.budgetFacadeService.isLoading$;
@@ -58,7 +60,7 @@ export class BudgetsComponent implements OnInit {
         this.budgetFacadeService.setIsLoading(false);
       },
       error: (error) => {
-        console.error('Error fetching budgets:', error);
+        this.alertService.error('Error fetching busgets: ' + error);
         this.budgetFacadeService.setIsLoading(false);
       },
     });

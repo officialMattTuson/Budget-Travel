@@ -16,6 +16,7 @@ import { LocationService } from '../../../services/mapbox/location.service';
 import { Location } from '../../../models/location.model';
 import { take } from 'rxjs';
 import { MapMarkerService } from '../../../services/mapbox/map-marker.service';
+import { AlertService } from '../../../services/shared/alert.service';
 
 @Component({
   selector: 'app-expense-map',
@@ -35,7 +36,8 @@ export class ExpenseMapComponent implements AfterViewInit, OnDestroy {
     @Inject(PLATFORM_ID) private readonly platformId: Object,
     private readonly mapboxSetupService: MapSetupService,
     private readonly mapboxMarkerService: MapMarkerService,
-    private readonly locationService: LocationService
+    private readonly locationService: LocationService,
+    private readonly alertService: AlertService
   ) {}
 
   ngAfterViewInit(): void {
@@ -67,9 +69,7 @@ export class ExpenseMapComponent implements AfterViewInit, OnDestroy {
         next: (location: Location) => {
           this.locationPinAdded.emit(location);
         },
-        error: (error) => {
-          console.error('Error fetching location:', error);
-        },
+        error: (error) => this.alertService.error(error),
       });
   }
 

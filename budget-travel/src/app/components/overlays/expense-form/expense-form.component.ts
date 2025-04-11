@@ -8,7 +8,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule  } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../modules/material.module';
 import { Observable, take } from 'rxjs';
 import { Budget } from '../../../models/budgets.model';
@@ -22,6 +22,7 @@ import { Coordinates, Location } from '../../../models/location.model';
 import { ExpensePostRequest } from '../../../models/expense.model';
 import { LocationService } from '../../../services/mapbox/location.service';
 import { ExpenseForm } from '../../../pages/expenses/add-expense/add-expense.form';
+import { AlertService } from '../../../services/shared/alert.service';
 
 interface Country {
   name: string;
@@ -56,6 +57,7 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
   constructor(
     private readonly budgetFacadeService: BudgetFacadeService,
     private readonly currencyService: CurrencyService,
+    private readonly alertService: AlertService,
     private readonly categoryService: CategoriesService,
     private readonly countriesService: CountriesService,
     private readonly locationService: LocationService
@@ -108,7 +110,7 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
             .sort((a, b) => a.name.localeCompare(b.name));
           this.filteredCountryOptions = this.countryOptions;
         },
-        error: (error) => console.error(error),
+        error: (error) => this.alertService.error(error),
         complete: () => (this.loadingCountries = false),
       });
   }
@@ -159,7 +161,7 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
           this.cityOptions = [...cities].sort((a, b) => a.localeCompare(b));
           this.filteredCityOptions = this.cityOptions;
         },
-        error: (error) => console.error(error),
+        error: (error) => this.alertService.error(error),
         complete: () => (this.loadingCities = false),
       });
 
@@ -198,7 +200,7 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
             this.emitCoordinates(coordinates);
           },
           error: (error) =>
-            console.error('Error fetching city coordinates:', error),
+            this.alertService.error('Error fetching coordinates: ' + error),
         });
     }
   }

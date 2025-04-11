@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Expense, ExpensePostRequest } from '../../models/expense.model';
 import { OverlayService } from '../shared/overlay.service';
 import { ExpensesService } from './expenses.service';
+import { AlertService } from '../shared/alert.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,7 @@ export class ExpensesFacadeService {
 
   constructor(
     private readonly overlayService: OverlayService,
+    private readonly alertService: AlertService,
     private readonly expensesService: ExpensesService
   ) {}
 
@@ -31,7 +33,7 @@ export class ExpensesFacadeService {
         expenses.push(newExpense);
         this.setExpenses(expenses);
       },
-      error: (error) => console.error(error),
+      error: (error) => this.alertService.error('Error adding expense: ' + error),
     });
   }
 }

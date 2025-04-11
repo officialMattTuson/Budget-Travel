@@ -139,3 +139,17 @@ mat-form-field .mat-mdc-form-field-subscript-wrapper {
 .ngx-charts-legend-label {
   font-size: 1rem;
 }
+
+.mat-mdc-snack-bar-container {
+  &.success .mat-mdc-snackbar-surface {
+    background-color: #087d11;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 0.5rem rgba(0, 0, 0, 0.2);
+  }
+
+  &.fail .mat-mdc-snackbar-surface {
+    background-color: #970303;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 0.5rem rgba(0, 0, 0, 0.2);
+  }
+}

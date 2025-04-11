@@ -24,6 +24,7 @@ import { CategoriesService } from '../../services/shared/categories.service';
 import { NgxChartsModule, LegendPosition } from '@swimlane/ngx-charts';
 import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
 import { ExpenseMapComponent } from '../../components/map/expense-map/expense-map.component';
+import { AlertService } from '../../services/shared/alert.service';
 
 @Component({
   selector: 'app-view-budget',
@@ -63,6 +64,7 @@ export class ViewBudgetComponent implements OnInit {
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
     private readonly budgetService: BudgetService,
+    private readonly alertService: AlertService,
     private readonly budgetFacadeService: BudgetFacadeService,
     private readonly categoriesService: CategoriesService
   ) {}
@@ -86,7 +88,7 @@ export class ViewBudgetComponent implements OnInit {
           this.calculateStats();
           this.calculateCategoryBreakdown();
         },
-        error: (error) => console.error('Error fetching budget:', error),
+        error: (error) => this.alertService.error(error),
       });
   }
 

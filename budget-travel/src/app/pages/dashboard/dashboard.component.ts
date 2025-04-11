@@ -11,6 +11,7 @@ import { CardDetailsComponent } from '../../components/card-details/card-details
 import { Expense } from '../../models/expense.model';
 import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
 import { ExpensesFacadeService } from '../../services/expenses/expenses-facade.service';
+import { AlertService } from '../../services/shared/alert.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,6 +31,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
+    private readonly alertService: AlertService,
     private readonly budgetService: BudgetService,
     private readonly expensesService: ExpensesService,
     private readonly budgetFacadeService: BudgetFacadeService,
@@ -56,7 +58,8 @@ export class DashboardComponent implements OnInit {
             }
           });
         },
-        error: (error) => console.error('Error fetching budgets:', error),
+        error: (error) =>
+          this.alertService.error('Error fetching budgets: ' + error),
       });
   }
 
@@ -69,7 +72,8 @@ export class DashboardComponent implements OnInit {
           this.expensesFacadeService.setExpenses(expenses);
           this.recentExpenses = expenses.slice(0, 5);
         },
-        error: (error) => console.error('Error fetching expenses:', error),
+        error: (error) =>
+          this.alertService.error('Error fetching expenses: ' + error),
       });
   }
 
@@ -79,7 +83,8 @@ export class DashboardComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: (categories) => this.categoriesService.setCategories(categories),
-        error: (error) => console.error('Error fetching categories:', error),
+        error: (error) =>
+          this.alertService.error('Error fetching categories: ' + error),
       });
   }
 
