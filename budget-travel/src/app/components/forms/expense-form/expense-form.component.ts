@@ -10,28 +10,30 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../modules/material.module';
+import { Coordinates, Location } from '../../../models/location.model';
+import { ExpensePostRequest } from '../../../models/expense.model';
+import { ExpenseForm } from '../../../pages/expenses/add-expense/expense.form';
+import { AlertService } from '../../../services/shared/alert.service';
+import { CountriesService } from '../../../services/expenses/countries.service';
+import { LocationService } from '../../../services/mapbox/location.service';
+import { CurrencyService } from '../../../services/shared/currency.service';
+import { CategoriesService } from '../../../services/shared/categories.service';
 import { Observable, take } from 'rxjs';
 import { Budget } from '../../../models/budgets.model';
 import { Category } from '../../../models/category.model';
 import { Currency } from '../../../models/currency.model';
 import { BudgetFacadeService } from '../../../services/budgets/budget-facade.service';
-import { CategoriesService } from '../../../services/shared/categories.service';
-import { CurrencyService } from '../../../services/shared/currency.service';
-import { CountriesService } from '../../../services/expenses/countries.service';
-import { Coordinates, Location } from '../../../models/location.model';
-import { ExpensePostRequest } from '../../../models/expense.model';
-import { LocationService } from '../../../services/mapbox/location.service';
-import { ExpenseForm } from '../../../pages/expenses/add-expense/expense.form';
-import { AlertService } from '../../../services/shared/alert.service';
+import { ErrorMessagePipe } from '../../../pipes/error-message.pipe';
 
 interface Country {
   name: string;
   currencies: string[];
   coordinates: Coordinates;
 }
+
 @Component({
   selector: 'app-expense-form',
-  imports: [MaterialModule, ReactiveFormsModule, CommonModule],
+  imports: [MaterialModule, ReactiveFormsModule, CommonModule, ErrorMessagePipe],
   templateUrl: './expense-form.component.html',
 })
 export class ExpenseFormComponent implements OnInit, OnChanges {
@@ -39,12 +41,13 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
   @Input() locationDetails!: Location;
   @Output() onValidFormSubmission = new EventEmitter<ExpensePostRequest>();
   @Output() emitCoordinatesToFlyTo = new EventEmitter<Coordinates>();
-  form!: FormGroup;
 
   currencies$!: Observable<Currency[]>;
   categories$!: Observable<Category[]>;
   budget$!: Observable<Budget[]>;
   defaultCurrency$!: Observable<Currency>;
+  form!: FormGroup;
+
   countryOptions: Country[] = [];
   cityOptions: string[] = [];
   filteredCountryOptions: Country[] = [];
@@ -56,22 +59,23 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
   constructor(
     private readonly budgetFacadeService: BudgetFacadeService,
     private readonly currencyService: CurrencyService,
-    private readonly alertService: AlertService,
     private readonly categoryService: CategoriesService,
+    private readonly alertService: AlertService,
     private readonly countriesService: CountriesService,
     private readonly locationService: LocationService
-  ) {}
-
-  ngOnInit(): void {
-    this.form = new ExpenseForm();
-    this.prefillDate();
+  ) {
     this.budget$ = this.budgetFacadeService.budgets$;
     this.currencies$ = this.currencyService.getCurrencies();
     this.categories$ = this.categoryService.categories$;
     this.defaultCurrency$ = this.currencyService.defaultCurrency$;
+  }
+
+  ngOnInit(): void {
+    this.form = new ExpenseForm();
+    this.prefillDate();
+    this.prefillBudget(this.budgetId);
     this.getCountries();
     this.resetCitiesFormFieldToInitialState();
-    this.prefillBudget();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -112,22 +116,6 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
         error: (error) => this.alertService.error(error),
         complete: () => (this.loadingCountries = false),
       });
-  }
-
-  prefillDate(): void {
-    const today = new Date();
-    this.form.get('date')?.setValue(today);
-  }
-
-  prefillBudget(): void {
-    this.budget$.pipe(take(1)).subscribe((budgets) => {
-      const matchingBudget = budgets.find(
-        (budget) => budget._id === this.budgetId
-      );
-      if (matchingBudget) {
-        this.form.get('budgetId')?.setValue(matchingBudget._id);
-      }
-    });
   }
 
   resetCountrySelected(): void {
@@ -220,10 +208,24 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
       : this.cityOptions;
   }
 
+  prefillDate(): void {
+    const today = new Date();
+    this.form.get('date')?.setValue(today);
+  }
+
+  prefillBudget(budgetId: string): void {
+    this.budget$.subscribe((budgets) => {
+      const matchingBudget = budgets.find((budget) => budget._id === budgetId);
+      if (matchingBudget) {
+        this.form.get('budgetId')?.setValue(matchingBudget._id);
+      }
+    });
+  }
+
   resetForm(): void {
     this.form.reset();
     this.prefillDate();
-    this.prefillBudget();
+    this.prefillBudget(this.budgetId);
     this.resetCitiesFormFieldToInitialState();
   }
 

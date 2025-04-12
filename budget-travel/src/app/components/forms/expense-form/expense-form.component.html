@@ -6,16 +6,25 @@
       <mat-option [value]="category.id">{{ category.name }}</mat-option>
       }
     </mat-select>
+    <mat-error>
+      {{ form.get("description") | errorMessage : "Category" }}
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Description</mat-label>
     <input matInput formControlName="description" />
+    <mat-error>
+      {{ form.get("description") | errorMessage : "Description" }}
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Amount</mat-label>
     <input matInput formControlName="amount" />
+    <mat-error>
+      {{ form.get("description") | errorMessage : "Amount" }}
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
@@ -25,6 +34,9 @@
       <mat-option [value]="budget._id">{{ budget.name }}</mat-option>
       }
     </mat-select>
+    <mat-error>
+      {{ form.get("description") | errorMessage : "Budget" }}
+    </mat-error>
   </mat-form-field>
 
   <ng-container formGroupName="location" class="form-single-column">
@@ -54,6 +66,9 @@
           {{ country.name }}
         </mat-option>
       </mat-autocomplete>
+      <mat-error>
+        {{ form.get("description") | errorMessage : "Country" }}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -79,16 +94,25 @@
           {{ city }}
         </mat-option>
       </mat-autocomplete>
+      <mat-error>
+        {{ form.get("description") | errorMessage : "City" }}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Name of Location</mat-label>
       <input matInput formControlName="name" />
+      <mat-error>
+        {{ form.get("description") | errorMessage : "Name of location" }}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Address of Location (optional)</mat-label>
       <input matInput formControlName="address" />
+      <mat-error>
+        {{ form.get("description") | errorMessage : "Address" }}
+      </mat-error>
     </mat-form-field>
   </ng-container>
 
@@ -113,6 +137,9 @@
         }
       </mat-optgroup>
     </mat-select>
+    <mat-error>
+      {{ form.get("description") | errorMessage : "Currency" }}
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
@@ -120,10 +147,15 @@
     <input matInput [matDatepicker]="picker1" formControlName="date" />
     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
     <mat-datepicker #picker1></mat-datepicker>
+    <mat-error>
+      {{ form.get("description") | errorMessage : "Date" }}
+    </mat-error>
   </mat-form-field>
 
   <div class="form-actions">
     <button mat-raised-button color="primary" type="submit">Submit</button>
-    <button mat-raised-button color="warn" type="button" (click)="resetForm()">Reset</button>
+    <button mat-raised-button color="warn" type="button" (click)="resetForm()">
+      Reset
+    </button>
   </div>
 </form>
