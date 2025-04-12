@@ -21,7 +21,7 @@ import { CountriesService } from '../../../services/expenses/countries.service';
 import { Coordinates, Location } from '../../../models/location.model';
 import { ExpensePostRequest } from '../../../models/expense.model';
 import { LocationService } from '../../../services/mapbox/location.service';
-import { ExpenseForm } from '../../../pages/expenses/add-expense/add-expense.form';
+import { ExpenseForm } from '../../../pages/expenses/add-expense/expense.form';
 import { AlertService } from '../../../services/shared/alert.service';
 
 interface Country {
@@ -33,7 +33,6 @@ interface Country {
   selector: 'app-expense-form',
   imports: [MaterialModule, ReactiveFormsModule, CommonModule],
   templateUrl: './expense-form.component.html',
-  styleUrl: './expense-form.component.scss',
 })
 export class ExpenseFormComponent implements OnInit, OnChanges {
   @Input() budgetId!: string;

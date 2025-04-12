@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../modules/material.module';
-import { ExpenseFormComponent } from '../../../components/overlays/expense-form/expense-form.component';
+import { ExpenseFormComponent } from '../../../components/forms/expense-form/expense-form.component';
 import { ExpenseMapComponent } from '../../../components/map/expense-map/expense-map.component';
 import { ActivatedRoute } from '@angular/router';
 import { Coordinates, Location } from '../../../models/location.model';
