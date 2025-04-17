@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../modules/material.module';
 import { ExpenseFormComponent } from '../../../components/forms/expense-form/expense-form.component';
 import { ExpenseMapComponent } from '../../../components/map/expense-map/expense-map.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   Coordinates,
   CoordinatesWithZoom,
@@ -12,6 +12,8 @@ import {
 } from '../../../models/location.model';
 import { ExpensePostRequest } from '../../../models/expense.model';
 import { MapSetupService } from '../../../services/mapbox/map-setup.service';
+import { ExpensesFacadeService } from '../../../services/expenses/expenses-facade.service';
+import { AlertService } from '../../../services/shared/alert.service';
 
 @Component({
   selector: 'app-add-expense',
@@ -29,7 +31,10 @@ export class AddExpenseComponent implements OnInit {
   budgetId!: string;
   locationDetails!: Location;
   constructor(
+    private readonly router: Router,
+    private readonly alertService: AlertService,
     private readonly activatedRoute: ActivatedRoute,
+    private readonly expenseFacadeService: ExpensesFacadeService,
     private readonly mapSetupService: MapSetupService
   ) {}
 
@@ -41,13 +46,14 @@ export class AddExpenseComponent implements OnInit {
     this.locationDetails = location;
   }
 
-  onValidFormSubmission(expense: ExpensePostRequest): void {
-    console.log(expense);
+  onSubmit(expense: ExpensePostRequest): void {
+    this.expenseFacadeService.addNewExpense(expense).subscribe(() => {
+      this.alertService.success('Expense added successfully');
+      this.router.navigateByUrl(`/budgets/${this.budgetId}`);
+    });
   }
 
   onCancel(): void {}
-
-  onSubmit(): void {}
 
   onCoordinatesReceived(coordinates: Coordinates): void {
     const map = this.mapSetupService.getMapSnapshot();

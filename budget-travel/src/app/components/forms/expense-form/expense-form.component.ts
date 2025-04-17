@@ -253,6 +253,24 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
     this.resetCitiesFormFieldToInitialState();
   }
 
+  submitExpense() {
+    if (this.form.valid) {
+      const expenseData: ExpensePostRequest = {
+        ...this.form.value,
+        location: {
+          ...this.form.value.location,
+          coordinates: {
+            lat: this.form.value.location.coordinates.latitude,
+            lng: this.form.value.location.coordinates.longitude,
+          },
+        },
+      };
+      this.onValidFormSubmission.emit(expenseData);
+    } else {
+      this.alertService.error('Please fill in all required fields.');
+    }
+  }
+
   get countryFormControl(): FormControl {
     return this.form?.get('location')?.get('country') as FormControl;
   }

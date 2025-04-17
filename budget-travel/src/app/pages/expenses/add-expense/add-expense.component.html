@@ -9,7 +9,7 @@
       <app-expense-form 
         [budgetId]="budgetId"
         [locationDetails]="locationDetails"
-        (onValidFormSubmission)="onValidFormSubmission($event)"
+        (onValidFormSubmission)="onSubmit($event)"
         (onEmitCoordinates)="onCoordinatesReceived($event)"
         (onEmitCoordinatesWithInstruction)="onZoomCoordinatesReceived($event)"
         ></app-expense-form>
@@ -26,10 +26,4 @@
       ></app-expense-map>
     </mat-card-content>
   </mat-card>
-</div>
-<div class="expense__actions">
-  <button mat-stroked-button (click)="onCancel()">Cancel</button>
-  <button mat-flat-button color="primary" (click)="onSubmit()">
-    Add Expense
-  </button>
 </div>

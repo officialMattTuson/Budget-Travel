@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, catchError, EMPTY, Observable, tap } from 'rxjs';
 import { Expense, ExpensePostRequest } from '../../models/expense.model';
 import { OverlayService } from '../shared/overlay.service';
 import { ExpensesService } from './expenses.service';
@@ -26,14 +26,17 @@ export class ExpensesFacadeService {
     this._expenses.next(expenses);
   }
 
-  addNewExpense(expense: ExpensePostRequest): void {
-    this.expensesService.addExpense(expense).subscribe({
-      next: (newExpense: Expense) => {
+  addNewExpense(expense: ExpensePostRequest): Observable<Expense> {
+    return this.expensesService.addExpense(expense).pipe(
+      catchError((error) => {
+        this.alertService.error('Error adding expense: ' + error);
+        return EMPTY;
+      }),
+      tap((newExpense: Expense) => {
         const expenses = this.getExpenses();
         expenses.push(newExpense);
         this.setExpenses(expenses);
-      },
-      error: (error) => this.alertService.error('Error adding expense: ' + error),
-    });
+      })
+    );
   }
 }

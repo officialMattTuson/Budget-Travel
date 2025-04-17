@@ -35,8 +35,8 @@ const getExpenseForm = () => {
       city: fb.control(''),
       country: fb.control('', Validators.required),
       coordinates: fb.group({
-        latitude: fb.control('', Validators.required),
-        longitude: fb.control('', Validators.required),
+        lat: fb.control('', Validators.required),
+        lng: fb.control('', Validators.required),
       }),
     }),
     category: fb.control('', Validators.required),

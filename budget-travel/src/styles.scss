@@ -93,6 +93,17 @@ mat-form-field .mat-mdc-form-field-subscript-wrapper {
   margin-block-start: 2rem;
 }
 
+.form-actions {
+  display: flex;
+  justify-content: end;
+  gap: 2rem;
+  align-items: center;
+  margin-top: 1rem;
+  button {
+    width: 8rem;
+  }
+}
+
 .title {
   font-size: 1.5rem;
   font-weight: bold;
