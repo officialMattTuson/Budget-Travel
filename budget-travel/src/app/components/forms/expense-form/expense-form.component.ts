@@ -10,9 +10,13 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../modules/material.module';
-import { Coordinates, Location } from '../../../models/location.model';
+import {
+  Coordinates,
+  Location,
+  CoordinatesWithZoom,
+} from '../../../models/location.model';
 import { ExpensePostRequest } from '../../../models/expense.model';
-import { ExpenseForm } from '../../../pages/expenses/add-expense/expense.form';
+import { ExpenseForm } from './expense.form';
 import { AlertService } from '../../../services/shared/alert.service';
 import { CountriesService } from '../../../services/expenses/countries.service';
 import { LocationService } from '../../../services/mapbox/location.service';
@@ -33,14 +37,21 @@ interface Country {
 
 @Component({
   selector: 'app-expense-form',
-  imports: [MaterialModule, ReactiveFormsModule, CommonModule, ErrorMessagePipe],
+  imports: [
+    MaterialModule,
+    ReactiveFormsModule,
+    CommonModule,
+    ErrorMessagePipe,
+  ],
   templateUrl: './expense-form.component.html',
 })
 export class ExpenseFormComponent implements OnInit, OnChanges {
   @Input() budgetId!: string;
   @Input() locationDetails!: Location;
   @Output() onValidFormSubmission = new EventEmitter<ExpensePostRequest>();
-  @Output() emitCoordinatesToFlyTo = new EventEmitter<Coordinates>();
+  @Output() onEmitCoordinates = new EventEmitter<Coordinates>();
+  @Output() onEmitCoordinatesWithInstruction =
+    new EventEmitter<CoordinatesWithZoom>();
 
   currencies$!: Observable<Currency[]>;
   categories$!: Observable<Category[]>;
@@ -85,6 +96,9 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
       this.onCountrySelected(this.locationDetails?.country);
       this.cityFormControl.enable();
       this.cityFormControl.patchValue(this.locationDetails?.city);
+      this.onEmitCoordinatesWithInstruction.emit(
+        this.getCoordinatesWithZoom(this.locationDetails.coordinates, 12)
+      );
     }
   }
 
@@ -156,7 +170,7 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
       (country) => country.name === countryName
     );
     if (selectedCountry) {
-      this.emitCoordinates(selectedCountry.coordinates);
+      this.onEmitCoordinates.emit(selectedCountry.coordinates);
     }
   }
 
@@ -166,10 +180,6 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
       (country) => country.name === countryName
     ) as Country;
     this.currenciesOfSelectedCountry = selectedCountry.currencies;
-  }
-
-  emitCoordinates(coordinates: Coordinates): void {
-    this.emitCoordinatesToFlyTo.emit(coordinates);
   }
 
   onCitySelected(city: string): void {
@@ -184,7 +194,10 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
               latitude: coordinates.lat,
               longitude: coordinates.lng,
             });
-            this.emitCoordinates(coordinates);
+
+            this.onEmitCoordinatesWithInstruction.emit(
+              this.getCoordinatesWithZoom(coordinates, 12)
+            );
           },
           error: (error) =>
             this.alertService.error('Error fetching coordinates: ' + error),
@@ -220,6 +233,17 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
         this.form.get('budgetId')?.setValue(matchingBudget._id);
       }
     });
+  }
+
+  getCoordinatesWithZoom(
+    coordinates: Coordinates,
+    zoom = 12
+  ): CoordinatesWithZoom {
+    return {
+      lat: coordinates.lat,
+      lng: coordinates.lng,
+      zoom: zoom,
+    };
   }
 
   resetForm(): void {

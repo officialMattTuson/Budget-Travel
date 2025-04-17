@@ -5,7 +5,11 @@ import { MaterialModule } from '../../../modules/material.module';
 import { ExpenseFormComponent } from '../../../components/forms/expense-form/expense-form.component';
 import { ExpenseMapComponent } from '../../../components/map/expense-map/expense-map.component';
 import { ActivatedRoute } from '@angular/router';
-import { Coordinates, Location } from '../../../models/location.model';
+import {
+  Coordinates,
+  CoordinatesWithZoom,
+  Location,
+} from '../../../models/location.model';
 import { ExpensePostRequest } from '../../../models/expense.model';
 import { MapSetupService } from '../../../services/mapbox/map-setup.service';
 
@@ -51,6 +55,16 @@ export class AddExpenseComponent implements OnInit {
       map.flyTo({
         center: [coordinates.lng, coordinates.lat],
         zoom: 4,
+      });
+    }
+  }
+
+  onZoomCoordinatesReceived(coordinatesWithZoom: CoordinatesWithZoom): void {
+    const map = this.mapSetupService.getMapSnapshot();
+    if (map) {
+      map.flyTo({
+        center: [coordinatesWithZoom.lng, coordinatesWithZoom.lat],
+        zoom: coordinatesWithZoom.zoom,
       });
     }
   }

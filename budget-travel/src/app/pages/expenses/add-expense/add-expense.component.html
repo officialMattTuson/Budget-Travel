@@ -10,7 +10,8 @@
         [budgetId]="budgetId"
         [locationDetails]="locationDetails"
         (onValidFormSubmission)="onValidFormSubmission($event)"
-        (emitCoordinatesToFlyTo)="onCoordinatesReceived($event)"
+        (onEmitCoordinates)="onCoordinatesReceived($event)"
+        (onEmitCoordinatesWithInstruction)="onZoomCoordinatesReceived($event)"
         ></app-expense-form>
     </mat-card-content>
   </mat-card>
