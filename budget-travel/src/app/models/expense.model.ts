@@ -1,4 +1,5 @@
 import { ScaleType } from '@swimlane/ngx-charts';
+import { Location } from './location.model';
 
 export interface Expense {
   _id: string;
