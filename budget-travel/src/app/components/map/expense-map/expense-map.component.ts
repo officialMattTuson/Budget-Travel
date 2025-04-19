@@ -44,8 +44,7 @@ export class ExpenseMapComponent implements AfterViewInit, OnDestroy {
     if (!isPlatformBrowser(this.platformId)) return;
 
     mapboxgl.accessToken = environment.mapboxToken;
-
-    const map = this.mapboxSetupService.initializeMap('map');
+    const map = this.mapboxSetupService.initializeMap('map', this.pins);
 
     map.on('load', () => {
       this.loadPins();

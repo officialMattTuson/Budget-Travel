@@ -25,7 +25,7 @@ import { NgxChartsModule, LegendPosition } from '@swimlane/ngx-charts';
 import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
 import { ExpenseMapComponent } from '../../components/map/expense-map/expense-map.component';
 import { AlertService } from '../../services/shared/alert.service';
-import { Location } from '../../models/location.model';
+import { Pin } from '../../models/location.model';
 
 @Component({
   selector: 'app-view-budget',
@@ -57,7 +57,7 @@ export class ViewBudgetComponent implements OnInit {
   categoryBreakdownData: object[] = [];
   LegendPosition = LegendPosition;
   colorScheme = colorScheme;
-  mapPins: { lat: number; lng: number; label?: string }[] = [];
+  mapPins: Pin[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -72,8 +72,12 @@ export class ViewBudgetComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.budgetId = this.activatedRoute.snapshot.paramMap.get('id')!;
+    this.getBudgetIdFromRouteParams();
     this.getBudgetById();
+  }
+
+  getBudgetIdFromRouteParams() {
+    this.budgetId = this.activatedRoute.snapshot.paramMap.get('id')!;
   }
 
   getBudgetById() {
@@ -90,7 +94,6 @@ export class ViewBudgetComponent implements OnInit {
           this.calculateStats();
           this.calculateCategoryBreakdown();
           this.mapPins = this.getPins();
-          console.log(this.mapPins);          
         },
         error: (error) => this.alertService.error(error),
       });
@@ -213,10 +216,9 @@ export class ViewBudgetComponent implements OnInit {
     this.router.navigate([`/budgets/${this.budgetId}/expense/new`]);
   }
 
-  getPins(): { lat: number; lng: number; label?: string }[] {
+  getPins(): Pin[] {
     const expenses = this.budget.expenses;
-    console.log(expenses);
-    let pins: { lat: number; lng: number; label?: string }[] = [];
+    let pins: Pin[] = [];
     for (let expense of expenses) {
       if (expense.location?.coordinates) {
         const pin = this.createPin(expense);
@@ -226,11 +228,7 @@ export class ViewBudgetComponent implements OnInit {
     return pins;
   }
 
-  createPin(expense: Expense): {
-    lat: number;
-    lng: number;
-    label?: string;
-  } {
+  createPin(expense: Expense): Pin {
     return {
       lat: expense.location.coordinates.lat,
       lng: expense.location.coordinates.lng,

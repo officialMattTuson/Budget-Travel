@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import mapboxgl from 'mapbox-gl';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Pin } from '../../models/location.model';
 
 enum MapStyles {
   MapboxStreets = 'mapbox://styles/mapbox/streets-v12',
@@ -31,15 +32,32 @@ export class MapSetupService {
 
   initializeMap(
     containerId: string,
+    mapPins: Pin[],
     options?: Partial<mapboxgl.MapboxOptions>
   ): mapboxgl.Map {
     const map = new mapboxgl.Map({
       container: containerId,
       style: MapStyles.MapboxSatelliteStreets,
-      center: [175.2528, -37.7826],
-      zoom: 7,
+      center: [0, 0],
+      zoom: 2,
       ...options,
     });
+
+    if (mapPins.length > 0) {
+      const bounds = new mapboxgl.LngLatBounds();
+
+      mapPins.forEach((pin) => {
+        bounds.extend([pin.lng, pin.lat]);
+      });
+
+      map.on('load', () => {
+        map.fitBounds(bounds, {
+          padding: 50,
+          maxZoom: 12,
+          linear: true,
+        });
+      });
+    }
 
     this.setMap(map);
     return map;

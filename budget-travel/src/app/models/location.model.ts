@@ -16,3 +16,9 @@ export interface CoordinatesWithZoom {
   lng: number;
   zoom: number;
 }
+
+export interface Pin {
+  lat: number;
+  lng: number;
+  label?: string;
+}
