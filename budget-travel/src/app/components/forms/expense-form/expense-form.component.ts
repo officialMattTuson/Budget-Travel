@@ -260,8 +260,8 @@ export class ExpenseFormComponent implements OnInit, OnChanges {
         location: {
           ...this.form.value.location,
           coordinates: {
-            lat: this.form.value.location.coordinates.latitude,
-            lng: this.form.value.location.coordinates.longitude,
+            lat: this.form.value.location.coordinates.lat,
+            lng: this.form.value.location.coordinates.lng,
           },
         },
       };
