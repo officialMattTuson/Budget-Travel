@@ -12,12 +12,14 @@ import { Expense } from '../../models/expense.model';
 import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
 import { ExpensesFacadeService } from '../../services/expenses/expenses-facade.service';
 import { AlertService } from '../../services/shared/alert.service';
+import { HeaderComponent } from '../../components/header/header.component';
+import { CategoryMapperPipe } from '../../pipes/category-mapper.pipe';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
-  imports: [CommonModule, MaterialModule, CardDetailsComponent],
+  imports: [CommonModule, MaterialModule, CardDetailsComponent, HeaderComponent, CategoryMapperPipe],
 })
 export class DashboardComponent implements OnInit {
   trips: any[] = [

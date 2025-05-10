@@ -4,7 +4,16 @@
   </mat-drawer>
 
   <mat-drawer-content>
-    <app-toolbar></app-toolbar>
-    <router-outlet></router-outlet>
+    <div class="layout">
+      <aside class="sidebar">
+        <app-menu></app-menu>
+      </aside>
+    
+      <div class="main-content">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+    
+    
   </mat-drawer-content>
 </mat-drawer-container>

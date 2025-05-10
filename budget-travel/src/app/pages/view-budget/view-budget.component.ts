@@ -26,6 +26,7 @@ import { BudgetFacadeService } from '../../services/budgets/budget-facade.servic
 import { ExpenseMapComponent } from '../../components/map/expense-map/expense-map.component';
 import { AlertService } from '../../services/shared/alert.service';
 import { Pin } from '../../models/location.model';
+import { ExchangeRateService } from '../../services/shared/exchange-rate.service';
 
 @Component({
   selector: 'app-view-budget',
@@ -68,12 +69,19 @@ export class ViewBudgetComponent implements OnInit {
     private readonly budgetService: BudgetService,
     private readonly alertService: AlertService,
     private readonly budgetFacadeService: BudgetFacadeService,
-    private readonly categoriesService: CategoriesService
+    private readonly categoriesService: CategoriesService,
+    private readonly exchangeRateService: ExchangeRateService
   ) {}
 
   ngOnInit(): void {
     this.getBudgetIdFromRouteParams();
     this.getBudgetById();
+    this.exchangeRateService.convertCurrency('NZD', 'USD', 100).subscribe({
+      next: (response) => {
+        console.log('Exchange Rate:', response);
+      },
+      error: (error) => this.alertService.error(error.message),
+    });
   }
 
   getBudgetIdFromRouteParams() {

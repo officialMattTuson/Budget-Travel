@@ -1,0 +1,35 @@
+.heading {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0 2.5rem 0;
+  gap: 1rem;
+
+  &__title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    .material-icons {
+      margin-right: 12px;
+    }
+
+    &.active,
+    &:hover {
+      background-color: #374151;
+    }
+  }
+}

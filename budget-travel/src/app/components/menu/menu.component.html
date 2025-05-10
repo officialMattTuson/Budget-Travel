@@ -1,0 +1,14 @@
+  <div class="heading">
+    <span class="material-icons">travel_explore</span>
+    <span class="heading__title">{{ title }}</span>
+  </div>
+  <nav>
+    <ul>
+      @for (item of menuItems; track item.id) {
+        <li class="list-item" routerLink="{{ item.route }}" routerLinkActive="active">
+          <span class="material-icons">{{ item.icon }}</span>
+          <span class="label">{{ item.label }}</span>
+        </li>
+      }
+    </ul>
+  </nav>

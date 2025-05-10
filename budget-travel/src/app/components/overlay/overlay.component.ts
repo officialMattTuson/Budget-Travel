@@ -13,13 +13,14 @@ import { MaterialModule } from '../../modules/material.module';
 import { MatDrawer } from '@angular/material/sidenav';
 import { RouterOutlet } from '@angular/router';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
+import { MenuComponent } from "../menu/menu.component";
 
 @Component({
   selector: 'app-overlay',
   templateUrl: './overlay.component.html',
   styleUrls: ['./overlay.component.scss'],
   standalone: true,
-  imports: [CommonModule, MaterialModule, RouterOutlet, ToolbarComponent],
+  imports: [CommonModule, MaterialModule, RouterOutlet, ToolbarComponent, MenuComponent],
 })
 export class OverlayComponent implements AfterViewInit {
   @ViewChild('overlayContainer', { read: ViewContainerRef })

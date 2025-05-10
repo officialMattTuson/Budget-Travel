@@ -1,87 +1,140 @@
-.container {
-  &__top-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-    padding: 1.25rem;
-    justify-content: center;
-  }
+// .container {
+//   &__top-row {
+//     display: grid;
+//     grid-template-columns: 1fr 1fr;
+//     gap: 1.25rem;
+//     padding: 1.25rem;
+//     justify-content: center;
+//   }
 
-  &__bottom-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1.25rem;
-    padding: 1.25rem;
-    justify-content: center;
-  }
+//   &__bottom-row {
+//     display: grid;
+//     grid-template-columns: 1fr 1fr 1fr;
+//     gap: 1.25rem;
+//     padding: 1.25rem;
+//     justify-content: center;
+//   }
+// }
+
+// .budget-overview,
+// .trip-overview {
+//   grid-column: span 1;
+//   width: 100%;
+//   padding: 1.5rem;
+//   border-radius: 0.5rem;
+// }
+
+// .expenses-overview,
+// .currency-exchange,
+// .category-breakdown {
+//   grid-column: span 1.5;
+//   width: 100%;
+//   padding: 1.5rem;
+//   border-radius: 0.5rem;
+// }
+
+// .budget {
+//   &-overview {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     text-align: center;
+//   }
+
+//   &-circle {
+//     position: relative;
+//     width: 12rem;
+//     height: 12rem;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     padding: 1.5rem;
+//   }
+
+//   &-text {
+//     position: absolute;
+//     text-align: center;
+//     font-family: "Playfair Display", serif;
+//     color: #3e2723;
+//   }
+// }
+
+// .mat-mdc-card-title {
+//   font-family: "Inter", serif;
+//   font-weight: 500;
+//   color: #3e2723;
+// }
+
+.trip-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.budget-overview,
-.trip-overview {
-  grid-column: span 1;
-  width: 100%;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-}
+.expenses-list {
+  padding: 0.75rem;
+  flex: 1;
 
-.expenses-overview,
-.currency-exchange,
-.category-breakdown {
-  grid-column: span 1.5;
-  width: 100%;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-}
-
-.budget {
-  &-overview {
+  &-item .mdc-list-item__content .mdc-list-item__primary-text {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
   }
+}
 
-  &-circle {
-    position: relative;
-    width: 12rem;
-    height: 12rem;
+.overview {
+  margin-block-start: 1rem;
+  display: flex;
+}
+
+.dashboard__cards {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 2rem;
+}
+
+.card {
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  &__info {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1.5rem;
+    flex-direction: column;
   }
+}
 
-  &-text {
-    position: absolute;
-    text-align: center;
-    font-family: "Playfair Display", serif;
-    color: #3e2723;
-  }
+.icon {
+  width: 2rem;
+  height: 2rem;
+  font-size: 2rem;
+  padding: 0.75rem;
+  border-radius: 1rem;
 }
 
 .trip {
-  &-stamp {
-    .mat-mdc-card-content {
-      margin: 0.5rem;
-      border-left: 0.25rem solid #d84315;
-      background: #ffe0b2;
-      padding: 0.5rem 1rem;
-    }
-  }
-
-  &-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  &-overview .mat-mdc-card-title {
-    text-align: center;
-  }
+  background-color: #ffe0b2;
+  color: #da9d42;
 }
 
-.mat-mdc-card-title {
-  font-family: "Inter", serif;
-  font-weight: 500;
-  color: #3e2723;
+.budget-active {
+  background-color: #ffb5b5;
+  color: #eb3939;
+}
+
+.budget-total {
+  background-color: #d1fdc6;
+  color: #39ad1b;
+}
+.budget-spent {
+  background-color: #b2dcff;
+  color: #42a2da;
+}
+.budget-remaining {
+  background-color: #ffb2df;
+  color: #da42b4;
 }

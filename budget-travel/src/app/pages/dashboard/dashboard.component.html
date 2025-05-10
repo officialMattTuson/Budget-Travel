@@ -1,4 +1,83 @@
+<app-header header="Dashboard"></app-header>
 <div class="container">
+  <div class="dashboard__cards">
+    <div class="card">
+      <mat-icon class="icon trip">flight</mat-icon>
+      <section class="card__info">
+        <span class="subtitle">Total Trips</span>
+        <span class="title">{{ trips.length }}</span>
+      </section>
+    </div>
+    <div class="card">
+      <mat-icon class="icon budget-active">payments</mat-icon>
+      <section class="card__info">
+        <span class="subtitle">Active Budgets</span>
+        <span class="title">{{ activeBudgets.length }}</span>
+      </section>
+    </div>
+    <div class="card">
+      <mat-icon class="icon budget-total">attach_money</mat-icon>
+      <section class="card__info">
+        <span class="subtitle">Total Budget Amount</span>
+        <span class="title">${{ activeBudgets[0].amount }}</span>
+      </section>
+    </div>
+    <div class="card">
+      <mat-icon class="icon budget-spent">attach_money</mat-icon>
+      <section class="card__info">
+        <span class="subtitle">Amount Spent</span>
+        <span class="title">${{ activeBudgets[0].totalSpent }}</span>
+      </section>
+    </div>
+    <div class="card">
+      <mat-icon class="icon budget-remaining">savings</mat-icon>
+      <section class="card__info">
+        <span class="subtitle">Remaining</span>
+        <span class="title"
+          >${{ activeBudgets[0].amount - activeBudgets[0].totalSpent }}</span
+        >
+      </section>
+    </div>
+  </div>
+</div>
+<mat-card-title>💰 Active Trips</mat-card-title>
+<div class="overview">
+  <div class="trip-list">
+    @for (budget of activeBudgets; track budget._id) {
+    <div class="hero-budget-tab">
+      <app-card-details
+        [title]="budget.name"
+        [amount]="budget.amount"
+        [currency]="budget.currency"
+        [startDate]="budget.startDate"
+        [endDate]="budget.endDate"
+        [progressValue]="(budget.totalSpent / budget.amount) * 100"
+        [spent]="budget.totalSpent"
+        [remaining]="budget.amount - budget.totalSpent"
+        [isActive]="true"
+        variant="hero"
+      />
+    </div>
+    }
+  </div>
+
+  <mat-card class="expenses-list">
+    <mat-card-title>Recent Expenses</mat-card-title>
+      <mat-list>
+        @for (expense of recentExpenses; track expense._id) {
+        <mat-list-item class="expenses-list-item">
+          <span
+            >{{ expense.description }}:
+            {{ expense.amount | currency : expense.currency }}</span
+          >
+          <span class="subtitle">{{ expense.category | categoryMap }}</span>
+        </mat-list-item>
+        }
+      </mat-list>
+  </mat-card>
+</div>
+
+<!-- <div class="container">
   <div class="container__top-row">
     <mat-card class="trip-overview">
       <mat-card-title (click)="goToBudgets()">💰 Budget Summary</mat-card-title>
@@ -36,21 +115,6 @@
   </div>
 
   <div class="container__bottom-row">
-    <mat-card class="expenses-overview">
-      <mat-card-title (click)="goToExpenses()"
-        >📊 Recent Expenses</mat-card-title
-      >
-      <div class="expense-list">
-        <mat-list>
-          <mat-list-item *ngFor="let expense of recentExpenses">
-            <span
-              >{{ expense.description }}: 
-              {{ expense.amount | currency : expense.currency }}</span
-            >
-          </mat-list-item>
-        </mat-list>
-      </div>
-    </mat-card>
 
     <mat-card class="currency-exchange">
       <mat-card-title>💱 Currency Exchange</mat-card-title>
@@ -69,4 +133,4 @@
       </ng-container>
     </mat-card>
   </div>
-</div>
+</div> -->
