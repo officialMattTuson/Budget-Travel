@@ -10,7 +10,7 @@ export interface Expense {
   date: Date;
   recurring: boolean;
   recurrenceInterval: string;
-  eventId: string;
+  tripId: string;
   budgetId: string;
   location: Location;
 }
@@ -23,7 +23,7 @@ export interface ExpensePostRequest {
   location: Location;
   budgetId?: string;
   date: Date;
-  eventId?: string;
+  tripId?: string;
 }
 
 export interface ExpenseStatistics {

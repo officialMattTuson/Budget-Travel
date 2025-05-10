@@ -1,9 +1,11 @@
-export interface Event {
+import { Budget } from './budgets.model';
+
+export interface Trip {
   _id: string;
   name: string;
   startDate: Date;
   endDate: Date;
-  budget: number;
+  budgetId: number;
   homeCurrency: string;
   destinationCurrency: string;
 }

@@ -5,7 +5,7 @@ import { Category } from '../../../models/category.model';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MaterialModule } from '../../../modules/material.module';
 import { FormsModule } from '@angular/forms';
-import { Event } from '../../../models/event.model';
+import { Trip } from '../../../models/trip.model';
 import { Expense } from '../../../models/expense.model';
 import { Budget } from '../../../models/budgets.model';
 import { CategoryMapperPipe } from '../../../pipes/category-mapper.pipe';
@@ -31,12 +31,12 @@ import { ExpensesFacadeService } from '../../../services/expenses/expenses-facad
 export class ExpensesComponent implements OnInit {
   expenses: Expense[] = [];
   filteredExpenses: Expense[] = [];
-  events: Event[] = [];
+  trips: Trip[] = [];
   budgets: Budget[] = [];
   filteredCategories: Category[] = [];
   expensesToCategoriesMap: Record<number, Expense[]> = {};
 
-  selectedEvent = '';
+  selectedTrip = '';
   selectedBudget = '';
   selectedCategory = 0;
   viewMode = 'accordion';
@@ -102,7 +102,7 @@ export class ExpensesComponent implements OnInit {
   filterExpenses(): void {
     this.filteredExpenses = this.expenses.filter(
       (expense) =>
-        (!this.selectedEvent || expense.eventId === this.selectedEvent) &&
+        (!this.selectedTrip || expense.tripId === this.selectedTrip) &&
         (!this.selectedBudget || expense.budgetId === this.selectedBudget) &&
         (!this.selectedCategory || expense.category === this.selectedCategory)
     );
