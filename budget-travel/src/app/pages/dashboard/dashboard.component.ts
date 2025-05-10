@@ -7,19 +7,24 @@ import { BudgetService } from '../../services/budgets/budget.service';
 import { ExpensesService } from '../../services/expenses/expenses.service';
 import { CategoriesService } from '../../services/shared/categories.service';
 import { Budget } from '../../models/budgets.model';
-import { CardDetailsComponent } from '../../components/card-details/card-details.component';
 import { Expense } from '../../models/expense.model';
 import { BudgetFacadeService } from '../../services/budgets/budget-facade.service';
 import { ExpensesFacadeService } from '../../services/expenses/expenses-facade.service';
 import { AlertService } from '../../services/shared/alert.service';
 import { HeaderComponent } from '../../components/header/header.component';
-import { CategoryMapperPipe } from '../../pipes/category-mapper.pipe';
+import { SuggestionsComponent } from '../../components/suggestions/suggestions.component';
+import { mockSuggestions } from '../../mocks/suggestions';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
-  imports: [CommonModule, MaterialModule, CardDetailsComponent, HeaderComponent, CategoryMapperPipe],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    HeaderComponent,
+    SuggestionsComponent,
+  ],
 })
 export class DashboardComponent implements OnInit {
   trips: any[] = [
@@ -30,6 +35,7 @@ export class DashboardComponent implements OnInit {
   recentExpenses: Expense[] = [];
   exchangeData = { from: 'USD', to: 'EUR', rate: 1 };
   categoryBreakdown: any[] = [];
+  suggestions = mockSuggestions;
 
   constructor(
     private readonly router: Router,

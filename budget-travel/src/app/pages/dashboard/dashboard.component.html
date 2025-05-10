@@ -40,39 +40,10 @@
     </div>
   </div>
 </div>
-<mat-card-title>💰 Active Trips</mat-card-title>
-<div class="overview">
-  <div class="trip-list">
-    @for (budget of activeBudgets; track budget._id) {
-    <div class="hero-budget-tab">
-      <app-card-details
-        [title]="budget.name"
-        [amount]="budget.amount"
-        [currency]="budget.currency"
-        [startDate]="budget.startDate"
-        [endDate]="budget.endDate"
-        [progressValue]="(budget.totalSpent / budget.amount) * 100"
-        [spent]="budget.totalSpent"
-        [remaining]="budget.amount - budget.totalSpent"
-        [isActive]="true"
-        variant="hero"
-      />
-    </div>
-    }
-  </div>
+<mat-card-title>💰 AI Suggestions</mat-card-title>
+<div class="suggestions__card">
 
-  <mat-card class="expenses-list">
-    <mat-card-title>Recent Expenses</mat-card-title>
-      <mat-list>
-        @for (expense of recentExpenses; track expense._id) {
-        <mat-list-item class="expenses-list-item">
-          <span
-            >{{ expense.description }}:
-            {{ expense.amount | currency : expense.currency }}</span
-          >
-          <span class="subtitle">{{ expense.category | categoryMap }}</span>
-        </mat-list-item>
-        }
-      </mat-list>
-  </mat-card>
+  @for (suggestion of suggestions; track suggestion) {
+    <app-suggestions [suggestion]="suggestion"></app-suggestions>
+  }
 </div>
