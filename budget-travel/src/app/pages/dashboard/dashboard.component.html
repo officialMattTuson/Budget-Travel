@@ -40,10 +40,9 @@
     </div>
   </div>
 </div>
-<mat-card-title>💰 AI Suggestions</mat-card-title>
+<mat-card-title class="dashboard__header">AI Suggestions </mat-card-title>
 <div class="suggestions__card">
-
   @for (suggestion of suggestions; track suggestion) {
-    <app-suggestions [suggestion]="suggestion"></app-suggestions>
+  <app-suggestions [suggestion]="suggestion"></app-suggestions>
   }
 </div>

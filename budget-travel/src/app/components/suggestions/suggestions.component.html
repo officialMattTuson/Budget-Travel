@@ -5,10 +5,20 @@
       <span class="Suggestion">{{ suggestion }}</span>
     </div>
     <div class="suggestion__actions">
-      <button class="suggestion__apply" mat-stroked-button (click)="onApplySuggestion()">
+      <button
+        class="suggestion__apply"
+        mat-stroked-button
+        (click)="onApplySuggestion()"
+      >
+      <mat-icon>task_alt</mat-icon>
         Apply
       </button>
-      <button class="suggestion__dismiss" mat-stroked-button color="danger" (click)="onDismissSuggestion()">
+      <button
+        class="suggestion__dismiss"
+        mat-stroked-button
+        color="danger"
+        (click)="onDismissSuggestion()"
+      >
         Dismiss
       </button>
     </div>
