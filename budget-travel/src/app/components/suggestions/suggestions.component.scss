@@ -1,0 +1,48 @@
+.suggestion {
+  &__container {
+    padding: 1rem;
+    border-radius: 0.75rem;
+    border: 2px solid rgb(2, 200, 207);
+    display: flex;
+    gap: 1rem;
+
+    &:hover {
+      border-color: rgb(219, 223, 27);
+    }
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-block-start: 0.25rem;
+  }
+
+  &__info {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  &__icon {
+    color: rgb(2, 200, 207);
+  }
+
+  &__actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  &__apply {
+    border-color: rgb(54, 176, 180);
+    color: rgb(54, 176, 180);
+    &:hover {
+      background-color: rgb(205, 244, 248);
+    }
+  }
+
+  &__dismiss {
+    border: none;
+  }
+}

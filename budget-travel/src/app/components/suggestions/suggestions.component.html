@@ -1,0 +1,16 @@
+<div class="suggestion__container">
+  <mat-icon class="suggestion__icon">lightbulb_2</mat-icon>
+  <div class="suggestion__details">
+    <div class="suggestion__info">
+      <span class="Suggestion">{{ suggestion }}</span>
+    </div>
+    <div class="suggestion__actions">
+      <button class="suggestion__apply" mat-stroked-button (click)="onApplySuggestion()">
+        Apply
+      </button>
+      <button class="suggestion__dismiss" mat-stroked-button color="danger" (click)="onDismissSuggestion()">
+        Dismiss
+      </button>
+    </div>
+  </div>
+</div>
