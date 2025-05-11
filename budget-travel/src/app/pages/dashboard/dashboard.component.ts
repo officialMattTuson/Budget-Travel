@@ -14,6 +14,9 @@ import { AlertService } from '../../services/shared/alert.service';
 import { HeaderComponent } from '../../components/header/header.component';
 import { SuggestionsComponent } from '../../components/suggestions/suggestions.component';
 import { mockSuggestions } from '../../mocks/suggestions';
+import { mockTrips } from '../../mocks/trips';
+import { Trip } from '../../models/trip.model';
+import { CategoryMapperPipe } from '../../pipes/category-mapper.pipe';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,16 +27,14 @@ import { mockSuggestions } from '../../mocks/suggestions';
     MaterialModule,
     HeaderComponent,
     SuggestionsComponent,
+    CategoryMapperPipe,
   ],
 })
 export class DashboardComponent implements OnInit {
-  trips: any[] = [
-    { name: 'Paris', spent: 3200, currency: 'EUR' },
-    { name: 'London', spent: 1200, currency: 'GBP' },
-  ];
+  trips = mockTrips;
+  activeTrips: Trip[] = [];
   activeBudgets: Budget[] = [];
   recentExpenses: Expense[] = [];
-  exchangeData = { from: 'USD', to: 'EUR', rate: 1 };
   categoryBreakdown: any[] = [];
   suggestions = mockSuggestions;
 
@@ -48,9 +49,15 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getTrips();
     this.getBudgets();
     this.getExpenses();
     this.getCategories();
+  }
+
+  getTrips() {
+    // mock function until backend is ready
+    this.activeTrips = this.trips.filter((trip) => trip.isActive);
   }
 
   getBudgets() {

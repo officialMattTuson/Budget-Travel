@@ -10,11 +10,11 @@
     <mat-form-field>
       <mat-label>Filter by Event</mat-label>
       <mat-select
-        [(ngModel)]="selectedEvent"
+        [(ngModel)]="selectedTrip"
         (selectionChange)="filterExpenses()"
       >
-        @for (event of events; track event._id) {
-        <mat-option [value]="event._id">{{ event.name }}</mat-option>
+        @for (trip of trips; track trip._id) {
+        <mat-option [value]="trip._id">{{ trip.name }}</mat-option>
         }
       </mat-select>
     </mat-form-field>

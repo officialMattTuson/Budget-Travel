@@ -1,48 +1,102 @@
 <app-header header="Dashboard"></app-header>
-<div class="container">
-  <div class="dashboard__cards">
+<div class="dashboard__container">
+  <div class="dashboard__card-container">
     <div class="card">
       <mat-icon class="icon trip">flight</mat-icon>
       <section class="card__info">
-        <span class="subtitle">Total Trips</span>
-        <span class="title">{{ trips.length }}</span>
+        <span class="card__subtitle subtitle">Total Trips</span>
+        <span class="card__title title">{{ trips.length }}</span>
       </section>
     </div>
     <div class="card">
-      <mat-icon class="icon budget-active">payments</mat-icon>
+      <mat-icon>attach_money</mat-icon>
       <section class="card__info">
-        <span class="subtitle">Active Budgets</span>
-        <span class="title">{{ activeBudgets.length }}</span>
-      </section>
-    </div>
-    <div class="card">
-      <mat-icon class="icon budget-total">attach_money</mat-icon>
-      <section class="card__info">
-        <span class="subtitle">Total Budget Amount</span>
-        <span class="title">${{ activeBudgets[0].amount }}</span>
+        <span class="card__subtitle subtitle">Total Budget Amount</span>
+        <span class="card__title title">${{ activeBudgets[0].amount }}</span>
       </section>
     </div>
     <div class="card">
       <mat-icon class="icon budget-spent">attach_money</mat-icon>
       <section class="card__info">
-        <span class="subtitle">Amount Spent</span>
-        <span class="title">${{ activeBudgets[0].totalSpent }}</span>
+        <span class="card__subtitle subtitle">Amount Spent</span>
+        <span class="card__title title">${{ activeBudgets[0].totalSpent }}</span>
       </section>
     </div>
     <div class="card">
       <mat-icon class="icon budget-remaining">savings</mat-icon>
       <section class="card__info">
-        <span class="subtitle">Remaining</span>
-        <span class="title"
+        <span class="card__subtitle subtitle">Remaining</span>
+        <span class="card__title title"
           >${{ activeBudgets[0].amount - activeBudgets[0].totalSpent }}</span
         >
       </section>
     </div>
   </div>
+  <div class="dashboard__body-top-row">
+    <div class="dashboard__suggestions-container">
+      <mat-card-title class="dashboard__header">AI Suggestions </mat-card-title>
+      <div class="suggestions__card">
+        @for (suggestion of suggestions; track suggestion) {
+          <app-suggestions [suggestion]="suggestion"></app-suggestions>
+        }
+      </div>
+    </div>
+    <div class="dashboard__trip-container">
+      <mat-card-title class="dashboard__header">Active Trip </mat-card-title>
+      <div class="trip__card">
+        @for (trip of activeTrips; track trip._id) {
+          <span class="card__title title">{{ trip.name }}</span>
+          <span class="card__title subtitle">{{ trip.destinations }}</span>
+          <div class="trip__details">
+            <section class="trip__details--section">
+              <span>Budget: </span>
+              <span>$2,500</span>
+            </section>
+            <section class="trip__details--section">
+              <span>Spent: </span>
+              <span>$1,000</span>
+            </section>
+            <section class="trip__details--section">
+              <span>Remaining: </span>
+              <span>$1,500</span>
+            </section>
+          </div>
+          <div class="trip__recent-expenses">
+            <span class="card__title title">Recent Expenses</span>
+            <div class="trip__recent-expenses--card">
+              @for (expense of recentExpenses; track expense._id) {
+                <div class="expense">
+                  <div class="expense__desc">
+                    <span class="card__title title">{{ expense.description }}</span>
+                    <span class="card__title subtitle">{{ expense.category | categoryMap }} </span>
+                  </div>
+                  <div class="expense__desc">
+                    <span class="card__title title">${{ expense.amount }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="dashboard__body-bottom-row">
+    <mat-card-title class="dashboard__header">Upcoming trips</mat-card-title>
 </div>
-<mat-card-title class="dashboard__header">AI Suggestions </mat-card-title>
-<div class="suggestions__card">
-  @for (suggestion of suggestions; track suggestion) {
-  <app-suggestions [suggestion]="suggestion"></app-suggestions>
-  }
-</div>
+  <div class="upcoming__card">
+    @for (trip of trips; track trip._id) {
+      <div class="upcoming__card--container">
+        <span class="card__title title">{{ trip.name }}</span>
+        <span class="card__title subtitle">{{ trip.destinations }}</span>
+        <section class="trip__details--section">
+          <span>Budget: </span>
+          <span>$2,500</span>
+        </section>
+        <section class="trip__details--section">
+          <span>Start date </span>
+          <span>{{ trip.startDate | date : "MMM d, y" }}</span>
+        </section>
+      </div>
+    }
+  </div>
