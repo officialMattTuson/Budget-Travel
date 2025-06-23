@@ -1,0 +1,40 @@
+<div class="trip">
+  <div class="trip__header">
+    <span class="trip__title header-center">{{ trip.name }}</span>
+    @if(budget) {
+    <span class="trip__budget--status header-right">{{
+      budget.isActive ? "Past" : "Upcoming"
+    }}</span>
+    }
+  </div>
+  <div class="trip__budget">
+    <div class="trip__subtitle">
+      @for(destination of trip.destinations; track destination) {
+      <span class="trip__destination">{{ destination }}</span>
+      }
+    </div>
+    @if (budget) {
+    <span class="trip__budget--date">
+      <mat-icon>calendar_month</mat-icon>
+      {{ budget.startDate | date:'mediumDate' }} - {{ budget.endDate | date:'mediumDate' }}
+    </span>
+    <span class="trip__budget--amount">
+      {{ budget.totalSpent | currency : budget.currency }} /
+      {{ budget.amount | currency : budget.currency }}
+    </span>
+    <div class="budget-bar">
+      <div
+        class="fill"
+        [style.width.%]="(budget.totalSpent / budget.amount) * 100"
+      >
+        <span class="label"
+          >{{
+            (budget.totalSpent / budget.amount) * 100 | number : "1.0-0"
+          }}%</span
+        >
+      </div>
+    </div>
+    } @else {
+    <span class="trip__budget--amount">Budget: Not set</span>}
+  </div>
+</div>

@@ -5,9 +5,5 @@ export interface Trip {
   destinations?: string[];
   startDate: Date;
   endDate: Date;
-  budgetId: number;
-  homeCurrency: string;
-  isActive?: boolean;
-  isCompleted?: boolean;
-  destinationCurrency: string;
+  budgets: [string];
 }
