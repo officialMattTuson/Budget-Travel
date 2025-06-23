@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
 
   getTrips() {
     // mock function until backend is ready
-    this.activeTrips = this.trips.filter((trip) => trip.isActive);
+    // this.activeTrips = this.trips.filter((trip) => trip.isActive);
   }
 
   getBudgets() {
