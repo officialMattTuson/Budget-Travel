@@ -10,6 +10,7 @@ import { MaterialModule } from '../../modules/material.module';
 export class HeaderComponent {
   @Input() header = '';
   @Input() buttonText = '';
+  @Input() showButton = false;
   @Output() onAddButtonClicked = new EventEmitter<void>();
 
   onAddButtonClick(): void {

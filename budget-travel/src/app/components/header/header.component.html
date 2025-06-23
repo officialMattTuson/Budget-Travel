@@ -1,5 +1,6 @@
 <div class="header">
   <span class="title">{{ header }}</span>
+  @if(showButton) {
   <button
     mat-raised-button
     color="primary"
@@ -9,4 +10,5 @@
     <mat-icon>add_circle</mat-icon>
     {{ buttonText }}
   </button>
+  }
 </div>
