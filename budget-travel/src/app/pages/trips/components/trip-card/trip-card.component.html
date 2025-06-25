@@ -26,13 +26,12 @@
       <div
         class="fill"
         [style.width.%]="(budget.totalSpent / budget.amount) * 100"
+      ></div>
+      <span class="label"
+        >{{
+          (budget.totalSpent / budget.amount) * 100 | number : "1.0-0"
+        }}%</span
       >
-        <span class="label"
-          >{{
-            (budget.totalSpent / budget.amount) * 100 | number : "1.0-0"
-          }}%</span
-        >
-      </div>
     </div>
     } @else {
     <span class="trip__budget--amount">Budget: Not set</span>}

@@ -48,25 +48,34 @@
 .budget-bar {
   height: 1.25rem;
   width: 100%;
-  background-color: #e0e0e0;
+  background-color: #c3ebac;
   border-radius: 0.75rem;
   overflow: hidden;
   margin-top: 0.5rem;
+  position: relative;
 
   .fill {
     height: 100%;
-    background: linear-gradient(to right, #019b15, #ac0303);
+    background: rgb(255, 195, 195);
     position: relative;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     padding-right: 0.5rem;
     border-radius: 0.75rem;
+  }
 
-    .label {
-      font-size: 0.75rem;
-      font-weight: bold;
-      color: white;
-    }
+  .label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-align: center;
+    color: black;
+    pointer-events: none;
+    z-index: 2;
+    width: max-content;
   }
 }
