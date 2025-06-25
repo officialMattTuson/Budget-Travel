@@ -2,12 +2,20 @@
   &__card {
     display: flex;
     flex-wrap: wrap;
+    cursor: pointer;
     gap: 2rem;
 
     > * {
       flex: 1 1 calc(33.333% - 2rem);
       max-width: calc(33.333% - 2rem);
       box-sizing: border-box;
+      border: 2px solid #e0e0e0;
+      border-radius: 0.5rem;
+      transition: transform 0.2s ease-in-out;
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0.25rem 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+      }
     }
   }
 }
