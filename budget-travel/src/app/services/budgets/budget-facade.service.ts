@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Budget, BudgetPostRequest } from '../../models/budgets.model';
 import { OverlayResult, OverlayType } from '../../models/overlay-result.model';
 import { AddBudgetComponent } from '../../components/overlays/add-budget/add-budget.component';
@@ -23,8 +23,15 @@ export class BudgetFacadeService {
     private readonly alertService: AlertService
   ) {}
 
-  getBudgets(): Budget[] {
-    return this._budgets.getValue();
+  getBudgets(): Observable<Budget[]> {
+    if (this._budgets.getValue().length === 0) {
+      return this.fetchBudgets();
+    }
+    return of(this._budgets.getValue());
+  }
+
+  fetchBudgets(): Observable<Budget[]> {
+    return this.budgetService.getBudgets();
   }
 
   setBudgets(budgets: Budget[]) {
@@ -62,7 +69,7 @@ export class BudgetFacadeService {
     const budgetPostObject = this.mapBudgetToPostRequest(formData);
     this.budgetService.addBudget(budgetPostObject).subscribe({
       next: (newBudget: Budget) => {
-        const budgets = this.getBudgets();
+        const budgets = this._budgets.getValue();
         budgets.push(newBudget);
         this.setBudgets(budgets);
       },
@@ -86,7 +93,7 @@ export class BudgetFacadeService {
     const budgetPostObject = this.mapBudgetToPostRequest(formData);
     this.budgetService.updateBudget(budgetPostObject, budget._id).subscribe({
       next: (addedBudget: Budget) => {
-        const currentBudgets = this.getBudgets();
+        const currentBudgets = this._budgets.getValue();
         const index = currentBudgets.findIndex((b) => b._id === budget._id);
         addedBudget.totalSpent = budget.totalSpent;
         currentBudgets[index] = addedBudget;

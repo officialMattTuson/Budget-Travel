@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { Budget } from '../../models/budgets.model';
 
 @Injectable({
@@ -17,13 +17,24 @@ export class BudgetService {
       map((budgets) =>
         budgets.map((budget) => ({
           ...budget,
-          isActive: this.checkIfActive(
-            budget.startDate,
-            budget.endDate
-          ),
+          isActive: this.checkIfActive(budget.startDate, budget.endDate),
         }))
       )
     );
+  }
+
+  getBudgetById(id: string): Observable<Budget> {
+    return this.http
+      .get<Budget>(`${this.apiUrl}/${id}`)
+      .pipe(
+        tap(
+          (budget) =>
+            (budget.isActive = this.checkIfActive(
+              budget.startDate,
+              budget.endDate
+            ))
+        )
+      );
   }
 
   private checkIfActive(startDate: string, endDate: string): boolean {
@@ -43,10 +54,6 @@ export class BudgetService {
     return this.http.delete<Budget>(`${this.apiUrl}`);
   }
 
-  getBudgetById(id: string): Observable<Budget> {
-    return this.http.get<Budget>(`${this.apiUrl}/${id}`);
-  }
-
   getActiveBudget(): Observable<Budget> {
     return this.http.get<Budget>(`${this.apiUrl}/active`);
   }
@@ -55,7 +62,10 @@ export class BudgetService {
     return this.http.post<Budget>(`${this.apiUrl}/set-active/${budgetId}`, {});
   }
 
-  updateBudget(budgetData: Partial<Budget>, budgetId: string): Observable<Budget> {
+  updateBudget(
+    budgetData: Partial<Budget>,
+    budgetId: string
+  ): Observable<Budget> {
     return this.http.put<Budget>(`${this.apiUrl}/${budgetId}`, budgetData);
   }
 }
