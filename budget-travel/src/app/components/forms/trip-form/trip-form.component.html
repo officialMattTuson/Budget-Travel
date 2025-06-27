@@ -1,0 +1,129 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="form">
+  <div class="form__header">
+    <span class="header">Create New Trip</span>
+    <mat-icon (click)="onCancel()">close</mat-icon>
+  </div>
+  <div class="form__field">
+    <mat-label>Trip Name</mat-label>
+    <mat-form-field appearance="outline">
+      <mat-icon matPrefix>card_travel</mat-icon>
+      <input
+        matInput
+        formControlName="name"
+        placeholder="e.g. Summer Vacation"
+      />
+    </mat-form-field>
+  </div>
+  <div class="form__field">
+    <mat-label>Destination</mat-label>
+    <mat-form-field appearance="outline">
+      <mat-icon matPrefix>flag</mat-icon>
+      <input
+        matInput
+        formControlName="destination"
+        placeholder="e.g. Madrid, Spain"
+      />
+    </mat-form-field>
+  </div>
+  <div class="form__two-column-row">
+    <div class="form__field">
+      <mat-label>Start Date</mat-label>
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          [matDatepicker]="startPicker"
+          formControlName="startDate"
+          placeholder="{{ today }}"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="startPicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="form__field">
+      <mat-label>End Date</mat-label>
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          [matDatepicker]="endPicker"
+          formControlName="endDate"
+          placeholder="{{ weekOut }}"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="endPicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="form__two-column-row">
+    <div class="form__field">
+      <mat-label>Total Budget</mat-label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>savings</mat-icon>
+        <input
+          matInput
+          formControlName="totalBudget"
+          type="number"
+          placeholder="Enter amount"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="form__field">
+      <mat-label>Currency</mat-label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>attach_money</mat-icon>
+        <mat-select formControlName="currency">
+          <mat-optgroup>
+            <mat-option [value]="(defaultCurrency$ | async)?.code">
+              {{ (defaultCurrency$ | async)?.code }}
+            </mat-option>
+          </mat-optgroup>
+          <mat-optgroup>
+            @for (currency of currencies$ | async; track currency.code) {
+            <mat-option [value]="currency.code">{{ currency.code }}</mat-option>
+            }
+          </mat-optgroup>
+        </mat-select>
+        <!-- <mat-error>
+          {{ form.get("currency") | errorMessage : "Currency" }}
+        </mat-error> -->
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="category-breakdown">
+    <div class="category-breakdown__header">
+      <span class="form__sub-heading">Budget Breakdown</span>
+      <span class="form__subtitle">Allocate your total budget across categories</span>
+    </div>
+    <div formArrayName="categoryBreakdown" class="category-breakdown__list">
+      @for (group of categoryBreakdown.controls; track group) {
+      <div [formGroupName]="$index" class="category-row">
+        <div class="category-row__label">
+          <span class="category-dot" [ngStyle]="{'background-color': getCategoryColor($index)}"></span>
+          <span>{{ categories[$index].name }}</span>
+        </div>
+        <mat-form-field appearance="outline">
+          <input matInput formControlName="amount" type="number" min="0" />
+        </mat-form-field>
+      </div>
+      }
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="form.invalid"
+    >
+      Save
+    </button>
+  </div>
+</form>

@@ -2,6 +2,7 @@
   header="Trips"
   [showButton]="true"
   buttonText="Add Trip"
+  (onAddButtonClicked)="onAddTrip()"
 ></app-header>
 <div class="trip__card">
   @for(trip of trips; track trip._id) {

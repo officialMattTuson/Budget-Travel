@@ -1,0 +1,50 @@
+.form {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.category-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.5rem;
+
+  &__label {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.category-breakdown {
+  margin-block-start: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  &__header {
+    display: flex;
+    flex-direction: column;
+  }
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-block-start: 0.5rem;
+    span {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #3e2723;
+    }
+  }
+}
+
+.category-dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  box-shadow: 0 0 0 1px #ccc;
+}
