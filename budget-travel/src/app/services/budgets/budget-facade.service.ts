@@ -80,11 +80,11 @@ export class BudgetFacadeService {
 
   mapBudgetToPostRequest(budgetData: BudgetPostRequest): Partial<Budget> {
     let budgetPostObject: Partial<Budget> = {
-      name: budgetData.budgetName,
-      amount: budgetData.budgetTarget,
-      currency: budgetData.budgetCurrency,
-      startDate: budgetData.budgetStartDate.toLocaleDateString(),
-      endDate: budgetData.budgetEndDate.toLocaleDateString(),
+      name: budgetData.name,
+      amount: budgetData.amount,
+      currency: budgetData.currency,
+      startDate: budgetData.startDate.toLocaleDateString(),
+      endDate: budgetData.endDate.toLocaleDateString(),
     };
     return budgetPostObject;
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { TripCardComponent } from './components/trip-card/trip-card.component';
-import { Trip } from '../../models/trip.model';
+import { Trip, TripPostRequest } from '../../models/trip.model';
 import { TripService } from '../../services/trips/trip.service';
 import { AlertService } from '../../services/shared/alert.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -9,6 +9,7 @@ import { take } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { PopupFormComponent } from '../../components/forms/popup-form/popup-form.component';
 import { TripFormComponent } from '../../components/forms/trip-form/trip-form.component';
+import { TripFacadeService } from '../../services/trips/trip-facade.service';
 
 @Component({
   selector: 'app-trips',
@@ -21,8 +22,9 @@ export class TripsComponent implements OnInit {
 
   constructor(
     private readonly tripService: TripService,
+    private readonly tripFacadeService: TripFacadeService,
     private readonly alertService: AlertService,
-    private readonly dialog: MatDialog,
+    private readonly dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -44,11 +46,16 @@ export class TripsComponent implements OnInit {
   }
 
   onAddTrip() {
-    this.dialog.open(PopupFormComponent, {
+    const dialogRef = this.dialog.open(PopupFormComponent, {
       data: {
         formComponent: TripFormComponent,
       },
       width: '400px',
+    });
+    dialogRef.afterClosed().subscribe((result: TripPostRequest) => {
+      if (result) {
+        this.tripFacadeService.addTrip(result);
+      }
     });
   }
 }

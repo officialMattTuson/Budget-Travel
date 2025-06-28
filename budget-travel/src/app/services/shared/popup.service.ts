@@ -5,10 +5,10 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class PopupService {
-  private readonly closeSubject = new Subject<void>();
+  private readonly closeSubject = new Subject<any>();
   close$ = this.closeSubject.asObservable();
 
-  close() {
-    this.closeSubject.next();
+  close(value?: any) {
+    this.closeSubject.next(value);
   }
 }

@@ -9,9 +9,7 @@
   </div>
   <div class="trip__budget">
     <div class="trip__subtitle">
-      @for(destination of trip.destinations; track destination) {
-      <span class="trip__destination">{{ destination }}</span>
-      }
+      <span class="trip__destination">{{ trip.destination }}</span>
     </div>
     @if (budget) {
     <span class="trip__budget--date">

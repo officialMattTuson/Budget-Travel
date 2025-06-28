@@ -46,7 +46,7 @@
       <div class="trip__card">
         @for (trip of activeTrips; track trip._id) {
           <span class="card__title title">{{ trip.name }}</span>
-          <span class="card__title subtitle">{{ trip.destinations }}</span>
+          <span class="card__title subtitle">{{ trip.destination }}</span>
           <div class="trip__details">
             <section class="trip__details--section">
               <span>Budget: </span>
@@ -88,7 +88,7 @@
     @for (trip of trips; track trip._id) {
       <div class="upcoming__card--container">
         <span class="card__title title">{{ trip.name }}</span>
-        <span class="card__title subtitle">{{ trip.destinations }}</span>
+        <span class="card__title subtitle">{{ trip.destination }}</span>
         <section class="trip__details--section">
           <span>Budget: </span>
           <span>$2,500</span>

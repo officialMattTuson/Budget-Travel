@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { Trip } from '../../models/trip.model';
+import { Trip, TripPostRequest } from '../../models/trip.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class TripService {
     return this.http.get<Trip[]>(`${this.apiUrl}`);
   }
 
-  addTrip(trip: Trip): Observable<Trip> {
+  addTrip(trip: TripPostRequest): Observable<Trip> {
     return this.http.post<Trip>(`${this.apiUrl}`, trip);
   }
 

@@ -5,7 +5,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { BaseFormComponent } from '../base-form.component';
 import { NgComponentOutlet } from '@angular/common';
 import { PopupService } from '../../../services/shared/popup.service';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-popup-form',
@@ -26,9 +26,11 @@ export class PopupFormComponent {
     },
     private readonly popupService: PopupService
   ) {
-    this.popupService.close$.subscribe(() => {
-      this.dialogRef.close();
-    });
+    this.popupService.close$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.dialogRef.close(value);
+      });
   }
 
   ngOnDestroy() {

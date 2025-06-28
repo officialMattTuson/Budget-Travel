@@ -29,7 +29,6 @@ export class TripFormComponent extends BaseFormComponent implements OnInit {
   defaultCurrency$!: Observable<Currency>;
   today: string;
   weekOut: string;
-  hasSubmitted = false;
   remainingBudget = 0;
 
   constructor(
@@ -100,22 +99,12 @@ export class TripFormComponent extends BaseFormComponent implements OnInit {
   observeDateChanges(): void {
     this.form.get('startDate')!.valueChanges.subscribe(() => {
       this.form.get('endDate')?.updateValueAndValidity();
-      console.log(this.form.get('endDate')?.errors);
     });
   }
 
   getCategoryColor(index: number): string {
     const category = this.categories[index];
     return category ? CategoryColor.getColorById(category.id) : '#ccc';
-  }
-
-  submit(): void {
-    this.hasSubmitted = true;
-    this.form.markAllAsTouched();
-    if (this.form.valid) {
-      this.formSubmit.emit(this.form.value);
-      console.log(this.form.value);
-    }
   }
 
   get categoryBreakdown(): FormArray {
