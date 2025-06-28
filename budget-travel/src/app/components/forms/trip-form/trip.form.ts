@@ -5,6 +5,7 @@ import {
   minDescriptionLength,
 } from '../../../utils/validators/validation-consts';
 import { Category } from '../../../models/category.model';
+import { endDateControlValidator } from '../../../utils/validators/past-date-validator';
 
 const getTripForm = () => {
   const fb = new FormBuilder();
@@ -20,7 +21,10 @@ const getTripForm = () => {
       Validators.maxLength(maxNameLength),
     ]),
     startDate: fb.control('', [Validators.required]),
-    endDate: fb.control('', [Validators.required]),
+    endDate: fb.control('', [
+      Validators.required,
+      endDateControlValidator('startDate'),
+    ]),
     currency: fb.control('', Validators.required),
     totalBudget: fb.control('', [
       Validators.required,
@@ -33,7 +37,7 @@ const getTripForm = () => {
 
 export class TripForm extends FormGroup {
   constructor() {
-    super(getTripForm().controls);
+    super(getTripForm().controls, getTripForm().validator);
   }
 
   get categoryBreakdown(): FormArray {

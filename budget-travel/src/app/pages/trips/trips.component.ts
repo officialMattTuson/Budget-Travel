@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { TripCardComponent } from './components/trip-card/trip-card.component';
 import { Trip } from '../../models/trip.model';

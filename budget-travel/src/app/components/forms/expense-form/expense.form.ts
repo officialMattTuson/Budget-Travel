@@ -1,5 +1,4 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { pastDateValidator } from '../../../utils/validators/past-date-validator';
 import {
   decimalRegex,
   maxDescriptionLength,
@@ -16,7 +15,7 @@ const getExpenseForm = () => {
       Validators.min(0),
       Validators.pattern(decimalRegex),
     ]),
-    date: fb.control('', [Validators.required, pastDateValidator()]),
+    date: fb.control('', [Validators.required]),
     description: fb.control('', [
       Validators.required,
       Validators.minLength(minDescriptionLength),

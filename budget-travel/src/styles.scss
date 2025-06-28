@@ -129,7 +129,6 @@ mat-form-field .mat-mdc-form-field-subscript-wrapper {
     display: flex;
     flex-direction: column;
     min-width: 0;
-    gap: 0.5rem;
     margin-block-end: 0.5rem;
     mat-label {
       font-size: 0.875rem;
@@ -233,6 +232,10 @@ mat-form-field .mat-mdc-form-field-subscript-wrapper {
   opacity: 0.4;
   margin-left: 0.5rem;
   font-family: "Inter", sans-serif;
+}
+
+.mat-mdc-form-field-error {
+  font-size: 0.75rem;
 }
 
 .ngx-charts-tooltip-content {

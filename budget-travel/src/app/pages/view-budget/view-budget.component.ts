@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
+  Inject,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -64,8 +65,8 @@ export class ViewBudgetComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private readonly router: Router,
-    private readonly activatedRoute: ActivatedRoute,
+    @Inject(Router) private readonly router: Router,
+    @Inject(ActivatedRoute) private readonly activatedRoute: ActivatedRoute,
     private readonly budgetService: BudgetService,
     private readonly alertService: AlertService,
     private readonly budgetFacadeService: BudgetFacadeService,

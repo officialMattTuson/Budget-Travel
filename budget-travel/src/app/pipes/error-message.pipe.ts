@@ -3,6 +3,7 @@ import { AbstractControl } from '@angular/forms';
 
 @Pipe({
   name: 'errorMessage',
+  pure: false
 })
 export class ErrorMessagePipe implements PipeTransform {
   transform(
@@ -15,6 +16,10 @@ export class ErrorMessagePipe implements PipeTransform {
     switch (true) {
       case formControl.hasError('required'):
         return `${formDisplayName} is required`;
+      case formControl.hasError('endDatePast'):
+        return `${formDisplayName} cannot be in the past`;
+      case formControl.hasError('endBeforeStart'):
+        return `${formDisplayName} cannot be before start date`;
       case formControl.hasError('minlength'):
         return `This field requires more than ${formControl.errors?.['minlength'].requiredLength} characters (currently ${formControl.errors?.['minlength'].actualLength}).`;
       case formControl.hasError('maxlength'):

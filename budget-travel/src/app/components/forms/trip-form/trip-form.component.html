@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="form">
+<form [formGroup]="form" class="form">
   <div class="form__header">
     <span class="header">Create New Trip</span>
     <mat-icon (click)="onCancel()">close</mat-icon>
@@ -13,6 +13,11 @@
         placeholder="e.g. Summer Vacation"
       />
     </mat-form-field>
+    @if(form.get("name")?.invalid && hasSubmitted) {
+    <mat-error>
+      {{ form.get("name") | errorMessage : "Name" }}
+    </mat-error>
+    }
   </div>
   <div class="form__field">
     <mat-label>Destination</mat-label>
@@ -24,6 +29,11 @@
         placeholder="e.g. Madrid, Spain"
       />
     </mat-form-field>
+    @if(form.get("destination")?.invalid && hasSubmitted) {
+    <mat-error>
+      {{ form.get("destination") | errorMessage : "Destination" }}
+    </mat-error>
+    }
   </div>
   <div class="form__two-column-row">
     <div class="form__field">
@@ -41,6 +51,11 @@
         ></mat-datepicker-toggle>
         <mat-datepicker #startPicker></mat-datepicker>
       </mat-form-field>
+      @if(form.get("startDate")?.invalid && hasSubmitted) {
+      <mat-error>
+        {{ form.get("startDate") | errorMessage : "Start date" }}
+      </mat-error>
+      }
     </div>
     <div class="form__field">
       <mat-label>End Date</mat-label>
@@ -57,6 +72,11 @@
         ></mat-datepicker-toggle>
         <mat-datepicker #endPicker></mat-datepicker>
       </mat-form-field>
+      @if(form.get("endDate")?.invalid && form.get("endDate")?.value) {
+      <mat-error>
+        {{ form.get("endDate") | errorMessage : "End date" }}
+      </mat-error>
+      }
     </div>
   </div>
   <div class="form__two-column-row">
@@ -71,6 +91,11 @@
           placeholder="Enter amount"
         />
       </mat-form-field>
+      @if(form.get("totalBudget")?.invalid && hasSubmitted) {
+      <mat-error>
+        {{ form.get("totalBudget") | errorMessage : "Total budget" }}
+      </mat-error>
+      }
     </div>
 
     <div class="form__field">
@@ -89,23 +114,30 @@
             }
           </mat-optgroup>
         </mat-select>
-        <!-- <mat-error>
-          {{ form.get("currency") | errorMessage : "Currency" }}
-        </mat-error> -->
       </mat-form-field>
+      @if(form.get("currency")?.invalid && hasSubmitted) {
+      <mat-error>
+        {{ form.get("currency") | errorMessage : "Currency" }}
+      </mat-error>
+      }
     </div>
   </div>
 
   <div class="category-breakdown">
     <div class="category-breakdown__header">
       <span class="form__sub-heading">Budget Breakdown</span>
-      <span class="form__subtitle">Allocate your total budget across categories</span>
+      <span class="form__subtitle"
+        >Allocate your total budget across categories</span
+      >
     </div>
     <div formArrayName="categoryBreakdown" class="category-breakdown__list">
       @for (group of categoryBreakdown.controls; track group) {
       <div [formGroupName]="$index" class="category-row">
         <div class="category-row__label">
-          <span class="category-dot" [ngStyle]="{'background-color': getCategoryColor($index)}"></span>
+          <span
+            class="category-dot"
+            [ngStyle]="{ 'background-color': getCategoryColor($index) }"
+          ></span>
           <span>{{ categories[$index].name }}</span>
         </div>
         <mat-form-field appearance="outline">
@@ -114,16 +146,11 @@
       </div>
       }
     </div>
+
+    <span class="category-breakdown__remaining">Remaining Budget: {{ remainingBudget }}</span>
   </div>
 
   <div class="form-actions">
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      [disabled]="form.invalid"
-    >
-      Save
-    </button>
+    <button mat-raised-button color="primary" (click)="submit()">Save</button>
   </div>
 </form>
