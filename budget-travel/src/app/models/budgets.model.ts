@@ -15,9 +15,11 @@ export interface Budget {
 }
 
 export interface BudgetPostRequest {
-  budgetName: string;
-  budgetTarget: number;
-  budgetCurrency: string;
-  budgetStartDate: Date;
-  budgetEndDate: Date;
+  name: string;
+  amount: number;
+  trip?: string;
+  startDate: Date;
+  endDate: Date;
+  currency: string;
+  categoryBreakdown: CategoryBudget[];
 }

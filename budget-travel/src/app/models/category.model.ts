@@ -5,8 +5,8 @@ export interface Category {
 }
 
 export interface CategoryBudget {
-  category: string;
-  allocatedAmount: number;
+  categoryId: number;
+  amount: number;
 }
 
 export class CategoryColor {
