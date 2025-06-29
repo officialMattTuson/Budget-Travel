@@ -20,6 +20,8 @@ export class ErrorMessagePipe implements PipeTransform {
         return `${formDisplayName} cannot be in the past`;
       case formControl.hasError('endBeforeStart'):
         return `${formDisplayName} cannot be before start date`;
+      case formControl.hasError('breakdownExceedsBudget'):
+        return `${formDisplayName} cannot exceed the total budget`;  
       case formControl.hasError('minlength'):
         return `This field requires more than ${formControl.errors?.['minlength'].requiredLength} characters (currently ${formControl.errors?.['minlength'].actualLength}).`;
       case formControl.hasError('maxlength'):

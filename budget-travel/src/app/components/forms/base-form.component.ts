@@ -23,4 +23,28 @@ export abstract class BaseFormComponent {
     this.form.reset();
     this.popupService.close(null);
   }
+
+  allowOnlyDigits(event: KeyboardEvent): void {
+    const allowedKeys = [
+      'Backspace',
+      'Tab',
+      'ArrowLeft',
+      'ArrowRight',
+      'Delete',
+      'Home',
+      'End',
+    ];
+
+    if (
+      allowedKeys.includes(event.key) ||
+      ((event.ctrlKey || event.metaKey) &&
+        ['a', 'c', 'v', 'x', 'z'].includes(event.key.toLowerCase()))
+    ) {
+      return;
+    }
+
+    if (!/^[0-9]$/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
 }

@@ -70,7 +70,7 @@
           matSuffix
           [for]="endPicker"
         ></mat-datepicker-toggle>
-        <mat-datepicker #endPicker></mat-datepicker>
+        <mat-datepicker #endPicker [startAt]="form.get('startDate')?.value"></mat-datepicker>
       </mat-form-field>
       @if(form.get("endDate")?.invalid && form.get("endDate")?.value) {
       <mat-error>
@@ -141,16 +141,30 @@
           <span>{{ categories[$index].name }}</span>
         </div>
         <mat-form-field appearance="outline">
-          <input matInput formControlName="amount" type="number" min="0" />
+          <input
+            matInput
+            formControlName="amount"
+            placeholder="Enter amount"
+            (keydown)="allowOnlyDigits($event)"
+          />
         </mat-form-field>
       </div>
       }
     </div>
+    @if(remainingBudget === 0 && hasSetRemainingBudgetToZero) {
+      <span class="category-breakdown__error">
+        Category breakdown cannot exceed the total budget.
+      </span>
+    }
 
-    <span class="category-breakdown__remaining">Remaining Budget: {{ remainingBudget }}</span>
+    <span class="category-breakdown__remaining"
+      >Remaining Budget: {{ remainingBudget }}</span
+    >
   </div>
 
   <div class="form-actions">
-    <button mat-raised-button color="primary" (click)="submit()">Add trip</button>
+    <button mat-raised-button color="primary" (click)="submit()">
+      Add trip
+    </button>
   </div>
 </form>

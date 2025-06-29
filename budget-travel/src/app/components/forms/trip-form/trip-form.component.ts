@@ -30,6 +30,7 @@ export class TripFormComponent extends BaseFormComponent implements OnInit {
   today: string;
   weekOut: string;
   remainingBudget = 0;
+  hasSetRemainingBudgetToZero = false;
 
   constructor(
     private readonly categoriesService: CategoriesService,
@@ -76,24 +77,19 @@ export class TripFormComponent extends BaseFormComponent implements OnInit {
     ]).subscribe(([totalBudget, breakdown]) => {
       const total = typeof totalBudget === 'number' ? totalBudget : 0;
       const allocated = Array.isArray(breakdown)
-        ? breakdown.reduce((sum, item) => sum + (item.amount ?? 0), 0)
+        ? breakdown.reduce((sum, item) => sum + Number(item.amount ?? 0), 0)
         : 0;
       this.remainingBudget = total - allocated;
+      console.log(this.remainingBudget)
       if (this.remainingBudget < 0) {
         this.remainingBudget = 0;
+        this.hasSetRemainingBudgetToZero = true;
+        this.categoryBreakdown.setErrors({ breakdownExceedsBudget: true });
+      } else {
+        this.hasSetRemainingBudgetToZero = false;
+        this.categoryBreakdown.setErrors(null);
       }
     });
-
-    const initialTotal = this.form.get('totalBudget')?.value ?? 0;
-    const initialBreakdown = this.categoryBreakdown.value ?? [];
-    const initialAllocated = initialBreakdown.reduce(
-      (sum: number, item: { amount: number }) => sum + (item.amount ?? 0),
-      0
-    );
-    this.remainingBudget = initialTotal - initialAllocated;
-    if (this.remainingBudget < 0) {
-      this.remainingBudget = 0;
-    }
   }
 
   observeDateChanges(): void {

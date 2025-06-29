@@ -50,7 +50,7 @@ export class TripForm extends FormGroup {
       this.categoryBreakdown.push(
         new FormGroup({
           categoryId: new FormBuilder().control(cat.id),
-          amount: new FormBuilder().control(0, [
+          amount: new FormBuilder().control('', [
             Validators.required,
             Validators.min(0),
           ]),

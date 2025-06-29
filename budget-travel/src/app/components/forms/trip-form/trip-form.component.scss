@@ -45,6 +45,13 @@
     color: #3e2723;
     margin-block-start: 0.5rem;
   }
+
+  &__error {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #d32f2f;
+    margin-block-start: 0.5rem;
+  }
 }
 
 .category-dot {
