@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PopupFormComponent } from '../../components/forms/popup-form/popup-form.component';
 import { TripFormComponent } from '../../components/forms/trip-form/trip-form.component';
 import { TripFacadeService } from '../../services/trips/trip-facade.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-trips',
@@ -24,6 +25,7 @@ export class TripsComponent implements OnInit {
     private readonly tripService: TripService,
     private readonly tripFacadeService: TripFacadeService,
     private readonly alertService: AlertService,
+    private readonly router: Router,
     private readonly dialog: MatDialog
   ) {}
 
@@ -57,5 +59,9 @@ export class TripsComponent implements OnInit {
         this.tripFacadeService.addTrip(result);
       }
     });
+  }
+
+  navigateToTripDetails(tripId: string): void {
+    this.router.navigateByUrl(`/trips/${tripId}`);
   }
 }

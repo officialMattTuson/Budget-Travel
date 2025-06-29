@@ -24,7 +24,7 @@ export class TripCardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const budgetId = this.trip.budgets[0];
+    const budgetId = this.trip.budget;
     if (budgetId) {
       this.getBudgetById(budgetId);
     }

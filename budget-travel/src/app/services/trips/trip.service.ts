@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { Trip, TripPostRequest } from '../../models/trip.model';
+import { Trip, TripDetails, TripPostRequest } from '../../models/trip.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +20,8 @@ export class TripService {
     return this.http.post<Trip>(`${this.apiUrl}`, trip);
   }
 
-  getTripDetails(tripId: string): Observable<Trip> {
-    return this.http.get<Trip>(`${this.apiUrl}/${tripId}`);
+  getTripDetails(tripId: string): Observable<TripDetails> {
+    return this.http.get<TripDetails>(`${this.apiUrl}/${tripId}`);
   }
 
   deleteTrip(tripId: string): Observable<Trip> {

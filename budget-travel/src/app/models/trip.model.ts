@@ -1,3 +1,4 @@
+import { Budget } from './budgets.model';
 import { CategoryBudget } from './category.model';
 
 export interface Trip {
@@ -6,7 +7,16 @@ export interface Trip {
   destination?: string;
   startDate: Date;
   endDate: Date;
-  budgets: [string];
+  budget: string;
+}
+
+export interface TripDetails {
+  _id: string;
+  name: string;
+  destination?: string;
+  startDate: Date;
+  endDate: Date;
+  budget: Budget;
 }
 
 export interface TripPostRequest {

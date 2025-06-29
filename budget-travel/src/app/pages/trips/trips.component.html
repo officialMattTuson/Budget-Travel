@@ -6,6 +6,6 @@
 ></app-header>
 <div class="trip__card">
   @for(trip of trips; track trip._id) {
-    <app-trip-card [trip]="trip"></app-trip-card>
+    <app-trip-card [trip]="trip" (click)="navigateToTripDetails(trip._id)"></app-trip-card>
   }
 </div>

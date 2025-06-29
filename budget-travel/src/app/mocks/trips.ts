@@ -7,7 +7,7 @@ export const mockTrips: Trip[] = [
     destination: 'France',
     startDate: new Date('2025-05-01'),
     endDate: new Date('2025-07-01'),
-    budgets: ['1'],
+    budget: '1',
   },
   {
     _id: '2',
@@ -15,6 +15,6 @@ export const mockTrips: Trip[] = [
     destination: 'England, Scotland',
     startDate: new Date('2025-08-01'),
     endDate: new Date('2023-09-10'),
-    budgets: ['2'],
+    budget: '2',
   },
 ];
